@@ -72,10 +72,15 @@ const EvenCardLogic = async () => {
 
       return cardHTML;
     }
+    const semuaCardHTML = result.data
+      .map((acara) => {
+        // Kita panggil fungsi cardFungsi untuk setiap elemen data
+        return cardFungsi(acara);
+      })
+      .join(""); // Menggabungkan semua array hasil mapping menjadi satu string raksasa
 
-    result.data.forEach((acara) => {
-      wadahPoster.innerHTML += cardFungsi(acara);
-    });
+    // Memasukkan ke container hanya satu kali
+    wadahPoster.innerHTML = semuaCardHTML;
 
     // 1. Buat fungsinya di luar
     function initCardClickListener() {
