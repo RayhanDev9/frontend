@@ -2,7 +2,7 @@
 const API_URL = "https://slab-silenced-riot.ngrok-free.dev/api/events";
 
 // 2. Fungsi untuk mengambil dan merender data
-async function muatDataMading() {
+const EvenCardLogic = async () => {
   const wadahPoster = document.getElementById("tempat-poster");
 
   try {
@@ -27,48 +27,74 @@ async function muatDataMading() {
       return;
     }
 
-    // 3. Looping data dan buat HTML (TEMPAT FRONT-END NGEDIT UI)
-    result.data.forEach((acara) => {
-      // Cek jika acara gratis
+    function cardFungsi(acara) {
       const hargaTeks =
         acara.harga == 0
           ? "Gratis"
           : `Rp ${parseInt(acara.harga).toLocaleString("id-ID")}`;
-
-      // Struktur Card (Silakan di-obrak-abrik desainnya sesuka hati!)
       const cardHTML = `
-                        <div class="bg-[#1e1e1e] border border-gray-800 rounded-xl overflow-hidden shadow-lg hover:border-gray-600 transition duration-300 flex flex-col">
-                            
-                            <div class="h-48 bg-gray-700 w-full overflow-hidden relative">
-                                <div class="absolute inset-0 flex items-center justify-center text-gray-500 text-sm">
-                                    [Area Gambar Poster]
-                                </div>
-                            </div>
+  <div data-id="${acara.id}" class="card-acara w-[100%] xs:w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition duration-300 flex flex-col cursor-pointer group max-xs:mx-auto">
+      
+      <div class="h-48 bg-slate-100 w-full relative overflow-hidden">
+          <div class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm">
+              [Area Gambar Poster]
+          </div>
+          <div class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded shadow-sm uppercase tracking-wider">
+              SEMINAR
+          </div>
+      </div>
 
-                            <div class="p-5 flex flex-col flex-grow">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="text-lg font-bold text-white line-clamp-2">${acara.judul}</h3>
-                                </div>
-                                
-                                <p class="text-sm text-blue-400 mb-3 font-medium">📅 ${acara.tanggal_acara}</p>
-                                
-                                <p class="text-gray-400 text-sm line-clamp-3 mb-4 flex-grow">
-                                    ${acara.deskripsi}
-                                </p>
+      <div class="p-5 flex flex-col flex-grow">
+          
+          <div class="flex items-center gap-x-2 text-sm text-blue-600 font-semibold mb-3">
+              <svg class="w-4 h-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+              </svg>
+              <span>${acara.tanggal_acara} &bull; ${acara.waktu_acara} WIB</span>
+          </div>
+          
+          
+          <h3 class="text-lg font-bold text-slate-900 leading-snug line-clamp-2 mb-5  transition-colors ">
+              ${acara.judul}
+          </h3>
+          
+          <div class="mt-auto flex items-start gap-x-2 text-sm text-slate-500">
+              <svg class="w-4 h-4 shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+              </svg>
+              <span class="line-clamp-2">${acara.lokasi || "Lokasi belum ditentukan"}</span>
+          </div>
+          
+      </div>
+  </div>
+`;
 
-                                <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-800">
-                                    <span class="text-green-400 font-bold text-sm">${hargaTeks}</span>
-                                    <button onclick="bukaDetail(${acara.id})" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-                                        Lihat Detail
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+      return cardHTML;
+    }
 
-      // Suntikkan card ke dalam wadah HTML
-      wadahPoster.innerHTML += cardHTML;
+    result.data.forEach((acara) => {
+      wadahPoster.innerHTML += cardFungsi(acara);
     });
+
+    // 1. Buat fungsinya di luar
+    function initCardClickListener() {
+      const containerPoster = document.getElementById("tempat-poster");
+
+      // Guard clause: Hentikan fungsi jika kontainer tidak ditemukan di halaman ini
+      if (!containerPoster) return;
+
+      containerPoster.addEventListener("click", (e) => {
+        const diklik = e.target.closest(".card-acara");
+
+        if (diklik) {
+          const idAcara = diklik.getAttribute("data-id");
+          bukaDetail(idAcara);
+        }
+      });
+    }
+
+    initCardClickListener();
   } catch (error) {
     console.error("Gagal konek ke API:", error);
     wadahPoster.innerHTML = `
@@ -78,7 +104,7 @@ async function muatDataMading() {
                     </div>
                 `;
   }
-}
+};
 
 // Fungsi dummy buat tombol detail
 function bukaDetail(id) {
@@ -87,4 +113,116 @@ function bukaDetail(id) {
 }
 
 // 4. Panggil fungsinya saat web dibuka
-muatDataMading();
+EvenCardLogic();
+
+const eventFilterLogic = () => {
+  document.addEventListener("DOMContentLoaded", () => {
+    // 1. DEFINISIKAN DULU VARIABEL KELAS-NYA DI SINI
+    const tabActive = [
+      "bg-white",
+      "text-blue-700",
+      "font-bold",
+      "shadow-sm",
+      "border-slate-200",
+    ];
+    const tabInactive = [
+      "text-slate-500",
+      "font-medium",
+      "border-transparent",
+      "hover:text-slate-900",
+      "hover:bg-slate-200/50",
+    ];
+
+    const timeActive = [
+      "bg-blue-50",
+      "text-blue-700",
+      "border-blue-200",
+      "font-semibold",
+      "hover:bg-blue-100",
+    ];
+    const timeInactive = [
+      "bg-white",
+      "text-slate-600",
+      "border-slate-200",
+      "font-medium",
+      "hover:bg-slate-50",
+      "hover:border-slate-300",
+    ];
+
+    const categoryActive = [
+      "bg-blue-50",
+      "text-blue-700",
+      "border-blue-200",
+      "font-semibold",
+    ];
+    const categoryInactive = [
+      "bg-white",
+      "text-slate-600",
+      "border-slate-200",
+      "font-medium",
+      "hover:bg-slate-50",
+      "hover:border-slate-300",
+      "hover:text-slate-900",
+    ];
+
+    // 2. FUNGSI LOGIKA (Nama yang profesional)
+    function initFilterGroup(containerId, activeClasses, inactiveClasses) {
+      const container = document.getElementById(containerId);
+
+      // console.info(container) -> Ini bisa kamu hapus kalau sudah tidak butuh debugging
+      if (!container) return;
+
+      const buttons = container.querySelectorAll("button");
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          buttons.forEach((btn) => {
+            btn.classList.remove(...activeClasses);
+            btn.classList.add(...inactiveClasses);
+          });
+          button.classList.remove(...inactiveClasses);
+          button.classList.add(...activeClasses);
+        });
+      });
+    }
+
+    // 3. PANGGIL FUNGSINYA
+    initFilterGroup("tab-group", tabActive, tabInactive);
+    initFilterGroup("time-group", timeActive, timeInactive);
+    initFilterGroup("category-group", categoryActive, categoryInactive);
+  });
+};
+
+eventFilterLogic();
+
+const initMobileMenu = () => {
+  const menuBtn = document.getElementById("mobile-menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+  console.info(mobileMenu);
+
+  if (!menuBtn || !mobileMenu) return;
+
+  menuBtn.addEventListener("click", () => {
+    // 1. Hapus state "Tertutup" (Transparan & terangkat)
+    mobileMenu.classList.toggle("opacity-0");
+    mobileMenu.classList.toggle("pointer-events-none");
+    mobileMenu.classList.toggle("-translate-y-4");
+
+    // 2. Tambahkan state "Terbuka" (Kelihatan penuh & posisi normal)
+    mobileMenu.classList.toggle("opacity-100");
+    mobileMenu.classList.toggle("pointer-events-auto");
+    mobileMenu.classList.toggle("translate-y-0");
+  });
+};
+
+initMobileMenu();
+
+// // 2. Panggil fungsinya saat halaman selesai dimuat
+// document.addEventListener("DOMContentLoaded", () => {
+//   // Fungsi-fungsi kamu sebelumnya
+//   // initFilterGroup("tab-group", ...);
+//   // initCardClickListener();
+
+//   // Panggil fungsi menu mobile di sini
+//   initMobileMenu();
+// });
