@@ -1,6 +1,66 @@
 // 1. URL API Ngrok dari Back-End
 const API_URL = "https://slab-silenced-riot.ngrok-free.dev/api/events";
 
+///Tanda
+/**
+ * Mengambil data acara dari API dengan format response standar
+ * @returns {Promise<{success: boolean, data: any, error: string|null}>}
+ */
+async function fetchEventsData() {
+  try {
+    const response = await fetch(API_URL, {
+      method: "GET",
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Pengecekan status HTTP (404, 500, dll)
+    if (!response.ok) {
+      throw new Error(`Server merespon dengan status: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    // Mengembalikan objek sukses
+    return {
+      success: true,
+      data: result.data,
+      error: null,
+    };
+  } catch (error) {
+    // Mengembalikan objek gagal
+    console.error("Gagal konek ke API:", error);
+    return {
+      success: false,
+      data: [],
+      error: error.message,
+    };
+  }
+}
+
+/**
+ * Mengurutkan array acara berdasarkan tanggal dan waktu
+ * @param {Array} events - Array data acara dari API
+ * @returns {Array} - Array yang sudah terurut
+ */
+function urutkanAcaraTercepat(events) {
+  return [...events].sort((a, b) => {
+    // Gabungkan tanggal dan waktu menjadi format ISO (YYYY-MM-DDTHH:MM:SS)
+    // Contoh: "2026-06-21" + "T" + "10:00:00"
+    const dateA = new Date(`${a.tanggal_acara}T${a.waktu_acara}:00`);
+    const dateB = new Date(`${b.tanggal_acara}T${b.waktu_acara}:00`);
+
+    // Bandingkan untuk sorting ascending (dari terkecil ke terbesar)
+    return dateA - dateB;
+  });
+}
+
+// Pastikan kurungnya lengkap seperti ini:
+await fetchEventsData();
+///Tanda
+
 // 2. Fungsi untuk mengambil dan merender data
 const EvenCardLogic = async () => {
   const wadahPoster = document.getElementById("tempat-poster");
