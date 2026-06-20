@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Caption Generator - Mading Kampus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#f5f7fa] text-slate-800 font-sans selection:bg-blue-200">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="text-xl font-bold text-blue-700 tracking-tight flex items-center gap-2 transition-transform hover:-translate-x-1">
+                <span class="text-2xl">&larr;</span> Kembali
+            </a>
+            <span class="font-semibold text-slate-500 uppercase tracking-widest text-sm text-right">Mini Tools</span>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 flex items-center justify-center gap-3">
+                ✨ AI Caption Generator
+            </h1>
+            <p class="text-slate-500 text-lg">Unggah poster acara, dan biarkan AI Google Gemini menuliskan caption estetik dan informatif untuk Anda.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 h-fit">
+                
+                <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">1. Unggah Poster Acara</label>
+                <div id="area-drop" onclick="document.getElementById('input-gambar').click()" class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group mb-6 relative">
+                    <input type="file" id="input-gambar" accept="image/jpeg, image/png, image/jpg" class="hidden">
+                    
+                    <div id="state-kosong">
+                        <svg class="w-10 h-10 mx-auto text-slate-400 group-hover:text-blue-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <p class="text-sm font-semibold text-slate-700">Pilih Gambar Poster</p>
+                    </div>
+
+                    <div id="state-preview" class="hidden">
+                        <img id="gambar-preview" src="" alt="Preview" class="max-h-40 mx-auto rounded shadow-sm object-contain">
+                    </div>
+                </div>
+
+                <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">2. Informasi Tambahan (Opsional)</label>
+                <textarea id="input-konteks" rows="3" placeholder="Contoh: Acara ini gratis, ada doorprize laptop, dan wajib bawa tumbler." class="w-full p-4 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none mb-6 text-sm"></textarea>
+
+                <button id="btn-generate" disabled class="w-full bg-slate-300 text-slate-500 font-bold py-4 rounded-xl transition-all duration-300 pointer-events-none flex justify-center items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    BUAT CAPTION SEKARANG
+                </button>
+            </div>
+
+            <div class="bg-slate-900 p-6 md:p-8 rounded-2xl shadow-lg border border-slate-800 flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest">Hasil Generasi AI</h3>
+                    
+                    <button id="btn-copy" class="text-xs font-bold bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-700 hover:text-white transition-colors hidden flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        Copy
+                    </button>
+                </div>
+
+                <div id="area-hasil" class="flex-grow bg-slate-800/50 rounded-xl p-5 border border-slate-700/50 text-slate-300 text-sm leading-relaxed overflow-y-auto whitespace-pre-wrap flex items-center justify-center min-h-[300px]">
+                    <span class="text-slate-500 text-center">Menunggu poster diunggah...</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // MASUKKAN API KEY ANDA DI SINI
+        const GEMINI_API_KEY = 'AQ.Ab8RN6Im7obw0AoiIzTqpi57czLyJy9AUmDO5XZrcq8tWFQC4Q'; 
+        const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+        const inputGambar = document.getElementById('input-gambar');
+        const stateKosong = document.getElementById('state-kosong');
+        const statePreview = document.getElementById('state-preview');
+        const gambarPreview = document.getElementById('gambar-preview');
+        const btnGenerate = document.getElementById('btn-generate');
+        const inputKonteks = document.getElementById('input-konteks');
+        const areaHasil = document.getElementById('area-hasil');
+        const btnCopy = document.getElementById('btn-copy');
+
+        let base64Image = "";
+        let mimeType = "";
+
+        // 1. LOGIKA UPLOAD & CONVERT GAMBAR KE BASE64
+        inputGambar.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                mimeType = file.type; // Simpan tipe file (image/jpeg, dll)
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Tampilkan ke UI
+                    gambarPreview.src = e.target.result;
+                    stateKosong.classList.add('hidden');
+                    statePreview.classList.remove('hidden');
+                    
+                    // Ambil string base64 murni (tanpa embel-embel 'data:image/jpeg;base64,')
+                    base64Image = e.target.result.split(',')[1];
+                    
+                    // Nyalakan tombol
+                    btnGenerate.disabled = false;
+                    btnGenerate.classList.remove('bg-slate-300', 'text-slate-500', 'pointer-events-none');
+                    btnGenerate.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700', 'shadow-lg', 'active:scale-[0.98]');
+                }
+                reader.readAsDataURL(file);
+            }
