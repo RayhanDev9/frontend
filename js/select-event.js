@@ -7,8 +7,47 @@ const urlParams = new URLSearchParams(window.location.search);
 const idAcara = urlParams.get("id");
 
 // ==========================================
-// BAGIAN 1: RENDER DETAIL ACARA
+// FITUR BOOKMARK (SIMPAN ACARA)
 // ==========================================
+window.toggleBookmarkEvent = async function() {
+    const btn = document.getElementById("btn-bookmark");
+    const text = document.getElementById("bookmark-text");
+
+    // 1. Ubah tampilan tombol langsung (Biar terasa cepat / Optimistic UI)
+    const isBookmarked = text.innerText === "Tersimpan";
+    
+    if (isBookmarked) {
+        text.innerText = "Simpan";
+        btn.classList.replace("bg-yellow-50", "bg-white");
+        btn.classList.replace("text-yellow-600", "text-gray-500");
+        btn.classList.replace("border-yellow-400", "border-gray-300");
+    } else {
+        text.innerText = "Tersimpan";
+        btn.classList.replace("bg-white", "bg-yellow-50");
+        btn.classList.replace("text-gray-500", "text-yellow-600");
+        btn.classList.replace("border-gray-300", "border-yellow-400");
+    }
+
+    // 2. Kirim data ke Background (API Laravel)
+    try {
+        const response = await fetch(`${API_BASE_URL}/${idAcara}/bookmark`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "ngrok-skip-browser-warning": "true"
+            },
+            // CATATAN: user_id diset 1 sementara sampai ada sistem login JS
+            body: JSON.stringify({ user_id: 1 }) 
+        });
+
+        if (!response.ok) throw new Error("Gagal menyimpan ke server");
+        
+    } catch (error) {
+        console.error("Gagal Bookmark:", error);
+        alert("Terjadi kesalahan jaringan saat menyimpan bookmark.");
+    }
+};
 
 const initEventDetail = () => {
     function fungsiCreateEvents(data) {
@@ -27,11 +66,15 @@ const initEventDetail = () => {
         // Render HTML
         const html = `
             <div class="relative w-full rounded-lg overflow-hidden bg-gray-200">
-                <span class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded shadow-sm z-10 capitalize">
-                ${data.kategori}
-                </span>
-                <img src="${imageUrl}" alt="${data.judul}" class="w-full h-auto object-cover aspect-video" onerror="this.src='https://via.placeholder.com/800x450?text=Gambar+Tidak+Tersedia'" />
-            </div>
+    <span class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded shadow-sm z-10 capitalize max-w-[70%] truncate">
+        ${data.kategori}
+    </span>
+    
+    <img src="${imageUrl}" 
+         alt="${data.judul}" 
+         class="w-full h-auto object-cover aspect-video transition-transform duration-500 hover:scale-105" 
+         onerror="this.src='https://via.placeholder.com/800x450?text=Gambar+Tidak+Tersedia'" />
+</div>
 
             <div class="bg-white p-5 md:p-6 rounded-lg shadow-sm border border-gray-200 border-t-2 border-b-2">
                 <h1 class="text-2xl md:text-3xl font-bold mb-6 text-gray-900">${data.judul}</h1>
