@@ -76,8 +76,13 @@ const initEventDetail = () => {
          onerror="this.src='https://via.placeholder.com/800x450?text=Gambar+Tidak+Tersedia'" />
 </div>
 
-            <div class="bg-white p-5 md:p-6 rounded-lg shadow-sm border border-gray-200 border-t-2 border-b-2">
-                <h1 class="text-2xl md:text-3xl font-bold mb-6 text-gray-900">${data.judul}</h1>
+            <div class="flex justify-between items-start gap-4 mb-6">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900">${data.judul}</h1>
+    
+            <button onclick="window.toggleBookmarkEvent()" id="btn-bookmark" class="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-white hover:bg-yellow-50 text-gray-500 hover:text-yellow-600 rounded-lg font-semibold text-xs md:text-sm transition-colors border border-gray-300 hover:border-yellow-400 shadow-sm">
+                <span class="text-lg">🔖</span> 
+            <span id="bookmark-text">Simpan</span>
+            </button>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 xs:gap-4 mb-6 py-1 xs:py-2 border-gray-100 border-t-2 border-b-2">
                     <div class="flex items-start space-x-3 p-2 xs:p-3">
