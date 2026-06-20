@@ -173,8 +173,10 @@ const EvenCardLogic = async () => {
 
 // Fungsi dummy buat tombol detail
 function bukaDetail(id) {
-  alert("Nanti ini diarahkan ke halaman detail untuk ID Acara: " + id);
+  // alert("Nanti ini diarahkan ke halaman detail untuk ID Acara: " + id);
   // Contoh implementasi asli nanti: window.location.href = `detail.html?id=${id}`;
+
+  window.location.href = `/select-event.html?id=${id}`;
 }
 
 // 4. Panggil fungsinya saat web dibuka

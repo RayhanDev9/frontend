@@ -23,7 +23,7 @@
       }
     </style>
   </head>
-  <body class="bg-gray-100  min-h-screen font-sans">
+  <body class="bg-gray-100 min-h-screen font-sans">
     <header
       class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm"
     >
@@ -60,25 +60,27 @@
           <!-- Kelompok Kanan: Search & Button Desktop -->
           <div class="hidden md:flex items-center gap-x-6">
             <!-- Tombol Aksi -->
-            <button
-              class="flex items-center gap-x-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
-            >
-              <svg
-                class="w-5 h-5"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
+            <a href="uploud.html">
+              <button
+                class="flex items-center gap-x-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
-                />
-              </svg>
-              UNGGAH
-            </button>
+                <svg
+                  class="w-5 h-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
+                  />
+                </svg>
+                UNGGAH
+              </button>
+            </a>
           </div>
 
           <!-- Tombol Hamburger (Hanya tampil di Mobile) -->
@@ -122,135 +124,33 @@
           >
         </nav>
         <div class="pt-4 border-t border-slate-100 flex flex-col gap-y-4">
-          <button
-            class="flex items-center justify-center gap-x-2 w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
-          >
-            UNGGAH
-          </button>
+          <a href="uploud.html">
+            <button
+              class="flex items-center justify-center gap-x-2 w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
+            >
+              UNGGAH
+            </button>
+          </a>
         </div>
       </div>
     </header>
 
-    <div class="flex flex-col px-4 ">
+    <div class="flex flex-col px-4">
       <!-- Breadcrumb -->
       <div
         class="py-4 px-4 md:px-10 text-xs md:text-sm text-gray-500 max-w-8xl"
+        id="breadcrumb"
       >
-        Beranda <span class="mx-1">></span> Acara <span class="mx-1">></span>
-        <span class="font-semibold text-gray-800">Talkshow Karir</span>
+      
       </div>
 
       <div
-        class="max-w-8xl  xs:px-4 md:px-10 pb-12 grid grid-cols-1 lg:grid-cols-3 gap-6"
+        class="max-w-8xl xs:px-4 md:px-10 pb-12 grid grid-cols-1 lg:grid-cols-3 gap-6"
       >
-        <main class="lg:col-span-2 flex flex-col gap-6">
-          <div class="relative w-full rounded-lg overflow-hidden bg-gray-200">
-            <span
-              class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded shadow-sm z-10"
-            >
-              Seminar
-            </span>
-            <img
-              src="https://via.placeholder.com/800x400?text=Gambar+Acara"
-              alt="Talkshow"
-              class="w-full h-auto object-cover aspect-video"
-            />
-          </div>
-
-          <div
-            class="bg-white p-5 md:p-6 rounded-lg shadow-sm border border-gray-200 border-t-2 border-b-2"
-          >
-            <h1 class="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
-              Talkshow Karir: Navigasi Dunia Kerja
-            </h1>
-
-            <div
-              class="grid grid-cols-1 sm:grid-cols-3 gap-2 xs:gap-4 mb-6 py-1 xs:py-2 border-gray-100 border-t-2 border-b-2"
-            >
-              <div class="flex items-start space-x-3 p-2 xs:p-3">
-                <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">
-                  📅
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 mb-0.5">Tanggal</p>
-                  <p class="font-semibold text-sm text-gray-800">25 Okt 2024</p>
-                </div>
-              </div>
-              <div class="flex items-start space-x-3 p-2 xs:p-3">
-                <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">
-                  🕒
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 mb-0.5">Waktu</p>
-                  <p class="font-semibold text-sm text-gray-800">14:00 WIB</p>
-                </div>
-              </div>
-              <div class="flex items-start space-x-3 p-2 xs:p-3">
-                <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">
-                  📍
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 mb-0.5">Lokasi</p>
-                  <p class="font-semibold text-sm text-gray-800">Aula Utama</p>
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
-            >
-              <div class="flex items-center space-x-3">
-                <div
-                  class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden border border-gray-300"
-                >
-                  <img
-                    src="https://via.placeholder.com/48"
-                    alt="Logo"
-                    class="w-full h-full object-cover"
-                  />
-                </div>
-                <div>
-                  <p class="text-sm font-bold text-gray-800">
-                    Diselenggarakan oleh BEM Fakultas Ekonomi
-                  </p>
-                  <p class="text-xs text-gray-500 mt-0.5">1.2k Pengikut</p>
-                </div>
-              </div>
-              <button
-                class="bg-[#3b82f6] hover:bg-blue-600 text-white px-6 py-2.5 rounded font-semibold text-sm w-full sm:w-auto transition-colors"
-              >
-                PESAN TIKET
-              </button>
-            </div>
-          </div>
-
-          <div
-            class="bg-white p-5 md:p-6 rounded-lg shadow-sm border border-gray-200"
-          >
-            <h2 class="text-base font-bold text-gray-900 mb-4">
-              Tentang Acara
-            </h2>
-            <div class="text-gray-600 text-sm leading-relaxed space-y-4">
-              <p>
-                Persiapkan diri Anda untuk menghadapi dunia kerja yang dinamis!
-                Talkshow Karir ini menghadirkan para profesional berpengalaman
-                dari berbagai industri terkemuka. Dapatkan wawasan langsung
-                mengenai ekspektasi industri, tips wawancara yang sukses, dan
-                cara membangun portofolio yang menarik.
-              </p>
-              <p>
-                Acara ini sangat direkomendasikan bagi mahasiswa tingkat akhir
-                yang sedang menyusun rencana karir, maupun mahasiswa baru yang
-                ingin mulai memetakan peluang sejak dini.
-              </p>
-              <ul class="list-disc pl-5 space-y-2 mt-2">
-                <li>Sesi panel dengan HRD perusahaan multinasional.</li>
-                <li>Workshop singkat pembuatan CV ATS-friendly.</li>
-                <li>Sesi networking eksklusif.</li>
-              </ul>
-            </div>
-          </div>
-        </main>
+        <main
+          class="lg:col-span-2 flex flex-col gap-6"
+          id="container-slect-event"
+        ></main>
 
         <aside class="lg:col-span-1">
           <div
@@ -392,7 +292,6 @@
         </aside>
       </div>
     </div>
-
 
     <footer class="mt-20 bg-white border-t border-slate-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
