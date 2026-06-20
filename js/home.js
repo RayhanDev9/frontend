@@ -1,7 +1,7 @@
 // 1. URL API Ngrok dari Back-End & URL Storage untuk Gambar
 const API_URL = "https://slab-silenced-riot.ngrok-free.dev/api/events";
 // Catatan: Kalau gambar nggak muncul, ganti 127.0.0.1 ini pakai link Ngrok lu juga ya
-const STORAGE_URL = "http://127.0.0.1:8000/storage/"; 
+const STORAGE_URL = "http://127.0.0.1:8000/storage/";
 
 ///Tanda
 /**
@@ -94,19 +94,19 @@ const EvenCardLogic = async () => {
       // ==========================================
       // >>> LOGIKA PEMBUAT PALET WARNA DIMULAI <<<
       // ==========================================
-      let paletWarnaHTML = '';
+      let paletWarnaHTML = "";
       if (acara.warna_dominan && acara.warna_dominan.length > 0) {
-          paletWarnaHTML = '<div class="flex items-center gap-1.5 mb-4">';
-          
-          acara.warna_dominan.forEach(warnaHex => {
-              paletWarnaHTML += `
+        paletWarnaHTML = '<div class="flex items-center gap-1.5 mb-4">';
+
+        acara.warna_dominan.forEach((warnaHex) => {
+          paletWarnaHTML += `
                   <div class="w-5 h-5 rounded shadow-sm border border-slate-200 cursor-pointer hover:scale-110 transition-transform" 
                        style="background-color: ${warnaHex};" 
                        title="${warnaHex}">
                   </div>`;
-          });
-          
-          paletWarnaHTML += '</div>';
+        });
+
+        paletWarnaHTML += "</div>";
       }
       // ==========================================
 
@@ -199,7 +199,7 @@ function bukaDetail(id) {
   // alert("Nanti ini diarahkan ke halaman detail untuk ID Acara: " + id);
   // Contoh implementasi asli nanti: window.location.href = `detail.html?id=${id}`;
 
-  window.location.href = `/select-event.html?id=${id}`;
+  window.location.href = `../select-event.html?id=${id}`;
 }
 
 // 4. Panggil fungsinya saat web dibuka
