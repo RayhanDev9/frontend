@@ -22,7 +22,7 @@
             <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 flex items-center justify-center gap-3">
                 ✨ AI Caption Generator
             </h1>
-            <p class="text-slate-500 text-lg">Unggah poster acara, dan biarkan ChatGPT (OpenAI) menuliskan caption estetik dan informatif untuk Anda.</p>
+            <p class="text-slate-500 text-lg">Unggah poster acara, dan biarkan AI menuliskan caption estetik dan informatif untuk Anda.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -73,8 +73,8 @@
     </main>
 
     <script>
-        const OPENAI_API_KEY = 'sk-rw4DV77PSLxDrbO4tgXjQ99B44ksTQ9oT683GM4H'; 
-        const OPENAI_URL = 'https://api.openai.com/v1/chat/completions'; 
+        // URL API Lokal Laravel
+        const LARAVEL_API_URL = 'http://127.0.0.1:8000/api/generate-caption'; 
         
         const inputGambar = document.getElementById('input-gambar');
         const stateKosong = document.getElementById('state-kosong');
@@ -136,7 +136,7 @@
             }
         });
 
-        // 3. Logika Eksekusi API OpenAI
+        // 3. Logika Eksekusi API via Backend Laravel
         btnGenerate.addEventListener('click', async () => {
             if (!fullBase64Image) return;
 
@@ -146,54 +146,38 @@
             btnGenerate.classList.replace('hover:bg-blue-700', 'opacity-90');
             btnCopy.classList.add('hidden');
             
-            areaHasil.innerHTML = '<span class="text-blue-400 animate-pulse text-center">AI OpenAI sedang membedah poster acara Anda...</span>';
+            areaHasil.innerHTML = '<span class="text-blue-400 animate-pulse text-center">Menghubungi server lokal untuk membuat caption...</span>';
             areaHasil.classList.replace('items-center', 'items-start');
 
-            let promptText = "Kamu adalah admin media sosial yang gaul, profesional, dan kreatif untuk 'Mading Kampus'. Tolong baca gambar poster acara ini, ekstrak semua informasi pentingnya (seperti tanggal, waktu, tempat, HTM), lalu buatkan caption Instagram yang menarik. Gunakan paragraf yang rapi, emoji yang pas, dan sertakan hashtag relevan.";
-            
-            if (inputKonteks.value.trim() !== "") {
-                promptText += `\n\nInformasi tambahan dari panitia yang WAJIB dimasukkan: "${inputKonteks.value}"`;
-            }
-
-            // Struktur Body Khusus OpenAI (Model gpt-4o untuk baca gambar)
-            const requestBody = {
-                model: "gpt-4-turbo",      
-                messages: [
-                    {
-                        role: "user",
-                        content: [
-                            { type: "text", text: promptText },
-                            { type: "image_url", image_url: { url: fullBase64Image } }
-                        ]
-                    }
-                ],
-                max_tokens: 800,
-                temperature: 0.7
-            };
-
             try {
-                const response = await fetch(OPENAI_URL, {
+                // Tembak ke API Lokal Laravel Anda
+                const response = await fetch(LARAVEL_API_URL, {
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENAI_API_KEY}` // Pemasangan Kunci OpenAI
+                        'Accept': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
                     },
-                    body: JSON.stringify(requestBody)
+                    body: JSON.stringify({
+                        image_base64: fullBase64Image,
+                        konteks: inputKonteks.value.trim()
+                    })
                 });
 
                 const data = await response.json();
 
-                if (response.ok) {
-                    const hasilTeks = data.choices[0].message.content;
-                    areaHasil.innerHTML = hasilTeks;
+                if (response.ok && data.status === 'success') {
+                    // Konversi baris baru menjadi tag <br> agar rapi di HTML
+                    const formattedCaption = data.caption.replace(/\n/g, '<br>');
+                    areaHasil.innerHTML = formattedCaption;
                     btnCopy.classList.remove('hidden');
                 } else {
-                    areaHasil.innerHTML = `<span class="text-red-400">Gagal: ${data.error.message}</span>`;
+                    areaHasil.innerHTML = `<span class="text-red-400">Gagal: ${data.message}</span>`;
                 }
 
             } catch (error) {
                 console.error("API Error:", error);
-                areaHasil.innerHTML = `<span class="text-red-400">Koneksi ke AI terputus. Coba periksa internet Anda.</span>`;
+                areaHasil.innerHTML = `<span class="text-red-400">Koneksi terputus. Pastikan server Laravel (php artisan serve) sedang menyala.</span>`;
             } finally {
                 btnGenerate.innerHTML = teksAsli;
                 btnGenerate.disabled = false;
@@ -203,6 +187,7 @@
 
         // 4. Fitur Copy
         btnCopy.addEventListener('click', () => {
+            // Mengambil teks menggunakan innerText agar format baris baru tetap terjaga
             const textToCopy = areaHasil.innerText;
             navigator.clipboard.writeText(textToCopy).then(() => {
                 const originalText = btnCopy.innerHTML;
