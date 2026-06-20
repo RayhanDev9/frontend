@@ -160,7 +160,8 @@ window.submitReply = async function(event, commentId) {
                 "Accept": "application/json",
                 "ngrok-skip-browser-warning": "true",
             },
-            body: JSON.stringify({ event_id: idAcara, isi_komentar: text })
+
+        body: JSON.stringify({ event_id: idAcara, isi_komentar: text, user_id: 1 })
         });
 
         if (response.ok) {
