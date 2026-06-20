@@ -31,15 +31,16 @@
                 
                 <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">1. Unggah Poster Acara</label>
                 <div id="area-drop" onclick="document.getElementById('input-gambar').click()" class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group mb-6 relative">
-                    <input type="file" id="input-gambar" accept="image/jpeg, image/png, image/jpg" class="hidden">
+                    <input type="file" id="input-gambar" accept="image/*" class="hidden">
                     
                     <div id="state-kosong">
-                        <svg class="w-10 h-10 mx-auto text-slate-400 group-hover:text-blue-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        <p class="text-sm font-semibold text-slate-700">Pilih Gambar Poster</p>
+                        <svg class="w-10 h-10 mx-auto text-slate-400 group-hover:text-blue-500 mb-2 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <p class="text-sm font-semibold text-slate-700">Klik atau Seret Gambar ke Sini</p>
                     </div>
 
                     <div id="state-preview" class="hidden">
                         <img id="gambar-preview" src="" alt="Preview" class="max-h-40 mx-auto rounded shadow-sm object-contain">
+                        <p class="text-xs text-blue-600 font-medium mt-3 hover:underline">Ganti Gambar</p>
                     </div>
                 </div>
 
@@ -71,7 +72,7 @@
     </main>
 
     <script>
-        // MASUKKAN API KEY ANDA DI SINI
+        // API KEY
         const GEMINI_API_KEY = 'AQ.Ab8RN6Im7obw0AoiIzTqpi57czLyJy9AUmDO5XZrcq8tWFQC4Q'; 
         const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
@@ -83,6 +84,7 @@
         const inputKonteks = document.getElementById('input-konteks');
         const areaHasil = document.getElementById('area-hasil');
         const btnCopy = document.getElementById('btn-copy');
+        const areaDrop = document.getElementById('area-drop');
 
         let base64Image = "";
         let mimeType = "";
@@ -91,22 +93,121 @@
         inputGambar.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
-                mimeType = file.type; // Simpan tipe file (image/jpeg, dll)
+                mimeType = file.type; 
                 
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    // Tampilkan ke UI
                     gambarPreview.src = e.target.result;
                     stateKosong.classList.add('hidden');
                     statePreview.classList.remove('hidden');
                     
-                    // Ambil string base64 murni (tanpa embel-embel 'data:image/jpeg;base64,')
                     base64Image = e.target.result.split(',')[1];
                     
-                    // Nyalakan tombol
                     btnGenerate.disabled = false;
                     btnGenerate.classList.remove('bg-slate-300', 'text-slate-500', 'pointer-events-none');
                     btnGenerate.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700', 'shadow-lg', 'active:scale-[0.98]');
                 }
                 reader.readAsDataURL(file);
             }
+        });
+
+        // 2. LOGIKA DRAG AND DROP
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            areaDrop.addEventListener(eventName, e => {
+                e.preventDefault(); e.stopPropagation();
+            });
+        });
+        ['dragenter', 'dragover'].forEach(eventName => {
+            areaDrop.addEventListener(eventName, () => areaDrop.classList.add('border-blue-500', 'bg-blue-50'));
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            areaDrop.addEventListener(eventName, () => areaDrop.classList.remove('border-blue-500', 'bg-blue-50'));
+        });
+        areaDrop.addEventListener('drop', e => {
+            const files = e.dataTransfer.files;
+            if(files.length) {
+                inputGambar.files = files;
+                inputGambar.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // 3. LOGIKA TEMBAK API GEMINI
+        btnGenerate.addEventListener('click', async () => {
+            if (!base64Image) return;
+
+            const teksAsli = btnGenerate.innerHTML;
+            btnGenerate.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> AI Sedang Menulis...`;
+            btnGenerate.disabled = true;
+            btnGenerate.classList.replace('hover:bg-blue-700', 'opacity-90');
+            btnCopy.classList.add('hidden');
+            
+            areaHasil.innerHTML = '<span class="text-blue-400 animate-pulse text-center">AI sedang menganalisa teks dan gambar di dalam poster...</span>';
+            areaHasil.classList.replace('items-center', 'items-start');
+
+            let promptText = "Kamu adalah admin media sosial yang gaul, profesional, dan kreatif untuk 'Mading Kampus'. Tolong baca gambar poster acara ini, ekstrak semua informasi pentingnya (seperti tanggal, waktu, tempat, HTM), lalu buatkan caption Instagram yang menarik. Gunakan paragraf yang rapi, emoji yang pas, dan sertakan hashtag relevan.";
+            
+            if (inputKonteks.value.trim() !== "") {
+                promptText += `\n\nInformasi tambahan dari panitia yang WAJIB dimasukkan: "${inputKonteks.value}"`;
+            }
+
+            const requestBody = {
+                contents: [{
+                    parts: [
+                        { text: promptText },
+                        {
+                            inline_data: {
+                                mime_type: mimeType,
+                                data: base64Image
+                            }
+                        }
+                    ]
+                }],
+                generationConfig: {
+                    temperature: 0.7,
+                }
+            };
+
+            try {
+                const response = await fetch(GEMINI_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const hasilTeks = data.candidates[0].content.parts[0].text;
+                    areaHasil.innerHTML = hasilTeks;
+                    btnCopy.classList.remove('hidden');
+                } else {
+                    areaHasil.innerHTML = `<span class="text-red-400">Gagal: ${data.error.message}</span>`;
+                }
+
+            } catch (error) {
+                console.error("API Error:", error);
+                areaHasil.innerHTML = `<span class="text-red-400">Koneksi ke AI terputus. Coba periksa internet Anda.</span>`;
+            } finally {
+                btnGenerate.innerHTML = teksAsli;
+                btnGenerate.disabled = false;
+                btnGenerate.classList.replace('opacity-90', 'hover:bg-blue-700');
+            }
+        });
+
+        // 4. FITUR COPY TEXT
+        btnCopy.addEventListener('click', () => {
+            const textToCopy = areaHasil.innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = btnCopy.innerHTML;
+                btnCopy.innerHTML = "Tersalin!";
+                btnCopy.classList.replace('bg-slate-800', 'bg-green-600');
+                
+                setTimeout(() => {
+                    btnCopy.innerHTML = originalText;
+                    btnCopy.classList.replace('bg-green-600', 'bg-slate-800');
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
