@@ -74,7 +74,7 @@
 
     <script>
         const OPENAI_API_KEY = 'sk-rw4DV77PSLxDrbO4tgXjQ99B44ksTQ9oT683GM4H'; 
-        const OPENAI_URL = 'https://ai.servernusa.com/v1/chat/completions';
+        const OPENAI_URL = 'https://api.openai.com/v1/chat/completions'; 
         
         const inputGambar = document.getElementById('input-gambar');
         const stateKosong = document.getElementById('state-kosong');
@@ -157,7 +157,7 @@
 
             // Struktur Body Khusus OpenAI (Model gpt-4o untuk baca gambar)
             const requestBody = {
-                model: "gpt-4o",
+                model: "gpt-4-vision-preview",      
                 messages: [
                     {
                         role: "user",
