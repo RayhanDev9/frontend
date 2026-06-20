@@ -30,7 +30,8 @@
             <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 h-fit">
                 
                 <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">1. Unggah Poster Acara</label>
-                <div id="area-drop" onclick="document.getElementById('input-gambar').click()" class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group mb-6 relative">
+                
+                <div id="area-drop" class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group mb-6 relative">
                     <input type="file" id="input-gambar" accept="image/*" class="hidden">
                     
                     <div id="state-kosong">
@@ -72,7 +73,6 @@
     </main>
 
     <script>
-        // API KEY
         const GEMINI_API_KEY = 'AQ.Ab8RN6Im7obw0AoiIzTqpi57czLyJy9AUmDO5XZrcq8tWFQC4Q'; 
         const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
@@ -89,29 +89,39 @@
         let base64Image = "";
         let mimeType = "";
 
-        // 1. LOGIKA UPLOAD & CONVERT GAMBAR KE BASE64
-        inputGambar.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                mimeType = file.type; 
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    gambarPreview.src = e.target.result;
-                    stateKosong.classList.add('hidden');
-                    statePreview.classList.remove('hidden');
-                    
-                    base64Image = e.target.result.split(',')[1];
-                    
-                    btnGenerate.disabled = false;
-                    btnGenerate.classList.remove('bg-slate-300', 'text-slate-500', 'pointer-events-none');
-                    btnGenerate.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700', 'shadow-lg', 'active:scale-[0.98]');
-                }
-                reader.readAsDataURL(file);
+        // PERUBAHAN 1: Logika Klik yang Aman
+        areaDrop.addEventListener('click', (e) => {
+            // Mencegah browser nge-klik 2 kali (mencegah event bubbling)
+            if (e.target !== inputGambar) {
+                inputGambar.click();
             }
         });
 
-        // 2. LOGIKA DRAG AND DROP
+        // PERUBAHAN 2: Logika Preview Gambar Diperkuat
+        inputGambar.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            
+            // Hentikan proses jika tiba-tiba user menekan "Cancel" di file explorer
+            if (!file) return; 
+
+            mimeType = file.type; 
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                gambarPreview.src = event.target.result;
+                stateKosong.classList.add('hidden');
+                statePreview.classList.remove('hidden');
+                
+                base64Image = event.target.result.split(',')[1];
+                
+                btnGenerate.disabled = false;
+                btnGenerate.classList.remove('bg-slate-300', 'text-slate-500', 'pointer-events-none');
+                btnGenerate.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700', 'shadow-lg', 'active:scale-[0.98]');
+            }
+            reader.readAsDataURL(file);
+        });
+
+        // Logika Drag and Drop
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             areaDrop.addEventListener(eventName, e => {
                 e.preventDefault(); e.stopPropagation();
@@ -131,7 +141,7 @@
             }
         });
 
-        // 3. LOGIKA TEMBAK API GEMINI
+        // Logika Eksekusi API AI
         btnGenerate.addEventListener('click', async () => {
             if (!base64Image) return;
 
@@ -194,7 +204,7 @@
             }
         });
 
-        // 4. FITUR COPY TEXT
+        // Fitur Copy
         btnCopy.addEventListener('click', () => {
             const textToCopy = areaHasil.innerText;
             navigator.clipboard.writeText(textToCopy).then(() => {
