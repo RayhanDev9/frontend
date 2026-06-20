@@ -22,7 +22,7 @@
             <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 flex items-center justify-center gap-3">
                 ✨ AI Caption Generator
             </h1>
-            <p class="text-slate-500 text-lg">Unggah poster acara, dan biarkan AI Google Gemini menuliskan caption estetik dan informatif untuk Anda.</p>
+            <p class="text-slate-500 text-lg">Unggah poster acara, dan biarkan ChatGPT (OpenAI) menuliskan caption estetik dan informatif untuk Anda.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -73,8 +73,9 @@
     </main>
 
     <script>
-        const GEMINI_API_KEY = 'AQ.Ab8RN6Im7obw0AoiIzTqpi57czLyJy9AUmDO5XZrcq8tWFQC4Q'; 
-        const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        // API KEY OPENAI (SUDAH DIPASANG)
+        const OPENAI_API_KEY = 'sk-rw4DV77PSLxDrbO4tgXjQ99B44ksTQ9oT683GM4H'; 
+        const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
 
         const inputGambar = document.getElementById('input-gambar');
         const stateKosong = document.getElementById('state-kosong');
@@ -86,33 +87,28 @@
         const btnCopy = document.getElementById('btn-copy');
         const areaDrop = document.getElementById('area-drop');
 
-        let base64Image = "";
-        let mimeType = "";
+        let fullBase64Image = "";
 
-        // PERUBAHAN 1: Logika Klik yang Aman
+        // 1. Logika Klik yang Aman
         areaDrop.addEventListener('click', (e) => {
-            // Mencegah browser nge-klik 2 kali (mencegah event bubbling)
             if (e.target !== inputGambar) {
                 inputGambar.click();
             }
         });
 
-        // PERUBAHAN 2: Logika Preview Gambar Diperkuat
+        // 2. Logika Preview Gambar Diperkuat
         inputGambar.addEventListener('change', function(e) {
             const file = e.target.files[0];
-            
-            // Hentikan proses jika tiba-tiba user menekan "Cancel" di file explorer
             if (!file) return; 
-
-            mimeType = file.type; 
             
             const reader = new FileReader();
             reader.onload = function(event) {
+                // OpenAI butuh data URL penuh, jadi kita simpan semuanya
+                fullBase64Image = event.target.result;
+
                 gambarPreview.src = event.target.result;
                 stateKosong.classList.add('hidden');
                 statePreview.classList.remove('hidden');
-                
-                base64Image = event.target.result.split(',')[1];
                 
                 btnGenerate.disabled = false;
                 btnGenerate.classList.remove('bg-slate-300', 'text-slate-500', 'pointer-events-none');
@@ -141,9 +137,9 @@
             }
         });
 
-        // Logika Eksekusi API AI
+        // 3. Logika Eksekusi API OpenAI
         btnGenerate.addEventListener('click', async () => {
-            if (!base64Image) return;
+            if (!fullBase64Image) return;
 
             const teksAsli = btnGenerate.innerHTML;
             btnGenerate.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> AI Sedang Menulis...`;
@@ -151,7 +147,7 @@
             btnGenerate.classList.replace('hover:bg-blue-700', 'opacity-90');
             btnCopy.classList.add('hidden');
             
-            areaHasil.innerHTML = '<span class="text-blue-400 animate-pulse text-center">AI sedang menganalisa teks dan gambar di dalam poster...</span>';
+            areaHasil.innerHTML = '<span class="text-blue-400 animate-pulse text-center">AI OpenAI sedang membedah poster acara Anda...</span>';
             areaHasil.classList.replace('items-center', 'items-start');
 
             let promptText = "Kamu adalah admin media sosial yang gaul, profesional, dan kreatif untuk 'Mading Kampus'. Tolong baca gambar poster acara ini, ekstrak semua informasi pentingnya (seperti tanggal, waktu, tempat, HTM), lalu buatkan caption Instagram yang menarik. Gunakan paragraf yang rapi, emoji yang pas, dan sertakan hashtag relevan.";
@@ -160,34 +156,36 @@
                 promptText += `\n\nInformasi tambahan dari panitia yang WAJIB dimasukkan: "${inputKonteks.value}"`;
             }
 
+            // Struktur Body Khusus OpenAI (Model gpt-4o untuk baca gambar)
             const requestBody = {
-                contents: [{
-                    parts: [
-                        { text: promptText },
-                        {
-                            inline_data: {
-                                mime_type: mimeType,
-                                data: base64Image
-                            }
-                        }
-                    ]
-                }],
-                generationConfig: {
-                    temperature: 0.7,
-                }
+                model: "gpt-4o",
+                messages: [
+                    {
+                        role: "user",
+                        content: [
+                            { type: "text", text: promptText },
+                            { type: "image_url", image_url: { url: fullBase64Image } }
+                        ]
+                    }
+                ],
+                max_tokens: 800,
+                temperature: 0.7
             };
 
             try {
-                const response = await fetch(GEMINI_URL, {
+                const response = await fetch(OPENAI_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OPENAI_API_KEY}` // Pemasangan Kunci OpenAI
+                    },
                     body: JSON.stringify(requestBody)
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    const hasilTeks = data.candidates[0].content.parts[0].text;
+                    const hasilTeks = data.choices[0].message.content;
                     areaHasil.innerHTML = hasilTeks;
                     btnCopy.classList.remove('hidden');
                 } else {
@@ -204,7 +202,7 @@
             }
         });
 
-        // Fitur Copy
+        // 4. Fitur Copy
         btnCopy.addEventListener('click', () => {
             const textToCopy = areaHasil.innerText;
             navigator.clipboard.writeText(textToCopy).then(() => {
