@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Realtime - Tanya Jawab</title>
+    <!-- Memanggil Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Styling untuk scrollbar agar terlihat lebih rapi */
+      .chat-container::-webkit-scrollbar {
+        width: 6px;
+      }
+      .chat-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      .chat-container::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+      .chat-container::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 min-h-screen font-sans">
+    <header
+      class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm"
+    >
+      <!-- Kontainer Utama -->
+      <div class="mx-auto px-4 sm:px-6 md:px-8">
+        <div class="flex items-center justify-between h-20">
+          <!-- Kelompok Kiri: Logo & Navigasi Desktop -->
+          <div class="flex items-center gap-x-5 lg:gap-x-10">
+            <!-- Logo (Kamu bisa ganti jadi MADINGKAMPUS jika mau) -->
+            <a
+              href="#"
+              class="text-2xl md:text-3xl font-bold text-blue-700 tracking-tight"
+              >MK</a
+            >
+
+            <!-- Tautan Navigasi (Hanya tampil di Desktop, disembunyikan di Mobile) -->
+            <nav
+              class="hidden md:flex items-center gap-x-8 lg:gap-x-8 text-sm md:text-lg"
+            >
+              <a
+                href="index.html"
+                class="text-slate-600 hover:text-slate-900 transition pb-1 mt-1"
+                >Beranda</a
+              >
+              <a href="#" class="text-slate-600 hover:text-slate-900 transition"
+                >Favorit</a
+              >
+              <a href="#" class="text-slate-600 hover:text-slate-900 transition"
+                >Profil</a
+              >
+            </nav>
+          </div>
+
+          <!-- Kelompok Kanan: Search & Button Desktop -->
+          <div class="hidden md:flex items-center gap-x-6">
+            <!-- Tombol Aksi -->
+            <a href="uploud.html">
+              <button
+                class="flex items-center gap-x-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
+              >
+                <svg
+                  class="w-5 h-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
+                  />
+                </svg>
+                UNGGAH
+              </button>
+            </a>
+          </div>
+
+          <!-- Tombol Hamburger (Hanya tampil di Mobile) -->
+          <div class="flex md:hidden items-center couser">
+            <button
+              id="mobile-menu-btn"
+              class="text-slate-600 hover:text-slate-900 focus:outline-none p-2"
+            >
+              <svg
+                class="w-7 h-7"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu Dropdown Mobile (Disembunyikan secara default oleh class 'hidden') -->
+      <div
+        id="mobile-menu"
+        class="md:hidden border-t border-slate-200 bg-white px-4 pt-4 pb-6 space-y-4 shadow-lg absolute w-full left-0 z-40 transform transition-all duration-300 ease-out opacity-0 pointer-events-none -translate-y-4"
+      >
+        <nav class="flex flex-col gap-y-4 text-lg">
+          <a href="index.html" class="hover:text-slate-600 transition"
+            >Beranda</a
+          >
+          <a href="#" class="text-slate-600 hover:text-slate-900 transition"
+            >Favorit</a
+          >
+          <a href="#" class="text-slate-600 hover:text-slate-900 transition"
+            >Profil</a
+          >
+        </nav>
+        <div class="pt-4 border-t border-slate-100 flex flex-col gap-y-4">
+          <a href="uploud.html">
+            <button
+              class="flex items-center justify-center gap-x-2 w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
+            >
+              UNGGAH
+            </button>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex flex-col px-4">
+      <!-- Breadcrumb -->
+      <div
+        class="py-4 px-4 md:px-10 text-xs md:text-sm text-gray-500 max-w-8xl"
+        id="breadcrumb"
+      >
+      
+      </div>
+
+      <div
+        class="max-w-8xl xs:px-4 md:px-10 pb-12 grid grid-cols-1 lg:grid-cols-3 gap-6"
+      >
+        <main
+          class="lg:col-span-2 flex flex-col gap-6"
+          id="container-slect-event"
+        ></main>
+
+        <aside class="lg:col-span-1">
+          <div
+            class="w-full bg-white border border-gray-200 rounded-xl shadow-sm flex flex-col h-[600px] sticky top-6 overflow-hidden"
+          >
+            <div
+              class="px-5 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10"
+            >
+              <h2
+                class="text-lg font-bold text-gray-800 flex items-center gap-2"
+              >
+                <span class="text-[#c0b4d6] text-2xl">💬</span> Tanya Jawab
+              </h2>
+              <span
+                class="bg-blue-100 text-blue-600 text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wide"
+                >Live</span
+              >
+            </div>
+
+            <div
+              id="chat-box"
+              class="chat-container p-5 flex-1 overflow-y-auto flex flex-col gap-5 bg-white"
+            >
+              <div class="flex gap-3">
+                <div
+                  class="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-gray-600 font-bold text-sm"
+                >
+                  A
+                </div>
+                <div
+                  class="flex-1 border border-gray-100 rounded-xl p-4 bg-white shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)]"
+                >
+                  <div class="flex justify-between items-start mb-2">
+                    <span class="font-bold text-sm text-gray-800"
+                      >Andi Pratama</span
+                    >
+                    <span class="text-xs text-gray-400">10 mnt lalu</span>
+                  </div>
+                  <p class="text-gray-600 text-sm mb-3 leading-relaxed">
+                    Apakah sertifikat akan diberikan kepada seluruh peserta?
+                  </p>
+                  <div
+                    class="flex items-center gap-5 text-sm font-medium text-gray-500"
+                  >
+                    <button
+                      class="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
+                    >
+                      <span>👍</span> <span>12</span>
+                    </button>
+                    <button
+                      class="flex items-center gap-1.5 hover:text-blue-600 transition-colors text-blue-500"
+                    >
+                      <span class="text-blue-500 font-bold">↩️</span>
+                      <span>Balas</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex gap-3 ml-12">
+                <div
+                  class="w-8 h-8 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center text-blue-600 font-bold text-xs"
+                >
+                  P
+                </div>
+                <div
+                  class="flex-1 rounded-xl p-4 bg-gray-50 border border-gray-100"
+                >
+                  <div class="flex justify-between items-start mb-2">
+                    <span class="font-bold text-sm text-gray-800">Panitia</span>
+                    <span class="text-xs text-gray-400">5 mnt lalu</span>
+                  </div>
+                  <p class="text-gray-600 text-sm leading-relaxed">
+                    Ya, e-sertifikat akan dikirimkan H+3 setelah acara ke email
+                    yang terdaftar.
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex gap-3">
+                <div
+                  class="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-gray-600 font-bold text-sm"
+                >
+                  B
+                </div>
+                <div
+                  class="flex-1 border border-gray-100 rounded-xl p-4 bg-white shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)]"
+                >
+                  <div class="flex justify-between items-start mb-2">
+                    <span class="font-bold text-sm text-gray-800"
+                      >Budi Santoso</span
+                    >
+                    <span class="text-xs text-gray-400">Baru saja</span>
+                  </div>
+                  <p class="text-gray-600 text-sm mb-3 leading-relaxed">
+                    Apakah ada kuota maksimal untuk peserta luring?
+                  </p>
+                  <div
+                    class="flex items-center gap-5 text-sm font-medium text-gray-500"
+                  >
+                    <button
+                      class="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
+                    >
+                      <span>👍</span> <span>2</span>
+                    </button>
+                    <button
+                      class="flex items-center gap-1.5 hover:text-blue-600 transition-colors text-blue-500"
+                    >
+                      <span class="text-blue-500 font-bold">↩️</span>
+                      <span>Balas</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 border-t border-gray-100 bg-white">
+              <form
+                id="chat-form"
+                class="flex items-center border border-gray-300 rounded-md focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden bg-gray-50"
+              >
+                <input
+                  type="text"
+                  id="chat-input"
+                  placeholder="Tanya sesuatu..."
+                  class="w-full px-4 py-3 text-sm outline-none bg-transparent"
+                  autocomplete="off"
+                  required
+                />
+                <button
+                  type="submit"
+                  class="bg-blue-600 text-white px-5 py-3 hover:bg-blue-700 transition-colors flex items-center justify-center font-bold"
+                >
+                  ➤
+                </button>
+              </form>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <footer class="mt-20 bg-white border-t border-slate-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center gap-y-6 text-center md:text-left"
+        >
+          <div>
+            <span class="text-2xl font-bold text-blue-700 tracking-tight"
+              >Mading Kampus</span
+            >
+            <p class="text-slate-500 text-sm mt-2">
+              Mading digital untuk berbagi acara & UMKM mahasiswa.
+            </p>
+          </div>
+
+          <nav
+            class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium text-slate-600"
+          >
+            <a href="#" class="hover:text-blue-600 transition">Tentang Kami</a>
+            <a href="#" class="hover:text-blue-600 transition"
+              >Hubungi Panitia</a
+            >
+            <a href="#" class="hover:text-blue-600 transition"
+              >Panduan Unggah</a
+            >
+          </nav>
+        </div>
+
+        <hr class="border-slate-200 my-8" />
+
+        <div class="text-center text-sm text-slate-400">
+          &copy; 2026 KampusKonek. Semua hak cipta dilindungi.
+        </div>
+      </div>
+    </footer>
+    <script type="module" src="js/select-event.js"></script>
+  </body>
+</html>
