@@ -3,8 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat Realtime - Tanya Jawab</title>
-    <!-- Memanggil Tailwind CSS -->
+    <title>Detail Event - Mading Kampus</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       /* Styling untuk scrollbar agar terlihat lebih rapi */
@@ -27,19 +26,15 @@
     <header
       class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm"
     >
-      <!-- Kontainer Utama -->
       <div class="mx-auto px-4 sm:px-6 md:px-8">
         <div class="flex items-center justify-between h-20">
-          <!-- Kelompok Kiri: Logo & Navigasi Desktop -->
           <div class="flex items-center gap-x-5 lg:gap-x-10">
-            <!-- Logo (Kamu bisa ganti jadi MADINGKAMPUS jika mau) -->
             <a
               href="#"
               class="text-2xl md:text-3xl font-bold text-blue-700 tracking-tight"
               >MK</a
             >
 
-            <!-- Tautan Navigasi (Hanya tampil di Desktop, disembunyikan di Mobile) -->
             <nav
               class="hidden md:flex items-center gap-x-8 lg:gap-x-8 text-sm md:text-lg"
             >
@@ -57,9 +52,7 @@
             </nav>
           </div>
 
-          <!-- Kelompok Kanan: Search & Button Desktop -->
           <div class="hidden md:flex items-center gap-x-6">
-            <!-- Tombol Aksi -->
             <a href="uploud.html">
               <button
                 class="flex items-center gap-x-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
@@ -83,7 +76,6 @@
             </a>
           </div>
 
-          <!-- Tombol Hamburger (Hanya tampil di Mobile) -->
           <div class="flex md:hidden items-center couser">
             <button
               id="mobile-menu-btn"
@@ -107,7 +99,6 @@
         </div>
       </div>
 
-      <!-- Menu Dropdown Mobile (Disembunyikan secara default oleh class 'hidden') -->
       <div
         id="mobile-menu"
         class="md:hidden border-t border-slate-200 bg-white px-4 pt-4 pb-6 space-y-4 shadow-lg absolute w-full left-0 z-40 transform transition-all duration-300 ease-out opacity-0 pointer-events-none -translate-y-4"
@@ -136,12 +127,11 @@
     </header>
 
     <div class="flex flex-col px-4">
-      <!-- Breadcrumb -->
       <div
         class="py-4 px-4 md:px-10 text-xs md:text-sm text-gray-500 max-w-8xl"
         id="breadcrumb"
       >
-      
+        Memuat...
       </div>
 
       <div
@@ -150,7 +140,11 @@
         <main
           class="lg:col-span-2 flex flex-col gap-6"
           id="container-slect-event"
-        ></main>
+        >
+          <div class="flex justify-center items-center h-64">
+              <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+          </div>
+        </main>
 
         <aside class="lg:col-span-1">
           <div
@@ -174,97 +168,7 @@
               id="chat-box"
               class="chat-container p-5 flex-1 overflow-y-auto flex flex-col gap-5 bg-white"
             >
-              <div class="flex gap-3">
-                <div
-                  class="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-gray-600 font-bold text-sm"
-                >
-                  A
-                </div>
-                <div
-                  class="flex-1 border border-gray-100 rounded-xl p-4 bg-white shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)]"
-                >
-                  <div class="flex justify-between items-start mb-2">
-                    <span class="font-bold text-sm text-gray-800"
-                      >Andi Pratama</span
-                    >
-                    <span class="text-xs text-gray-400">10 mnt lalu</span>
-                  </div>
-                  <p class="text-gray-600 text-sm mb-3 leading-relaxed">
-                    Apakah sertifikat akan diberikan kepada seluruh peserta?
-                  </p>
-                  <div
-                    class="flex items-center gap-5 text-sm font-medium text-gray-500"
-                  >
-                    <button
-                      class="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
-                    >
-                      <span>👍</span> <span>12</span>
-                    </button>
-                    <button
-                      class="flex items-center gap-1.5 hover:text-blue-600 transition-colors text-blue-500"
-                    >
-                      <span class="text-blue-500 font-bold">↩️</span>
-                      <span>Balas</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex gap-3 ml-12">
-                <div
-                  class="w-8 h-8 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center text-blue-600 font-bold text-xs"
-                >
-                  P
-                </div>
-                <div
-                  class="flex-1 rounded-xl p-4 bg-gray-50 border border-gray-100"
-                >
-                  <div class="flex justify-between items-start mb-2">
-                    <span class="font-bold text-sm text-gray-800">Panitia</span>
-                    <span class="text-xs text-gray-400">5 mnt lalu</span>
-                  </div>
-                  <p class="text-gray-600 text-sm leading-relaxed">
-                    Ya, e-sertifikat akan dikirimkan H+3 setelah acara ke email
-                    yang terdaftar.
-                  </p>
-                </div>
-              </div>
-
-              <div class="flex gap-3">
-                <div
-                  class="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-gray-600 font-bold text-sm"
-                >
-                  B
-                </div>
-                <div
-                  class="flex-1 border border-gray-100 rounded-xl p-4 bg-white shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)]"
-                >
-                  <div class="flex justify-between items-start mb-2">
-                    <span class="font-bold text-sm text-gray-800"
-                      >Budi Santoso</span
-                    >
-                    <span class="text-xs text-gray-400">Baru saja</span>
-                  </div>
-                  <p class="text-gray-600 text-sm mb-3 leading-relaxed">
-                    Apakah ada kuota maksimal untuk peserta luring?
-                  </p>
-                  <div
-                    class="flex items-center gap-5 text-sm font-medium text-gray-500"
-                  >
-                    <button
-                      class="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
-                    >
-                      <span>👍</span> <span>2</span>
-                    </button>
-                    <button
-                      class="flex items-center gap-1.5 hover:text-blue-600 transition-colors text-blue-500"
-                    >
-                      <span class="text-blue-500 font-bold">↩️</span>
-                      <span>Balas</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <div class="text-center text-sm text-gray-400 my-auto">Memuat diskusi dari server...</div>
             </div>
 
             <div class="p-4 border-t border-gray-100 bg-white">
@@ -323,10 +227,11 @@
         <hr class="border-slate-200 my-8" />
 
         <div class="text-center text-sm text-slate-400">
-          &copy; 2026 KampusKonek. Semua hak cipta dilindungi.
+          &copy; 2026 Mading Kampus. Semua hak cipta dilindungi.
         </div>
       </div>
     </footer>
+    
     <script type="module" src="js/select-event.js"></script>
   </body>
 </html>
