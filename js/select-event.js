@@ -309,10 +309,3 @@ const initChatSystem = () => {
 
 initEventDetail();
 initChatSystem();
-
-
-// ==========================================
-// 3. JALANKAN SEMUA FUNGSI
-// ==========================================
-initEventDetail();
-initChatSystem();
