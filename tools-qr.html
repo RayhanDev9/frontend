@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator - Mading Kampus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body class="min-h-screen bg-[#f5f7fa] text-slate-800 font-sans selection:bg-blue-200">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="text-xl font-bold text-blue-700 tracking-tight flex items-center gap-2 transition-transform hover:-translate-x-1">
+                <span class="text-2xl">&larr;</span> Kembali
+            </a>
+            <span class="font-semibold text-slate-500 uppercase tracking-widest text-sm">Mini Tools</span>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-6 py-12">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">QR Code Generator</h1>
+            <p class="text-slate-500 text-lg">Ubah tautan acara, profil, atau teks apapun menjadi QR Code yang siap dipindai dalam sekejap.</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+            
+            <div class="mb-6">
+                <label for="input-link" class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Masukkan Tautan / Teks</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                    </div>
+                    <input type="text" id="input-link" placeholder="Contoh: https://instagram.com/madingkampus" 
+                           class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block transition-all outline-none">
+                </div>
+            </div>
+
+            <button id="btn-generate" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl transition-all duration-300 hover:bg-blue-700 shadow-md active:scale-[0.98] flex justify-center items-center gap-2">
+                BUAT QR CODE SEKARANG
+            </button>
+
+        </div>
+
+        <div id="wadah-hasil" class="mt-12 hidden transition-all duration-500 opacity-0 translate-y-4">
+            <h3 class="text-center text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Hasil QR Code</h3>
+            
+            <div class="flex flex-col items-center gap-6">
+                <div class="p-4 bg-white rounded-2xl shadow-lg border border-slate-200 transition-transform hover:scale-105 duration-300">
+                    <canvas id="qr-canvas" class="rounded-lg"></canvas>
+                </div>
+                
+                <button id="btn-download" class="flex items-center gap-2 px-8 py-3 bg-slate-900 text-white font-semibold rounded-full hover:bg-slate-800 transition-colors shadow-md">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Unduh Gambar (PNG)
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const inputLink = document.getElementById('input-link');
+        const btnGenerate = document.getElementById('btn-generate');
+        const wadahHasil = document.getElementById('wadah-hasil');
+        const qrCanvas = document.getElementById('qr-canvas');
+        const btnDownload = document.getElementById('btn-download');
+
+        // Objek QRious untuk membuat QR Code
+        let qrGenerator = new QRious({
+            element: qrCanvas,
+            size: 250, // Ukuran pixel gambar
+            background: 'white',
+            foreground: '#0f172a', // Warna biru dongker gelap (Slate 900)
+            level: 'H' // Error correction level High (gambarnya tetap bisa dibaca meski sedikit tertutup)
+        });
+
+        // Event saat tombol ditekan
+        btnGenerate.addEventListener('click', () => {
+            const nilaiInput = inputLink.value.trim();
+
+            // Validasi jika kosong
+            if (!nilaiInput) {
+                alert('Tautan atau teks tidak boleh kosong!');
+                inputLink.focus();
+                return;
+            }
+
+            // Generate QR Code baru berdasarkan input
+            qrGenerator.value = nilaiInput;
+
+            // Munculkan wadah hasil dengan animasi
+            wadahHasil.classList.remove('hidden');
+            setTimeout(() => {
+                wadahHasil.classList.remove('opacity-0', 'translate-y-4');
+                wadahHasil.classList.add('opacity-100', 'translate-y-0');
+                
+                // Scroll halus ke area hasil
+                wadahHasil.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 50);
+        });
+
+        // Fitur eksekusi saat menekan tombol "Enter" di keyboard
+        inputLink.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                btnGenerate.click();
+            }
+        });
+
+        // Event untuk tombol unduh gambar
+        btnDownload.addEventListener('click', () => {
+            // Ubah kanvas menjadi URL data gambar PNG
+            const dataUrl = qrCanvas.toDataURL("image/png");
+            
+            // Buat elemen link bohongan untuk memicu download
+            const linkDownload = document.createElement('a');
+            linkDownload.href = dataUrl;
+            linkDownload.download = 'MadingKampus-QRCode.png'; // Nama file otomatis
+            
+            // Simulasikan klik
+            document.body.appendChild(linkDownload);
+            linkDownload.click();
+            document.body.removeChild(linkDownload);
+        });
+    </script>
+</body>
+</html>
