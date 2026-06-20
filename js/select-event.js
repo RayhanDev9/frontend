@@ -135,116 +135,180 @@ const initEventDetail = () => {
 // BAGIAN 2: LOGIKA CHAT & KOMENTAR (INTEGRASI API)
 // ==========================================
 
+// Buka 2 fungsi ini ke global window agar bisa dipanggil dari HTML inline onclick
+window.toggleReply = function(commentId) {
+    const form = document.getElementById(`reply-form-${commentId}`);
+    form.classList.toggle('hidden');
+};
+
+window.submitReply = async function(event, commentId) {
+    event.preventDefault();
+    const input = document.getElementById(`reply-input-${commentId}`);
+    const btn = document.getElementById(`btn-reply-${commentId}`);
+    const text = input.value.trim();
+    if (!text) return;
+
+    btn.disabled = true;
+    btn.innerHTML = '...';
+
+    try {
+        // Tembak API Balasan (POST /api/comments/{id}/reply)
+        const response = await fetch(`https://slab-silenced-riot.ngrok-free.dev/api/comments/${commentId}/reply`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "ngrok-skip-browser-warning": "true",
+            },
+            body: JSON.stringify({ event_id: idAcara, isi_komentar: text })
+        });
+
+        if (response.ok) {
+            input.value = '';
+            window.toggleReply(commentId); // Tutup form setelah sukses
+            window.refreshComments(); // Refresh seluruh chat
+        } else {
+            alert('Gagal mengirim balasan.');
+        }
+    } catch (error) {
+        console.error("Gagal reply:", error);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Kirim';
+    }
+};
+
+
 const initChatSystem = () => {
-    if (!idAcara) return; // Jangan inisiasi chat kalau tidak ada ID Acara
+    if (!idAcara) return; 
 
     const chatBox = document.getElementById("chat-box");
     const chatForm = document.getElementById("chat-form");
     const chatInput = document.getElementById("chat-input");
     const btnSubmit = chatForm.querySelector('button[type="submit"]');
 
-    // 1. Fungsi Ambil Komentar dari Database (GET)
-    async function fetchComments() {
+    // Buat fetchComments bisa dipanggil dari luar (lewat window)
+    window.refreshComments = async function fetchComments() {
         try {
-            // Asumsi Endpoint API Laravel: /api/events/{id}/comments
             const response = await fetch(`${API_BASE_URL}/${idAcara}/comments`, {
                 headers: { "ngrok-skip-browser-warning": "true", "Accept": "application/json" }
             });
-            
             const result = await response.json();
             
-            // Bersihkan box chat
-            chatBox.innerHTML = ''; 
+            let chatHtml = '';
 
             if (!result.data || result.data.length === 0) {
                 chatBox.innerHTML = `<div class="text-center text-sm text-gray-400 my-auto w-full">Belum ada diskusi. Jadilah yang pertama!</div>`;
                 return;
             }
 
-            // Loop data komentar dan masukkan ke HTML
+            // LOOP KOMENTAR UTAMA
             result.data.forEach(comment => {
-                // Mengecek apakah yang komentar itu panitia atau user biasa
-                // (Ini asumsi properti dari API, sesuaikan jika beda nama kolomnya)
-                const namaUser = comment.user ? comment.user.nama_lengkap : (comment.user_nama || 'Anonim');
-                const isPanitia = comment.role === 'panitia' || (comment.user && comment.user.role === 'admin');
+                const namaUser = comment.user_nama || 'Anonim';
+                const isPanitia = comment.role === 'panitia' || comment.role === 'admin';
                 const initial = namaUser.charAt(0).toUpperCase();
-                
-                // Format Waktu sederhana
                 const jamFormat = comment.waktu_yang_lalu || "Baru saja";
 
-                const chatHtml = `
-                    <div class="flex gap-3 ${isPanitia ? 'ml-12' : ''} animate-fade-in">
+                chatHtml += `
+                    <div class="flex gap-3 animate-fade-in mb-2">
                         <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm ${isPanitia ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-600'}">
                             ${initial}
                         </div>
-                        <div class="flex-1 border border-gray-100 rounded-xl p-4 ${isPanitia ? 'bg-blue-50' : 'bg-white shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)]'}">
+                        <div class="flex-1 border border-gray-100 rounded-xl p-4 ${isPanitia ? 'bg-blue-50' : 'bg-white shadow-sm'}">
                             <div class="flex justify-between items-start mb-2">
                                 <span class="font-bold text-sm text-gray-800">${namaUser} ${isPanitia ? '<span class="text-[10px] bg-blue-500 text-white px-1.5 py-0.5 rounded ml-1 uppercase">Panitia</span>' : ''}</span>
                                 <span class="text-xs text-gray-400">${jamFormat}</span>
                             </div>
                             <p class="text-gray-800 text-sm mb-3 leading-relaxed">${comment.isi_komentar}</p>
+                            
+                            <button onclick="window.toggleReply(${comment.id})" class="text-xs font-semibold text-blue-500 hover:text-blue-700 flex items-center gap-1 transition">
+                                <span>↩️</span> Balas
+                            </button>
+
+                            <div id="reply-form-${comment.id}" class="hidden mt-3 pt-3 border-t border-gray-100">
+                                <form onsubmit="window.submitReply(event, ${comment.id})" class="flex gap-2">
+                                    <input type="text" id="reply-input-${comment.id}" placeholder="Balas komentar ini..." class="w-full px-3 py-1.5 text-sm bg-gray-50 border border-gray-200 rounded outline-none focus:border-blue-400" required>
+                                    <button type="submit" id="btn-reply-${comment.id}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm font-semibold transition">Kirim</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 `;
-                chatBox.insertAdjacentHTML("beforeend", chatHtml);
+
+                // LOOP BALASAN (Jika ada replies di dalam komentar utama)
+                if (comment.replies && comment.replies.length > 0) {
+                    comment.replies.forEach(reply => {
+                        const rNamaUser = reply.user_nama || 'Anonim';
+                        const rIsPanitia = reply.role === 'panitia' || reply.role === 'admin';
+                        const rInitial = rNamaUser.charAt(0).toUpperCase();
+                        const rJam = reply.waktu_yang_lalu || "Baru saja";
+
+                        chatHtml += `
+                            <div class="flex gap-3 ml-12 mb-2 animate-fade-in border-l-2 border-gray-200 pl-4">
+                                <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-xs ${rIsPanitia ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}">
+                                    ${rInitial}
+                                </div>
+                                <div class="flex-1 rounded-xl p-3 bg-gray-50 border border-gray-100">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <span class="font-bold text-xs text-gray-800">${rNamaUser} ${rIsPanitia ? '<span class="text-[9px] bg-blue-500 text-white px-1 rounded ml-1 uppercase">Panitia</span>' : ''}</span>
+                                        <span class="text-[10px] text-gray-400">${rJam}</span>
+                                    </div>
+                                    <p class="text-gray-600 text-xs leading-relaxed">${reply.isi_komentar}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
             });
 
-            // Scroll ke bawah
+            chatBox.innerHTML = chatHtml;
             chatBox.scrollTop = chatBox.scrollHeight;
 
         } catch (error) {
             console.error("Gagal load komentar:", error);
-            // Jangan timpa tampilan jika gagal load, biarkan apa adanya
         }
-    }
+    };
 
-    // 2. Fungsi Kirim Komentar ke Database (POST)
+    // Fungsi Kirim Komentar Utama (Bukan Balasan)
     chatForm.addEventListener("submit", async function (e) {
         e.preventDefault(); 
         const messageText = chatInput.value.trim();
-        if (messageText === "") return;
+        if (!messageText) return;
 
-        // Kunci input sementara
         btnSubmit.disabled = true;
         btnSubmit.innerHTML = '...';
 
         try {
-            // Asumsi Endpoint API Laravel: /api/events/{id}/comment
             const response = await fetch(`${API_BASE_URL}/${idAcara}/comment`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
-                    "ngrok-skip-browser-warning": "true",
-                    // "Authorization": `Bearer ${localStorage.getItem('token')}` // Buka baris ini jika API wajib login
+                    "ngrok-skip-browser-warning": "true"
                 },
                 body: JSON.stringify({ isi_komentar: messageText })
             });
 
-            if (!response.ok) {
-                // Jika API menolak (misal karena belum login/401)
-                throw new Error(response.status);
+            if (response.ok) {
+                chatInput.value = "";
+                window.refreshComments(); 
+            } else {
+                throw new Error("Gagal");
             }
-
-            // Kosongkan form dan reload komentar dari server
-            chatInput.value = "";
-            fetchComments(); 
-
         } catch (error) {
-            console.error("Gagal kirim komentar:", error);
-            alert(error.message == '401' ? "Anda harus login untuk berkomentar!" : "Gagal mengirim pesan ke server.");
+            alert("Gagal mengirim komentar.");
         } finally {
             btnSubmit.disabled = false;
             btnSubmit.innerHTML = '➤';
         }
     });
 
-    // Jalankan load komentar pertama kali
-    fetchComments();
-
-    // (Opsional) Refresh komentar otomatis setiap 5 detik agar realtime untuk semua pengunjung
-    // setInterval(fetchComments, 5000); 
+    // Jalankan load pertama
+    window.refreshComments();
 };
+
+initEventDetail();
+initChatSystem();
 
 
 // ==========================================
