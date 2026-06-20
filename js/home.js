@@ -93,7 +93,7 @@ const EvenCardLogic = async () => {
           ? "Gratis"
           : `Rp ${parseInt(acara.harga).toLocaleString("id-ID")}`;
       const cardHTML = `
-  <div data-id="${acara.id}" class="card-acara w-[100%] xs:w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition duration-300 flex flex-col cursor-pointer group max-xs:mx-auto">
+  <div data-id="${acara.id}" class="card-acara w-[100%] xs:w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition duration-300 flex flex-col cursor-pointer group max-sm:mx-auto">
       
       <div class="h-48 bg-slate-100 w-full relative overflow-hidden">
           <div class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm">
@@ -181,81 +181,79 @@ function bukaDetail(id) {
 EvenCardLogic();
 
 const eventFilterLogic = () => {
-  document.addEventListener("DOMContentLoaded", () => {
-    // 1. DEFINISIKAN DULU VARIABEL KELAS-NYA DI SINI
-    const tabActive = [
-      "bg-white",
-      "text-blue-700",
-      "font-bold",
-      "shadow-sm",
-      "border-slate-200",
-    ];
-    const tabInactive = [
-      "text-slate-500",
-      "font-medium",
-      "border-transparent",
-      "hover:text-slate-900",
-      "hover:bg-slate-200/50",
-    ];
+  // 1. DEFINISIKAN DULU VARIABEL KELAS-NYA DI SINI
+  const tabActive = [
+    "bg-white",
+    "text-blue-700",
+    "font-bold",
+    "shadow-sm",
+    "border-slate-200",
+  ];
+  const tabInactive = [
+    "text-slate-500",
+    "font-medium",
+    "border-transparent",
+    "hover:text-slate-900",
+    "hover:bg-slate-200/50",
+  ];
 
-    const timeActive = [
-      "bg-blue-50",
-      "text-blue-700",
-      "border-blue-200",
-      "font-semibold",
-      "hover:bg-blue-100",
-    ];
-    const timeInactive = [
-      "bg-white",
-      "text-slate-600",
-      "border-slate-200",
-      "font-medium",
-      "hover:bg-slate-50",
-      "hover:border-slate-300",
-    ];
+  const timeActive = [
+    "bg-blue-50",
+    "text-blue-700",
+    "border-blue-200",
+    "font-semibold",
+    "hover:bg-blue-100",
+  ];
+  const timeInactive = [
+    "bg-white",
+    "text-slate-600",
+    "border-slate-200",
+    "font-medium",
+    "hover:bg-slate-50",
+    "hover:border-slate-300",
+  ];
 
-    const categoryActive = [
-      "bg-blue-50",
-      "text-blue-700",
-      "border-blue-200",
-      "font-semibold",
-    ];
-    const categoryInactive = [
-      "bg-white",
-      "text-slate-600",
-      "border-slate-200",
-      "font-medium",
-      "hover:bg-slate-50",
-      "hover:border-slate-300",
-      "hover:text-slate-900",
-    ];
+  const categoryActive = [
+    "bg-blue-50",
+    "text-blue-700",
+    "border-blue-200",
+    "font-semibold",
+  ];
+  const categoryInactive = [
+    "bg-white",
+    "text-slate-600",
+    "border-slate-200",
+    "font-medium",
+    "hover:bg-slate-50",
+    "hover:border-slate-300",
+    "hover:text-slate-900",
+  ];
 
-    // 2. FUNGSI LOGIKA (Nama yang profesional)
-    function initFilterGroup(containerId, activeClasses, inactiveClasses) {
-      const container = document.getElementById(containerId);
+  // 2. FUNGSI LOGIKA (Nama yang profesional)
+  function initFilterGroup(containerId, activeClasses, inactiveClasses) {
+    const container = document.getElementById(containerId);
 
-      // console.info(container) -> Ini bisa kamu hapus kalau sudah tidak butuh debugging
-      if (!container) return;
+    // console.info(container) -> Ini bisa kamu hapus kalau sudah tidak butuh debugging
+    if (!container) return;
 
-      const buttons = container.querySelectorAll("button");
+    const buttons = container.querySelectorAll("button");
 
-      buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-          buttons.forEach((btn) => {
-            btn.classList.remove(...activeClasses);
-            btn.classList.add(...inactiveClasses);
-          });
-          button.classList.remove(...inactiveClasses);
-          button.classList.add(...activeClasses);
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        buttons.forEach((btn) => {
+          btn.classList.remove(...activeClasses);
+          btn.classList.add(...inactiveClasses);
         });
+        button.classList.remove(...inactiveClasses);
+        button.classList.add(...activeClasses);
       });
-    }
+    });
+  }
 
-    // 3. PANGGIL FUNGSINYA
-    initFilterGroup("tab-group", tabActive, tabInactive);
-    initFilterGroup("time-group", timeActive, timeInactive);
-    initFilterGroup("category-group", categoryActive, categoryInactive);
-  });
+  // 3. PANGGIL FUNGSINYA
+  initFilterGroup("tab-group", tabActive, tabInactive);
+  initFilterGroup("time-group", timeActive, timeInactive);
+  initFilterGroup("category-group", categoryActive, categoryInactive);
 };
 
 eventFilterLogic();

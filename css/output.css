@@ -14,6 +14,8 @@
     --color-red-700: oklch(50.5% 0.213 27.518);
     --color-red-900: oklch(39.6% 0.141 25.723);
     --color-red-950: oklch(25.8% 0.092 26.042);
+    --color-amber-300: oklch(87.9% 0.169 91.605);
+    --color-amber-500: oklch(76.9% 0.188 70.08);
     --color-green-200: oklch(92.5% 0.084 155.995);
     --color-green-700: oklch(52.7% 0.154 150.069);
     --color-green-900: oklch(39.3% 0.095 152.535);
@@ -447,17 +449,11 @@
   .max-w-1 {
     max-width: var(--spacing);
   }
-  .max-w-1\/2 {
-    max-width: calc(1 / 2 * 100%);
-  }
   .max-w-2xl {
     max-width: var(--container-2xl);
   }
   .max-w-7xl {
     max-width: var(--container-7xl);
-  }
-  .max-w-\[75\%\] {
-    max-width: 75%;
   }
   .flex-1 {
     flex: 1;
@@ -636,6 +632,9 @@
   .border-blue-200 {
     border-color: var(--color-blue-200);
   }
+  .border-blue-500 {
+    border-color: var(--color-blue-500);
+  }
   .border-blue-600 {
     border-color: var(--color-blue-600);
   }
@@ -672,6 +671,12 @@
   .bg-\[\#f5f7fa\] {
     background-color: #f5f7fa;
   }
+  .bg-amber-300 {
+    background-color: var(--color-amber-300);
+  }
+  .bg-amber-500 {
+    background-color: var(--color-amber-500);
+  }
   .bg-blue-50 {
     background-color: var(--color-blue-50);
   }
@@ -683,6 +688,9 @@
   }
   .bg-gray-50 {
     background-color: var(--color-gray-50);
+  }
+  .bg-gray-400 {
+    background-color: var(--color-gray-400);
   }
   .bg-green-900 {
     background-color: var(--color-green-900);
@@ -1025,13 +1033,6 @@
   .\[-ms-overflow-style\:none\] {
     -ms-overflow-style: none;
   }
-  .group-hover\:text-blue-600 {
-    &:is(:where(.group):hover *) {
-      @media (hover: hover) {
-        color: var(--color-blue-600);
-      }
-    }
-  }
   .hover\:border-blue-400 {
     &:hover {
       @media (hover: hover) {
@@ -1105,13 +1106,6 @@
       }
     }
   }
-  .hover\:text-slate-700 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-slate-700);
-      }
-    }
-  }
   .hover\:text-slate-900 {
     &:hover {
       @media (hover: hover) {
@@ -1167,6 +1161,11 @@
       scale: 0.98;
     }
   }
+  .max-sm\:mx-auto {
+    @media (width < 40rem) {
+      margin-inline: auto;
+    }
+  }
   .max-xs\:mx-auto {
     @media (width < 30rem) {
       margin-inline: auto;
@@ -1180,11 +1179,6 @@
   .xs\:px-4 {
     @media (width >= 30rem) {
       padding-inline: calc(var(--spacing) * 4);
-    }
-  }
-  .sm\:w-80 {
-    @media (width >= 40rem) {
-      width: calc(var(--spacing) * 80);
     }
   }
   .sm\:max-w-md {
