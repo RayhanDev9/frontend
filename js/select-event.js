@@ -111,7 +111,9 @@ const initEventDetail = () => {
             if (!response.ok) throw new Error("Gagal mengambil data dari API");
 
             const result = await response.json();
-            const dataAsli = result.data;
+            
+            // PERBAIKAN: Antisipasi jika Back-End tidak membungkus respons dengan 'data'
+            const dataAsli = result.data !== undefined ? result.data : result;
 
             fungsiCreateEvents(dataAsli);
             renderBreadcrumb(dataAsli);
@@ -168,8 +170,7 @@ const initChatSystem = () => {
                 const initial = namaUser.charAt(0).toUpperCase();
                 
                 // Format Waktu sederhana
-                const d = new Date(comment.created_at);
-                const jamFormat = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+                const jamFormat = comment.waktu_yang_lalu || "Baru saja";
 
                 const chatHtml = `
                     <div class="flex gap-3 ${isPanitia ? 'ml-12' : ''} animate-fade-in">
