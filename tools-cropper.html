@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Cropper</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <style>
+        /* === RESET & VARIABEL === */
+        :root {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --primary: #f97316; /* Orange sesuai desain */
+            --primary-hover: #ea580c;
+            --success: #22c55e;
+            --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            background-color: var(--bg-body);
+            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* === HEADER === */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .badge-on-device {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+        }
+
+        .badge-on-device::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+        }
+
+        .btn-reset {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+        }
+
+        /* === LAYOUT UTAMA === */
+        .layout-container {
+            display: flex;
+            flex: 1;
+            padding: 20px 30px;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        /* === SIDEBAR (KIRI) === */
+        .sidebar {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: var(--bg-body);
+            position: relative;
+        }
+
+        .upload-area:hover { border-color: var(--primary); }
+        .upload-area input[type="file"] {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer;
+        }
+        
+        .upload-btn {
+            background: white; border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px;
+            font-weight: 600; color: var(--primary); margin-bottom: 10px; display: inline-flex; align-items: center; gap: 8px;
+        }
+
+        .btn-download {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-download:hover { background-color: var(--primary-hover); }
+
+        /* Aspect Ratio Grid */
+        .ratio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .ratio-btn {
+            background: white; border: 1px solid var(--border); padding: 15px 5px; border-radius: 8px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+            cursor: pointer; color: var(--text-muted); font-size: 12px; font-weight: 600; transition: 0.2s;
+        }
+
+        .ratio-btn.active { border-color: var(--primary); color: var(--primary); }
+        .ratio-btn:hover { border-color: var(--primary); }
+        .ratio-icon { border: 1px solid currentColor; border-radius: 2px; }
+
+        /* === WORKSPACE (KANAN) === */
+        .workspace {
+            flex: 1;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .workspace-header {
+            padding: 15px 20px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cropper-container-wrapper {
+            flex: 1;
+            background-image: 
+                linear-gradient(45deg, #e2e8f0 25%, transparent 25%), 
+                linear-gradient(-45deg, #e2e8f0 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #e2e8f0 75%), 
+                linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .no-image {
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Target gambar untuk cropper */
+        #cropper-image {
+            max-width: 100%;
+            max-height: 100%;
+            display: none; /* Sembunyikan sampai ada gambar */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <div style="width: 36px; height: 36px; background-color: var(--primary); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px;">+</div>
+            <div>
+                Image Cropper <span style="color:var(--success)">🍃</span>
+                <div class="badge-on-device">On-Device</div>
+            </div>
+        </div>
+        <button class="btn-reset" id="btn-reset">↺ Reset</button>
+    </header>
+
+    <div class="layout-container">
+        <div class="sidebar">
+            <div class="card">
+                <div class="card-header">🖼️ Source Image</div>
+                <div class="upload-area">
+                    <input type="file" id="image-input" accept="image/png, image/jpeg, image/jpg, image/webp">
+                    <div class="upload-btn">☁️ Upload Image</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Drag & drop or click to browse files.</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span>⚙️ Settings</span>
+                    <button class="btn-download" id="btn-download">📥 DOWNLOAD</button>
+                </div>
+                
+                <div class="card-header" style="margin-top: 20px; color: var(--text-muted);">♮ ASPECT RATIO</div>
+                <div class="ratio-grid">
+                    <div class="ratio-btn active" data-ratio="NaN">
+                        <div class="ratio-icon" style="width: 20px; height: 16px; border-style: dashed;"></div>
+                        FREE
+                    </div>
+                    <div class="ratio-btn" data-ratio="1">
+                        <div class="ratio-icon" style="width: 16px; height: 16px;"></div>
+                        1:1
+                    </div>
+                    <div class="ratio-btn" data-ratio="0.75">
+                        <div class="ratio-icon" style="width: 14px; height: 18px;"></div>
+                        3:4
+                    </div>
+                    <div class="ratio-btn" data-ratio="1.3333">
+                        <div class="ratio-icon" style="width: 20px; height: 15px;"></div>
+                        4:3
+                    </div>
+                    <div class="ratio-btn" data-ratio="1.7777">
+                        <div class="ratio-icon" style="width: 24px; height: 14px;"></div>
+                        16:9
+                    </div>
+                    <div class="ratio-btn" data-ratio="0.5625">
+                        <div class="ratio-icon" style="width: 12px; height: 20px;"></div>
+                        9:16
+                    </div>
+                </div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 15px; text-align: center;">
+                    Drag the edges of the box to resize the crop area freely.
+                </div>
+            </div>
+        </div>
+
+        <div class="workspace">
+            <div class="workspace-header">🔲 Cropper Workspace</div>
+            <div class="cropper-container-wrapper" id="workspace-container">
+                <div class="no-image" id="no-image-text">
+                    <div style="font-size: 40px; color: #cbd5e1; margin-bottom: 10px;">🖼️</div>
+                    No image selected.
+                </div>
+                <img id="cropper-image" src="" alt="Picture to crop">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    
+    <script>
+        // === KONFIGURASI API ===
+        const API_URL = 'https://slab-silenced-riot.ngrok-free.dev/api/crop-image';
+
+        // === VARIABEL GLOBAL ===
+        let cropper = null;
+        const imageInput = document.getElementById('image-input');
+        const cropperImage = document.getElementById('cropper-image');
+        const noImageText = document.getElementById('no-image-text');
+        const btnReset = document.getElementById('btn-reset');
+        const btnDownload = document.getElementById('btn-download');
+        const ratioBtns = document.querySelectorAll('.ratio-btn');
+
+        // === INIT GAMBAR & CROPPER ===
+        imageInput.addEventListener('change', function (e) {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                const file = files[0];
+                const url = URL.createObjectURL(file);
+                
+                // Tampilkan gambar, sembunyikan teks kosong
+                noImageText.style.display = 'none';
+                cropperImage.src = url;
+                cropperImage.style.display = 'block';
+
+                // Hancurkan cropper lama jika ada, lalu buat yang baru
+                if (cropper) { cropper.destroy(); }
+                
+                cropper = new Cropper(cropperImage, {
+                    aspectRatio: NaN, // Default FREE
+                    viewMode: 1,      // Membatasi kotak crop agar tidak keluar gambar
+                    background: false, // Background ditangani oleh CSS kita
+                });
+
+                // Reset status tombol ratio ke FREE
+                ratioBtns.forEach(b => b.classList.remove('active'));
+                ratioBtns[0].classList.add('active');
+            }
+        });
+
+        // === FUNGSI ASPECT RATIO ===
+        ratioBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!cropper) return alert('Silakan upload gambar terlebih dahulu!');
+
+                // Update UI tombol
+                ratioBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                // Ubah rasio pada cropper
+                const ratioValue = parseFloat(this.getAttribute('data-ratio'));
+                cropper.setAspectRatio(ratioValue);
+            });
+        });
+
+        // === FUNGSI RESET ===
+        btnReset.addEventListener('click', () => {
+            if (cropper) { cropper.destroy(); cropper = null; }
+            imageInput.value = '';
+            cropperImage.src = '';
+            cropperImage.style.display = 'none';
+            noImageText.style.display = 'block';
+            ratioBtns.forEach(b => b.classList.remove('active'));
+            ratioBtns[0].classList.add('active');
+        });
+
+        // === FUNGSI DOWNLOAD & KIRIM KE LARAVEL API ===
+        btnDownload.addEventListener('click', async () => {
+            if (!cropper) return alert('Tidak ada gambar untuk di-crop!');
+
+            btnDownload.innerText = '⏳ PROSES...';
+
+            // 1. Ekstrak gambar yang sudah dipotong menjadi Base64
+            const canvas = cropper.getCroppedCanvas();
+            const base64Image = canvas.toDataURL('image/png'); // Format file PNG
+
+            // 2. Opsi: Download otomatis ke komputer lokal (Opsional)
+            const link = document.createElement('a');
+            link.download = 'cropped-image.png';
+            link.href = base64Image;
+            link.click();
+
+            // 3. Kirim hasil crop ke API Laravel Anda
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
+                    },
+                    body: JSON.stringify({
+                        cropped_image: base64Image
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    console.log('Sukses disimpan di Laravel!', result);
+                    // alert('Sukses! Gambar berhasil di-crop dan dikirim ke server.');
+                } else {
+                    alert('Error dari Server: ' + result.message);
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                alert('Gagal menghubungi API Laravel.');
+            } finally {
+                btnDownload.innerText = '📥 DOWNLOAD';
+            }
+        });
+    </script>
+</body>
+</html>
