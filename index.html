@@ -21,42 +21,36 @@
     <header
       class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm"
     >
-      <!-- Kontainer Utama -->
       <div class="mx-auto px-4 sm:px-6 md:px-8">
-        <div class="flex items-center justify-between h-20">
-          <!-- Kelompok Kiri: Logo & Navigasi Desktop -->
-          <div class="flex items-center gap-x-5 lg:gap-x-10">
-            <!-- Logo (Kamu bisa ganti jadi MADINGKAMPUS jika mau) -->
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center gap-x-5 lg:gap-x-8">
             <a
               href="#"
-              class="text-2xl md:text-3xl font-bold text-blue-700 tracking-tight"
+              class="text-xl md:text-2xl font-bold text-blue-700 tracking-tight"
               >MK</a
             >
 
-            <!-- Tautan Navigasi (Hanya tampil di Desktop, disembunyikan di Mobile) -->
             <nav
-              class="hidden md:flex items-center gap-x-8 lg:gap-x-8 text-sm md:text-lg"
+              class="hidden md:flex items-center gap-x-6 lg:gap-x-8 text-sm md:text-base"
             >
               <a
                 href="#"
-                class="font-medium text-blue-600 border-b-4 border-blue-600 pb-1 mt-1"
+                class="font-medium text-blue-600 border-b-[3px] border-blue-600 pb-1 mt-1"
                 >Beranda</a
               >
               <a href="#" class="text-slate-600 hover:text-slate-900 transition"
                 >Favorit</a
               >
               <a href="#" class="text-slate-600 hover:text-slate-900 transition"
-                >Profil</a
+                >Mini Tools</a
               >
             </nav>
           </div>
 
-          <!-- Kelompok Kanan: Search & Button Desktop -->
-          <div class="hidden md:flex items-center gap-x-6">
-            <!-- Bidang Pencarian -->
+          <div class="hidden md:flex items-center gap-x-5 text-sm">
             <div class="relative">
               <svg
-                class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -72,17 +66,16 @@
               <input
                 type="text"
                 placeholder="Cari acara..."
-                class="-40 lg:w-64 px-4 py-2.5 pl-10 border border-slate-300 rounded-lg placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                class="w-48 lg:w-56 px-3 py-1.5 pl-10 border border-slate-300 rounded-lg placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
               />
             </div>
 
-            <!-- Tombol Aksi -->
             <a href="uploud.html">
               <button
-                class="flex items-center gap-x-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
+                class="flex items-center gap-x-1.5 px-4 py-1.5 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
               >
                 <svg
-                  class="w-5 h-5"
+                  class="w-4 h-4"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -98,6 +91,14 @@
                 UNGGAH
               </button>
             </a>
+
+            <div class="border-l border-slate-300 pl-5">
+              <a
+                href="#"
+                class="text-red-500 hover:text-red-700 font-medium transition text-base"
+                >Logout</a
+              >
+            </div>
           </div>
 
           <!-- Tombol Hamburger (Hanya tampil di Mobile) -->
@@ -124,33 +125,40 @@
         </div>
       </div>
 
-      <!-- Menu Dropdown Mobile (Disembunyikan secara default oleh class 'hidden') -->
       <div
         id="mobile-menu"
         class="md:hidden border-t border-slate-200 bg-white px-4 pt-4 pb-6 space-y-4 shadow-lg absolute w-full left-0 z-40 transform transition-all duration-300 ease-out opacity-0 pointer-events-none -translate-y-4"
       >
-        <nav class="flex flex-col gap-y-4 text-lg">
+        <nav class="flex flex-col gap-y-4 text-base">
           <a href="#" class="font-medium text-blue-600">Beranda</a>
           <a href="#" class="text-slate-600 hover:text-slate-900 transition"
             >Favorit</a
           >
           <a href="#" class="text-slate-600 hover:text-slate-900 transition"
-            >Profil</a
+            >Mini Tools</a
           >
         </nav>
         <div class="pt-4 border-t border-slate-100 flex flex-col gap-y-4">
           <input
             type="text"
             placeholder="Cari acara..."
-            class="w-full px-4 py-2 border border-slate-300 rounded-lg placeholder-slate-400 focus:outline-none focus:border-blue-500 transition"
+            class="w-full px-4 py-2 border border-slate-300 rounded-lg placeholder-slate-400 focus:outline-none focus:border-blue-500 transition text-sm"
           />
           <a href="uploud.html">
             <button
-              class="flex items-center justify-center gap-x-2 w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
+              class="flex items-center justify-center gap-x-2 w-full px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition text-sm"
             >
               UNGGAH
             </button>
           </a>
+
+          <div class="flex justify-end pt-2">
+            <a
+              href="#"
+              class="text-red-500 hover:text-red-700 font-medium transition text-base"
+              >Logout</a
+            >
+          </div>
         </div>
       </div>
     </header>
@@ -177,7 +185,7 @@
             <button
               class="px-8 py-2 rounded-md text-sm transition-all duration-200 focus:outline-none text-slate-500 font-medium border border-transparent hover:text-slate-900 hover:bg-slate-200/50"
             >
-              UMKO
+              UKO
             </button>
             <button
               class="px-8 py-2 rounded-md text-sm transition-all duration-200 focus:outline-none text-slate-500 font-medium border border-transparent hover:text-slate-900 hover:bg-slate-200/50"
@@ -217,39 +225,6 @@
                 class="whitespace-nowrap px-5 py-2 rounded-full text-sm transition-all duration-200 shadow-sm border bg-white text-slate-600 border-slate-200 font-medium hover:bg-slate-50 hover:border-slate-300"
               >
                 Acara Mendatang
-              </button>
-            </div>
-
-            <!-- BARIS 3: Filter Kategori (Tambahkan id="category-group") -->
-            <div
-              id="category-group"
-              class="flex flex-nowrap overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] items-center gap-2"
-            >
-              <span
-                class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2"
-                >Kategori</span
-              >
-
-              <!-- Untuk kategori, saya atur desain defaultnya polos, anggap belum ada yang dipilih -->
-              <button
-                class="whitespace-nowrap px-4 py-1.5 rounded-lg text-sm transition-all duration-200 border bg-white text-slate-600 border-slate-200 font-medium hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900"
-              >
-                Seminar
-              </button>
-              <button
-                class="whitespace-nowrap px-4 py-1.5 rounded-lg text-sm transition-all duration-200 border bg-white text-slate-600 border-slate-200 font-medium hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900"
-              >
-                Workshop
-              </button>
-              <button
-                class="whitespace-nowrap px-4 py-1.5 rounded-lg text-sm transition-all duration-200 border bg-white text-slate-600 border-slate-200 font-medium hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900"
-              >
-                Lomba
-              </button>
-              <button
-                class="whitespace-nowrap px-4 py-1.5 rounded-lg text-sm transition-all duration-200 border bg-white text-slate-600 border-slate-200 font-medium hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900"
-              >
-                Seni & Budaya
               </button>
             </div>
           </div>

@@ -124,11 +124,15 @@ const EvenCardLogic = async () => {
 
       <div class="p-5 flex flex-col flex-grow">
           
-          <div class="flex items-center gap-x-2 text-sm text-blue-600 font-semibold mb-3">
+          <div class="flex items-center justify-between gap-x-2 text-sm text-blue-600 font-semibold mb-3">
+           
+                <span class="font-semibold inline-block text-black/50">${hargaTeks}</span>
+               <div class="flex items-center gap-x-2">
               <svg class="w-4 h-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
               </svg>
               <span>${acara.tanggal_acara}</span>
+            </div>
           </div>
           
           
@@ -145,7 +149,6 @@ const EvenCardLogic = async () => {
               </svg>
               <div class="flex justify-between w-full items-center">
                 <span class="line-clamp-1 w-2/3">${acara.link_action || "Lokasi belum ditentukan"}</span>
-                <span class="font-bold text-blue-700">${hargaTeks}</span>
               </div>
           </div>
           
@@ -238,22 +241,6 @@ const eventFilterLogic = () => {
     "hover:border-slate-300",
   ];
 
-  const categoryActive = [
-    "bg-blue-50",
-    "text-blue-700",
-    "border-blue-200",
-    "font-semibold",
-  ];
-  const categoryInactive = [
-    "bg-white",
-    "text-slate-600",
-    "border-slate-200",
-    "font-medium",
-    "hover:bg-slate-50",
-    "hover:border-slate-300",
-    "hover:text-slate-900",
-  ];
-
   // 2. FUNGSI LOGIKA (Nama yang profesional)
   function initFilterGroup(containerId, activeClasses, inactiveClasses) {
     const container = document.getElementById(containerId);
@@ -278,7 +265,6 @@ const eventFilterLogic = () => {
   // 3. PANGGIL FUNGSINYA
   initFilterGroup("tab-group", tabActive, tabInactive);
   initFilterGroup("time-group", timeActive, timeInactive);
-  initFilterGroup("category-group", categoryActive, categoryInactive);
 };
 
 eventFilterLogic();
