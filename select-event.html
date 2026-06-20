@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Realtime - Tanya Jawab</title>
+    <!-- Memanggil Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Styling untuk scrollbar agar terlihat lebih rapi */
+      .chat-container::-webkit-scrollbar {
+        width: 6px;
+      }
+      .chat-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      .chat-container::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+      .chat-container::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gray-100 flex flex-col  min-h-screen p-4 font-sans"
+  >
+    <!-- Breadcrumb -->
+    <div
+      class="py-4 px-4 md:px-10  text-xs md:text-sm text-gray-500 max-w-7xl "
+    >
+      Beranda <span class="mx-1">></span> Acara <span class="mx-1">></span>
+      <span class="font-semibold text-gray-800">Talkshow Karir</span>
+    </div>
+
+    <div
+      class="max-w-7xl mx-auto xs:px-4 md:px-10 pb-12 grid grid-cols-1 lg:grid-cols-3 gap-6"
+    >
+      <main class="lg:col-span-2 flex flex-col gap-6">
+        <div class="relative w-full rounded-lg overflow-hidden bg-gray-200">
+          <span
+            class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded shadow-sm z-10"
+          >
+            Seminar
+          </span>
+          <img
+            src="https://via.placeholder.com/800x400?text=Gambar+Acara"
+            alt="Talkshow"
+            class="w-full h-auto object-cover aspect-video"
+          />
+        </div>
+
+        <div
+          class="bg-white p-5 md:p-6 rounded-lg shadow-sm border border-gray-200 border-t-2 border-b-2 "
+        >
+          <h1 class="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
+            Talkshow Karir: Navigasi Dunia Kerja
+          </h1>
+
+          <div
+            class="grid grid-cols-1 sm:grid-cols-3 gap-2 xs:gap-4 mb-6 py-1 xs:py-2  border-gray-100 border-t-2 border-b-2"
+          >
+            <div
+              class="flex items-start space-x-3 p-2 xs:p-3  "
+            >
+              <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">📅</div>
+              <div>
+                <p class="text-xs text-gray-500 mb-0.5">Tanggal</p>
+                <p class="font-semibold text-sm text-gray-800">25 Okt 2024</p>
+              </div>
+            </div>
+            <div
+              class="flex items-start space-x-3 p-2 xs:p-3 "
+            >
+              <div class="text-blue-500 text-xl  bg-gray-50 rounded p-1">🕒</div>
+              <div>
+                <p class="text-xs text-gray-500 mb-0.5">Waktu</p>
+                <p class="font-semibold text-sm text-gray-800">14:00 WIB</p>
+              </div>
+            </div>
+            <div
+              class="flex items-start space-x-3 p-2 xs:p-3 "
+            >
+              <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">📍</div>
+              <div>
+                <p class="text-xs text-gray-500 mb-0.5">Lokasi</p>
+                <p class="font-semibold text-sm text-gray-800">Aula Utama</p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+          >
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden border border-gray-300"
+              >
+                <img
+                  src="https://via.placeholder.com/48"
+                  alt="Logo"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <p class="text-sm font-bold text-gray-800">
+                  Diselenggarakan oleh BEM Fakultas Ekonomi
+                </p>
+                <p class="text-xs text-gray-500 mt-0.5">1.2k Pengikut</p>
+              </div>
+            </div>
+            <button
+              class="bg-[#3b82f6] hover:bg-blue-600 text-white px-6 py-2.5 rounded font-semibold text-sm w-full sm:w-auto transition-colors"
+            >
+              PESAN TIKET
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="bg-white p-5 md:p-6 rounded-lg shadow-sm border border-gray-200"
+        >
+          <h2 class="text-base font-bold text-gray-900 mb-4">Tentang Acara</h2>
+          <div class="text-gray-600 text-sm leading-relaxed space-y-4">
+            <p>
+              Persiapkan diri Anda untuk menghadapi dunia kerja yang dinamis!
+              Talkshow Karir ini menghadirkan para profesional berpengalaman
+              dari berbagai industri terkemuka. Dapatkan wawasan langsung
+              mengenai ekspektasi industri, tips wawancara yang sukses, dan cara
+              membangun portofolio yang menarik.
+            </p>
+            <p>
+              Acara ini sangat direkomendasikan bagi mahasiswa tingkat akhir
+              yang sedang menyusun rencana karir, maupun mahasiswa baru yang
+              ingin mulai memetakan peluang sejak dini.
+            </p>
+            <ul class="list-disc pl-5 space-y-2 mt-2">
+              <li>Sesi panel dengan HRD perusahaan multinasional.</li>
+              <li>Workshop singkat pembuatan CV ATS-friendly.</li>
+              <li>Sesi networking eksklusif.</li>
+            </ul>
+          </div>
+        </div>
+      </main>
+
+      <aside class="lg:col-span-1">
+        <div
+          class="w-full bg-white border border-gray-200 rounded-xl shadow-sm flex flex-col h-[600px] sticky top-6 overflow-hidden"
+        >
+          <div
+            class="px-5 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10"
+          >
+            <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+              <span class="text-[#c0b4d6] text-2xl">💬</span> Tanya Jawab
+            </h2>
+            <span
+              class="bg-blue-100 text-blue-600 text-xs font-bold px-3 py-1.5 rounded uppercase tracking-wide"
+              >Live</span
+            >
+          </div>
+
+          <div
+            id="chat-box"
+            class="chat-container p-5 flex-1 overflow-y-auto flex flex-col gap-5 bg-white"
+          >
+            <div class="flex gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-gray-600 font-bold text-sm"
+              >
+                A
+              </div>
+              <div
+                class="flex-1 border border-gray-100 rounded-xl p-4 bg-white shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)]"
+              >
+                <div class="flex justify-between items-start mb-2">
+                  <span class="font-bold text-sm text-gray-800"
+                    >Andi Pratama</span
+                  >
+                  <span class="text-xs text-gray-400">10 mnt lalu</span>
+                </div>
+                <p class="text-gray-600 text-sm mb-3 leading-relaxed">
+                  Apakah sertifikat akan diberikan kepada seluruh peserta?
+                </p>
+                <div
+                  class="flex items-center gap-5 text-sm font-medium text-gray-500"
+                >
+                  <button
+                    class="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
+                  >
+                    <span>👍</span> <span>12</span>
+                  </button>
+                  <button
+                    class="flex items-center gap-1.5 hover:text-blue-600 transition-colors text-blue-500"
+                  >
+                    <span class="text-blue-500 font-bold">↩️</span>
+                    <span>Balas</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-3 ml-12">
+              <div
+                class="w-8 h-8 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center text-blue-600 font-bold text-xs"
+              >
+                P
+              </div>
+              <div
+                class="flex-1 rounded-xl p-4 bg-gray-50 border border-gray-100"
+              >
+                <div class="flex justify-between items-start mb-2">
+                  <span class="font-bold text-sm text-gray-800">Panitia</span>
+                  <span class="text-xs text-gray-400">5 mnt lalu</span>
+                </div>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                  Ya, e-sertifikat akan dikirimkan H+3 setelah acara ke email
+                  yang terdaftar.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-gray-600 font-bold text-sm"
+              >
+                B
+              </div>
+              <div
+                class="flex-1 border border-gray-100 rounded-xl p-4 bg-white shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)]"
+              >
+                <div class="flex justify-between items-start mb-2">
+                  <span class="font-bold text-sm text-gray-800"
+                    >Budi Santoso</span
+                  >
+                  <span class="text-xs text-gray-400">Baru saja</span>
+                </div>
+                <p class="text-gray-600 text-sm mb-3 leading-relaxed">
+                  Apakah ada kuota maksimal untuk peserta luring?
+                </p>
+                <div
+                  class="flex items-center gap-5 text-sm font-medium text-gray-500"
+                >
+                  <button
+                    class="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
+                  >
+                    <span>👍</span> <span>2</span>
+                  </button>
+                  <button
+                    class="flex items-center gap-1.5 hover:text-blue-600 transition-colors text-blue-500"
+                  >
+                    <span class="text-blue-500 font-bold">↩️</span>
+                    <span>Balas</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 border-t border-gray-100 bg-white">
+            <form
+              id="chat-form"
+              class="flex items-center border border-gray-300 rounded-md focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden bg-gray-50"
+            >
+              <input
+                type="text"
+                id="chat-input"
+                placeholder="Tanya sesuatu..."
+                class="w-full px-4 py-3 text-sm outline-none bg-transparent"
+                autocomplete="off"
+                required
+              />
+              <button
+                type="submit"
+                class="bg-blue-600 text-white px-5 py-3 hover:bg-blue-700 transition-colors flex items-center justify-center font-bold"
+              >
+                ➤
+              </button>
+            </form>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <script type="module" src="js/select-event.js"></script>
+  </body>
+</html>
