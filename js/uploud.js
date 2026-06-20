@@ -39,6 +39,50 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+  
+    //LOGIKA DRAG AND DROP (SERET FOTO)
+    const areaDrop = document.getElementById('area-drop-file');
+
+    // Mencegah browser membuka gambar di tab baru saat diseret
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        areaDrop.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    // Nambahin efek visual saat foto berada di atas kotak (hover)
+    ['dragenter', 'dragover'].forEach(eventName => {
+        areaDrop.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        areaDrop.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+        areaDrop.classList.add('border-blue-500', 'bg-blue-50');
+    }
+
+    function unhighlight(e) {
+        areaDrop.classList.remove('border-blue-500', 'bg-blue-50');
+    }
+
+    // Menangkap file saat dilepaskan (drop) ke dalam kotak
+    areaDrop.addEventListener('drop', function(e) {
+        let dt = e.dataTransfer;
+        let files = dt.files;
+
+        // Masukkan file yang diseret ke dalam input file tersembunyi kita
+        inputFile.files = files;
+
+        // Panggil event 'change' secara manual biar teks "File terpilih" berubah
+        const event = new Event('change');
+        inputFile.dispatchEvent(event);
+    }, false);
+
     // 2. Logika submit form ke API Laravel
     const formUnggah = document.getElementById('form-unggah');
     const btnSubmit = document.getElementById('btn-submit');
