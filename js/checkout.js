@@ -43,13 +43,11 @@ document.addEventListener("DOMContentLoaded", () => {
           ? "GRATIS"
           : "Rp " + new Intl.NumberFormat("id-ID").format(data.harga);
 
-      // // const subTotal =
-      //   !data.harga || data.harga == 0
-      //     ? "GRATIS"
-      //     : "Rp " +
-      //       new Intl.NumberFormat("id-ID").format(
-      //         data.harga * Number(inputQty),
-      //       );
+      let imageUrl = data.gambar_poster;
+      if (imageUrl && !imageUrl.startsWith("http")) {
+        imageUrl = STORAGE_BASE_URL + imageUrl;
+      }
+
       return `
          <div class="mb-6">
             <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
@@ -71,8 +69,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <div class="flex items-start gap-3 sm:gap-4">
               <img
-                src="${data.gambar_poster}"
-                alt="Poster Talkshow"
+                src="${imageUrl}"
+                alt="Poster Acara"
+                onerror="this.src='https://via.placeholder.com/800x450?text=Gambar+Tidak+Tersedia'"
                 class="w-20 h-24 sm:w-24 sm:h-24 object-cover rounded-md border border-slate-100 shadow-sm shrink-0"
               />
 
@@ -229,7 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     container.insertAdjacentHTML("beforeend", htmlCheckout());
 
-    // Pindahkan listener ke sini agar elemen sudah ada di DOM
     setupListeners();
   };
 
@@ -276,7 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await response.json();
       initCheckout(result.data !== undefined ? result.data : result);
     } catch (error) {
-      console.error("DEBUG ERROR:", error); // Ini kuncinya!
+      console.error("DEBUG ERROR:", error); 
       document.getElementById("container-checkout").innerHTML =
         `<div class="p-6 text-center text-red-500 font-bold">Gagal memuat acara.</div>`;
     }
