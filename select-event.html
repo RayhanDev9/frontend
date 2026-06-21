@@ -27,38 +27,42 @@
       class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm"
     >
       <div class="mx-auto px-4 sm:px-6 md:px-8">
-        <div class="flex items-center justify-between h-20">
-          <div class="flex items-center gap-x-5 lg:gap-x-10">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center gap-x-5 lg:gap-x-8">
             <a
               href="#"
-              class="text-2xl md:text-3xl font-bold text-blue-700 tracking-tight"
+              class="text-xl md:text-2xl font-bold text-blue-700 tracking-tight"
               >MK</a
             >
 
             <nav
-              class="hidden md:flex items-center gap-x-8 lg:gap-x-8 text-sm md:text-lg"
+              class="hidden md:flex items-center gap-x-6 lg:gap-x-8 text-sm md:text-base"
             >
-              <a
-                href="index.html"
-                class="text-slate-600 hover:text-slate-900 transition pb-1 mt-1"
+              <a href="#" class="text-slate-600 hover:text-slate-900 transition"
                 >Beranda</a
               >
-              <a href="#" class="text-slate-600 hover:text-slate-900 transition"
+              <a
+                href="favorit.html"
+                class="text-slate-600 hover:text-slate-900 transition"
                 >Favorit</a
               >
-              <a href="#" class="text-slate-600 hover:text-slate-900 transition"
-                >Profil</a
+              <a
+                href="mini-tools.html"
+                class="text-slate-600 hover:text-slate-900 transition"
+                >Mini Tools</a
               >
             </nav>
           </div>
 
-          <div class="hidden md:flex items-center gap-x-6">
-            <a href="uploud.html">
+          <div class="hidden md:flex items-center gap-x-5 text-sm">
+            
+
+            <a href="uploud.html" class="btn-unggah" id="btn-unggah-desktop">
               <button
-                class="flex items-center gap-x-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
+                class="flex items-center gap-x-1.5 px-4 py-1.5 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
               >
                 <svg
-                  class="w-5 h-5"
+                  class="w-4 h-4"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -74,8 +78,17 @@
                 UNGGAH
               </button>
             </a>
+
+            <div class="border-slate-300 pl-5">
+              <a
+                href="login.html"
+                class="text-red-500 hover:text-red-700 font-medium transition text-base"
+                >Logout</a
+              >
+            </div>
           </div>
 
+          <!-- Tombol Hamburger (Hanya tampil di Mobile) -->
           <div class="flex md:hidden items-center couser">
             <button
               id="mobile-menu-btn"
@@ -103,25 +116,35 @@
         id="mobile-menu"
         class="md:hidden border-t border-slate-200 bg-white px-4 pt-4 pb-6 space-y-4 shadow-lg absolute w-full left-0 z-40 transform transition-all duration-300 ease-out opacity-0 pointer-events-none -translate-y-4"
       >
-        <nav class="flex flex-col gap-y-4 text-lg">
-          <a href="index.html" class="hover:text-slate-600 transition"
+        <nav class="flex flex-col gap-y-4 text-base">
+          <a href="#" class="text-slate-600 hover:text-slate-900 transition"
             >Beranda</a
           >
-          <a href="#" class="text-slate-600 hover:text-slate-900 transition"
+          <a
+            href="favorit.html"
+            class="text-slate-600 hover:text-slate-900 transition"
             >Favorit</a
           >
-          <a href="#" class="text-slate-600 hover:text-slate-900 transition"
-            >Profil</a
+          <a href="mini-tools.html" class="text-slate-600 hover:text-slate-900 transition"
+            >Mini Tools</a
           >
         </nav>
-        <div class="pt-4 border-t border-slate-100 flex flex-col gap-y-4">
-          <a href="uploud.html">
+        <div class="pt-4 border-slate-100 flex flex-col gap-y-4">
+          <a href="uploud.html" class="btn-unggah" id="btn-unggah-mobile">
             <button
-              class="flex items-center justify-center gap-x-2 w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition"
+              class="flex items-center justify-center gap-x-2 w-full px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold uppercase hover:bg-blue-700 transition text-sm"
             >
               UNGGAH
             </button>
           </a>
+
+          <div class="flex pt-2">
+            <a
+              href="login.html"
+              class="text-red-500 hover:text-red-700 font-medium transition text-base"
+              >Logout</a
+            >
+          </div>
         </div>
       </div>
     </header>
@@ -142,7 +165,26 @@
           id="container-slect-event"
         >
           <div class="flex justify-center items-center h-64">
-              <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            <svg
+              class="animate-spin h-8 w-8 text-blue-600"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
           </div>
         </main>
 
@@ -168,7 +210,9 @@
               id="chat-box"
               class="chat-container p-5 flex-1 overflow-y-auto flex flex-col gap-5 bg-white"
             >
-              <div class="text-center text-sm text-gray-400 my-auto">Memuat diskusi dari server...</div>
+              <div class="text-center text-sm text-gray-400 my-auto">
+                Memuat diskusi dari server...
+              </div>
             </div>
 
             <div class="p-4 border-t border-gray-100 bg-white">
@@ -231,7 +275,7 @@
         </div>
       </div>
     </footer>
-    
+
     <script type="module" src="js/select-event.js"></script>
   </body>
 </html>

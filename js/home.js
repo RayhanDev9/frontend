@@ -8,76 +8,49 @@ let allEvents = [];
 let currentFilterKat = "Semua";
 let currentFilterWaktu = "Semua";
 
-// const headerHtml = () => {
-//   document.addEventListener("DOMContentLoaded", function () {
-//     // 1. Ambil data user dari penyimpanan browser
-//     const dataLokal = localStorage.getItem("user_mading");
 
-//     // 2. Pilih tombol unggah berdasarkan ID
-//     const btnsUnggah = document.querySelectorAll(".btn-unggah");
-//     console.info(btnsUnggah);
+const header = () => {
+  const initMobileMenu = () => {
+    const menuBtn = document.getElementById("mobile-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
 
-//     // Fungsi kecil untuk menyembunyikan tombol
-//     const sembunyikanTombol = () => {
-//       btnsUnggah.forEach((btn) => {
-//         btn.classList.add("hidden");
-//         console.info(btn);
-//       });
-//     };
+    if (!menuBtn || !mobileMenu) return;
 
-//     // 3. Logika Pengecekan
-//     if (dataLokal) {
-//       // Jika user sudah login, ubah teks data lokal menjadi objek
-//       const userData = JSON.parse(dataLokal);
-//       console.info("Data User Saat Ini:", userData);
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("opacity-0");
+      mobileMenu.classList.toggle("pointer-events-none");
+      mobileMenu.classList.toggle("-translate-y-4");
+      mobileMenu.classList.toggle("opacity-100");
+      mobileMenu.classList.toggle("pointer-events-auto");
+      mobileMenu.classList.toggle("translate-y-0");
+    });
+  };
+  initMobileMenu();
 
-//       // KARENA API BELUM MENGIRIM ROLE, KITA CEK PAKAI NAMA
-//       // Asumsi: Hanya "YAHFI" yang merupakan admin
-//       // Peringatan: Huruf besar/kecil sangat berpengaruh (YAHFI != yahfi)
-//       if (userData.nama !== "YAHFI") {
-//         // Jika yang login BUKAN YAHFI, sembunyikan tombol unggah
-//         sembunyikanTombol();
-//       } else {
-//         console.info("Halo Admin YAHFI, tombol unggah ditampilkan.");
-//       }
-//     } else {
-//       // Jika belum login sama sekali, sembunyikan tombol
-//       sembunyikanTombol();
-//     }
-//   });
-// };
+  const checkUserRole = () => {
+    // Ambil data user yang sedang login dari memori browser
+    const userAktif = JSON.parse(localStorage.getItem("user_mading"));
 
-// // Jalankan fungsinya
-// headerHtml();
+    // Tangkap elemen tombol unggah
+    const btnDesktop = document.getElementById("btn-unggah-desktop");
+    const btnMobile = document.getElementById("btn-unggah-mobile");
 
-// ==========================================
-// FUNGSI CEK ROLE (SEMBUNYIKAN TOMBOL UNGGAH JIKA BUKAN ADMIN)
-// ==========================================
-const checkUserRole = () => {
-  // Ambil data user yang sedang login dari memori browser
-  const userAktif = JSON.parse(localStorage.getItem("user_mading"));
+    // Jika user belum login ATAU user bukan admin (misal: mahasiswa)
+    if (!userAktif || userAktif.role !== "admin") {
+      // Sembunyikan tombol dengan class 'hidden' bawaan Tailwind
+      if (btnDesktop) btnDesktop.classList.add("hidden");
+      if (btnMobile) btnMobile.classList.add("hidden");
+    } else {
+      // Jika Admin, pastikan tombolnya muncul
+      if (btnDesktop) btnDesktop.classList.remove("hidden");
+      if (btnMobile) btnMobile.classList.remove("hidden");
+    }
+  };
 
-  // Tangkap elemen tombol unggah
-  const btnDesktop = document.getElementById("btn-unggah-desktop");
-  const btnMobile = document.getElementById("btn-unggah-mobile");
-
-  console.info(userAktif.role);
-
-  // Jika user belum login ATAU user bukan admin (misal: mahasiswa)
-  if (!userAktif || userAktif.role !== "admin") {
-    // Sembunyikan tombol dengan class 'hidden' bawaan Tailwind
-    if (btnDesktop) btnDesktop.classList.add("hidden");
-    if (btnMobile) btnMobile.classList.add("hidden");
-  } else {
-    // Jika Admin, pastikan tombolnya muncul
-    if (btnDesktop) btnDesktop.classList.remove("hidden");
-    if (btnMobile) btnMobile.classList.remove("hidden");
-  }
+  // Panggil fungsinya saat web dibuka
+  checkUserRole();
 };
-
-// Panggil fungsinya saat web dibuka
-checkUserRole();
-
+header();
 /**
  * Mengambil data acara dari API dan merender pertama kali
  */
@@ -330,25 +303,9 @@ const eventFilterLogic = () => {
 /**
  * Logika Menu Mobile
  */
-const initMobileMenu = () => {
-  const menuBtn = document.getElementById("mobile-menu-btn");
-  const mobileMenu = document.getElementById("mobile-menu");
-
-  if (!menuBtn || !mobileMenu) return;
-
-  menuBtn.addEventListener("click", () => {
-    mobileMenu.classList.toggle("opacity-0");
-    mobileMenu.classList.toggle("pointer-events-none");
-    mobileMenu.classList.toggle("-translate-y-4");
-    mobileMenu.classList.toggle("opacity-100");
-    mobileMenu.classList.toggle("pointer-events-auto");
-    mobileMenu.classList.toggle("translate-y-0");
-  });
-};
 
 // ==========================================
 // MENGHIDUPKAN SEMUA SISTEM SAAT WEB DIBUKA
 // ==========================================
 fetchEventsData();
 eventFilterLogic();
-initMobileMenu();
