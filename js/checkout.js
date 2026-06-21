@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div
-                  class="text-sm sm:text-md lg:text-lg font-semibold text-blue-500 shrink-0 max-sm:pl-2.5"
+                  class="text-sm sm:text-md  font-bold  text-blue-500 shrink-0 max-sm:pl-2.5"
                 >
                  ${hargaFormat}
                 </div>
@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
           >
             <div class="flex justify-between items-center mb-4 px-2">
               <h2 class="text-lg font-semibold text-slate-800">Subtotal</h2>
-              <div class="text-sm sm:text-md lg:text-lg font-semibold text-blue-500 ">${hargaFormat}</div>
+              <div class="text-sm sm:text-md  font-bold  text-blue-500 ">${hargaFormat}</div>
             </div>
 
             <div
