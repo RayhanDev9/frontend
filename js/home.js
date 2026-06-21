@@ -279,7 +279,7 @@ const eventFilterLogic = () => {
           if (teksTombol === "Acara") currentFilterKat = "Semua";
           else if (teksTombol === "UMKM") currentFilterKat = "UMKM";
           else if (teksTombol === "UKO") currentFilterKat = "UMKO";
-          else if (teksTombol === "HIMTIF") currentFilterKat = "HIMA";
+          else if (teksTombol === "HIMA") currentFilterKat = "HIMA";
         } else if (tipeFilter === "waktu") {
           if (teksTombol === "Semua Acara") currentFilterWaktu = "Semua";
           else if (teksTombol === "Hari Ini") currentFilterWaktu = "Hari Ini";
