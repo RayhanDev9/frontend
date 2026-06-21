@@ -124,30 +124,85 @@ const initEventDetail = () => {
 <div class="flex flex-col w-full gap-6 mb-6 mt-4">
     
     <div class="flex justify-between items-start gap-4 w-full">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">${data.judul}</h1>
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 self-center">${data.judul}</h1>
         <button onclick="window.toggleBookmarkEvent()" id="btn-bookmark" class="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-white hover:bg-yellow-50 text-gray-500 hover:text-yellow-600 rounded-lg font-semibold text-xs md:text-sm transition-colors border border-gray-300 hover:border-yellow-400 shadow-sm">
-            <span class="text-lg">🔖</span> 
+            <span class="text-lg">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round" 
+                class="w-5 h-5 text-blue-700"
+              >
+                <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path>
+              </svg>
+            </span> 
             <span id="bookmark-text">Simpan</span>
         </button>
     </div>
 
     <div class="flex flex-wrap sm:flex-nowrap justify-between w-full  mx-auto  gap-4 py-3 border-gray-200 border-t-2 border-b-2 px-5 md:px-12 ">
         <div class="flex items-start space-x-3">
-            <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">📅</div>
+            <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round" 
+                class="w-5 h-5 text-blue-700"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>            
+            </div>
             <div>
                 <p class="text-xs text-gray-500 mb-0.5">Tanggal Acara</p>
                 <p class="font-semibold text-sm text-gray-800">${data.tanggal_acara}</p>
             </div>
         </div>
         <div class="flex items-start space-x-3">
-            <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">🎟️</div>
+            <div class="text-blue-500 text-xl bg-gray-50 rounded p-1"></div>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              class="w-5 h-5 text-blue-700"
+            >
+              <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path>
+            </svg>
             <div>
                 <p class="text-xs text-gray-500 mb-0.5">Biaya (HTM)</p>
-                <p class="font-semibold text-sm ${data.harga == 0 ? "text-green-600" : "text-gray-800"}">${hargaFormat}</p>
+                <p class="font-semibold text-xs ${data.harga == 0 ? "text-green-600" : "text-gray-800"}">${hargaFormat}</p>
             </div>
         </div>
         <div class="flex items-start space-x-3">
-            <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">📍</div>
+            <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              class="w-5 h-5 text-blue-700"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            </div>
             <div>
                 <p class="text-xs text-gray-500 mb-0.5">Link / Info</p>
                 <p class="font-semibold text-sm text-gray-800 truncate">
@@ -180,6 +235,7 @@ const initEventDetail = () => {
     </div>
 </div>
         `;
+        console.info(data)
     // Bersihkan loading state lalu masukkan HTML baru
     container.innerHTML = html;
   }
