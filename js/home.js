@@ -95,19 +95,7 @@ const EvenCardLogic = async () => {
       // >>> LOGIKA PEMBUAT PALET WARNA DIMULAI <<<
       // ==========================================
       let paletWarnaHTML = "";
-      if (acara.warna_dominan && acara.warna_dominan.length > 0) {
-        paletWarnaHTML = '<div class="flex items-center gap-1.5 mb-4">';
-
-        acara.warna_dominan.forEach((warnaHex) => {
-          paletWarnaHTML += `
-                  <div class="w-5 h-5 rounded shadow-sm border border-slate-200 cursor-pointer hover:scale-110 transition-transform" 
-                       style="background-color: ${warnaHex};" 
-                       title="${warnaHex}">
-                  </div>`;
-        });
-
-        paletWarnaHTML += "</div>";
-      }
+  
       // ==========================================
 
       const cardHTML = `
