@@ -1,13 +1,12 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // Ambil semua elemen berdasarkan IDcons
+const API_BASE_URL = "https://slab-silenced-riot.ngrok-free.dev/api/events";
+const STORAGE_BASE_URL = "https://slab-silenced-riot.ngrok-free.dev/storage/";
 
+document.addEventListener("DOMContentLoaded", () => {
   const header = () => {
     const initMobileMenu = () => {
       const menuBtn = document.getElementById("mobile-menu-btn");
       const mobileMenu = document.getElementById("mobile-menu");
-
       if (!menuBtn || !mobileMenu) return;
-
       menuBtn.addEventListener("click", () => {
         mobileMenu.classList.toggle("opacity-0");
         mobileMenu.classList.toggle("pointer-events-none");
@@ -20,34 +19,37 @@ document.addEventListener("DOMContentLoaded", () => {
     initMobileMenu();
 
     const checkUserRole = () => {
-      // Ambil data user yang sedang login dari memori browser
       const userAktif = JSON.parse(localStorage.getItem("user_mading"));
-
-      // Tangkap elemen tombol unggah
       const btnDesktop = document.getElementById("btn-unggah-desktop");
       const btnMobile = document.getElementById("btn-unggah-mobile");
-
-      // Jika user belum login ATAU user bukan admin (misal: mahasiswa)
       if (!userAktif || userAktif.role !== "admin") {
-        // Sembunyikan tombol dengan class 'hidden' bawaan Tailwind
         if (btnDesktop) btnDesktop.classList.add("hidden");
         if (btnMobile) btnMobile.classList.add("hidden");
       } else {
-        // Jika Admin, pastikan tombolnya muncul
         if (btnDesktop) btnDesktop.classList.remove("hidden");
         if (btnMobile) btnMobile.classList.remove("hidden");
       }
     };
-
-    // Panggil fungsinya saat web dibuka
     checkUserRole();
   };
   header();
 
-  const initCheckout = () => {
+  const initCheckout = (data) => {
     const container = document.getElementById("container-checkout");
 
     function htmlCheckout() {
+      const hargaFormat =
+        !data.harga || data.harga == 0
+          ? "GRATIS"
+          : "Rp " + new Intl.NumberFormat("id-ID").format(data.harga);
+
+      // const subTotal =
+      //   !data.harga || data.harga == 0
+      //     ? "GRATIS"
+      //     : "Rp " +
+      //       new Intl.NumberFormat("id-ID").format(
+      //         data.harga * Number(inputQty),
+      //       );
       return `
          <div class="mb-6">
             <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
@@ -69,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <div class="flex items-start gap-3 sm:gap-4">
               <img
-                src="https://via.placeholder.com/150x150?text=Poster"
+                src="${data.gambar_poster}"
                 alt="Poster Talkshow"
                 class="w-20 h-24 sm:w-24 sm:h-24 object-cover rounded-md border border-slate-100 shadow-sm shrink-0"
               />
@@ -81,12 +83,12 @@ document.addEventListener("DOMContentLoaded", () => {
                   <h3
                     class="font-bold text-base sm:text-lg text-slate-900 leading-tight truncate"
                   >
-                    Tiket Talkshow Karir
+                    Tiket ${data.judul}
                   </h3>
                   <p
                     class="text-xs sm:text-sm text-slate-500 mt-1 mb-2.5 truncate"
                   >
-                    Fakultas Ekonomi dan Bisnis
+                    ${data.kategori}
                   </p>
                   <div>
                     <span
@@ -100,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div
                   class="text-md sm:text-lg lg:text-xl font-bold text-blue-600 shrink-0 max-sm:pl-2.5"
                 >
-                  Gratis
+                 ${hargaFormat}
                 </div>
               </div>
             </div>
@@ -175,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
           >
             <div class="flex justify-between items-center mb-4 px-2">
               <h2 class="text-lg font-semibold text-slate-800">Subtotal</h2>
-              <div class="text-md sm:text-lg lg:text-xl font-bold text-blue-600">Gratis</div>
+              <div class="text-md sm:text-lg lg:text-xl font-bold text-blue-600">${hargaFormat}</div>
             </div>
 
             <div
@@ -226,62 +228,64 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     container.insertAdjacentHTML("beforeend", htmlCheckout());
+
+    // Pindahkan listener ke sini agar elemen sudah ada di DOM
+    setupListeners();
   };
 
-  initCheckout();
+  function setupListeners() {
+    const btnMin = document.getElementById("btn-min");
+    const btnPlus = document.getElementById("btn-plus");
+    const inputQty = document.getElementById("input-qty");
+    const inputNama = document.getElementById("input-nama");
+    const inputNim = document.getElementById("input-nim");
+    const btnSubmit = document.getElementById("btn-submit");
 
-  const btnMin = document.getElementById("btn-min");
-  const btnPlus = document.getElementById("btn-plus");
-  const inputQty = document.getElementById("input-qty");
+    btnPlus.addEventListener(
+      "click",
+      () => (inputQty.value = parseInt(inputQty.value) + 1),
+    );
+    btnMin.addEventListener("click", () => {
+      if (parseInt(inputQty.value) > 1)
+        inputQty.value = parseInt(inputQty.value) - 1;
+    });
 
-  const inputNama = document.getElementById("input-nama");
-  const inputNim = document.getElementById("input-nim");
-  const btnSubmit = document.getElementById("btn-submit");
+    btnSubmit.addEventListener("click", () => {
+      const namaLengkap = inputNama.value.trim();
+      if (!namaLengkap) return alert("Mohon isi Nama Lengkap terlebih dahulu.");
 
-  // Fungsi Event Listener Tombol + dan -
-  btnPlus.addEventListener("click", () => {
-    let currentValue = parseInt(inputQty.value);
-    inputQty.value = currentValue + 1;
-  });
+      let teksPesan = `Halo, saya ingin memesan tiket acara:\n\n*Acara:* Tiket Talkshow Karir\n*Jumlah Peserta:* ${inputQty.value} Orang\n*Nama Lengkap:* ${namaLengkap}\n${inputNim.value ? `*NIM:* ${inputNim.value}\n` : ""} \nMohon instruksi selanjutnya.`;
+      window.open(
+        `https://wa.me/6285692097048?text=${encodeURIComponent(teksPesan)}`,
+        "_blank",
+      );
+    });
+  }
 
-  btnMin.addEventListener("click", () => {
-    let currentValue = parseInt(inputQty.value);
-    if (currentValue > 1) {
-      inputQty.value = currentValue - 1;
+  async function fetchDetailAcara(id) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${id}`, {
+        method: "GET",
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+          Accept: "application/json",
+        },
+      });
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      const result = await response.json();
+      initCheckout(result.data !== undefined ? result.data : result);
+    } catch (error) {
+      console.error("DEBUG ERROR:", error); // Ini kuncinya!
+      document.getElementById("container-checkout").innerHTML =
+        `<div class="p-6 text-center text-red-500 font-bold">Gagal memuat acara.</div>`;
     }
-  });
+  }
 
-  // Fungsi Event Listener Pesan WhatsApp
-  btnSubmit.addEventListener("click", () => {
-    // Ganti nomor ini dengan nomor WhatsApp yang dituju (Format: 628...)
-    const nomorWhatsApp = "6281234567890";
+  function initializeCheckout() {
+    const idEvent = new URLSearchParams(window.location.search).get("id");
+    if (idEvent) fetchDetailAcara(idEvent);
+  }
 
-    // Ambil data dari inputan
-    const jumlahPeserta = inputQty.value;
-    const namaLengkap = inputNama.value.trim();
-    const nim = inputNim.value.trim();
-
-    // Validasi: Pastikan nama tidak kosong
-    if (!namaLengkap) {
-      alert("Mohon isi Nama Lengkap terlebih dahulu sebelum memesan.");
-      return;
-    }
-
-    // Susun teks pesan
-    let teksPesan = `Halo, saya ingin memesan tiket acara:\n\n`;
-    teksPesan += `*Acara:* Tiket Talkshow Karir\n`;
-    teksPesan += `*Jumlah Peserta:* ${jumlahPeserta} Orang\n`;
-    teksPesan += `*Nama Lengkap:* ${namaLengkap}\n`;
-
-    // Masukkan NIM ke pesan hanya jika diisi
-    if (nim) {
-      teksPesan += `*NIM:* ${nim}\n`;
-    }
-
-    teksPesan += `\nMohon instruksi selanjutnya. Terima kasih!`;
-
-    // Buat Link dan Buka di Tab Baru
-    const urlWhatsApp = `https://wa.me/${6285692097048}?text=${encodeURIComponent(teksPesan)}`;
-    window.open(urlWhatsApp, "_blank");
-  });
+  initializeCheckout();
 });

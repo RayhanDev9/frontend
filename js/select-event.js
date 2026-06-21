@@ -57,11 +57,11 @@ header();
 // ==========================================
 window.toggleBookmarkEvent = async function () {
   const userAktif = JSON.parse(localStorage.getItem("user_mading"));
-  
+
   if (!userAktif) {
-      alert("Silakan login terlebih dahulu untuk menyimpan acara.");
-      window.location.href = "login.html";
-      return;
+    alert("Silakan login terlebih dahulu untuk menyimpan acara.");
+    window.location.href = "login.html";
+    return;
   }
 
   const btn = document.getElementById("btn-bookmark");
@@ -122,9 +122,9 @@ const initEventDetail = () => {
         : "Rp " + new Intl.NumberFormat("id-ID").format(data.harga);
 
     const textBookmark = data.is_bookmarked ? "Tersimpan" : "Simpan";
-    const classBtnBookmark = data.is_bookmarked 
-        ? "bg-yellow-50 text-yellow-600 border-yellow-400" 
-        : "bg-white text-gray-500 border-gray-300";
+    const classBtnBookmark = data.is_bookmarked
+      ? "bg-yellow-50 text-yellow-600 border-yellow-400"
+      : "bg-white text-gray-500 border-gray-300";
 
     // Render HTML
     const html = `
@@ -228,7 +228,7 @@ const initEventDetail = () => {
 
       // Sisipkan is_bookmarked dari luar data utama jika strukturnya terpisah
       if (result.is_bookmarked !== undefined) {
-          dataAsli.is_bookmarked = result.is_bookmarked;
+        dataAsli.is_bookmarked = result.is_bookmarked;
       }
 
       fungsiCreateEvents(dataAsli);
@@ -267,9 +267,9 @@ window.submitReply = async function (event, commentId) {
   // AMBIL DATA USER DARI MEMORI
   const userAktif = JSON.parse(localStorage.getItem("user_mading"));
   if (!userAktif) {
-      alert("Silakan login terlebih dahulu untuk membalas komentar.");
-      window.location.href = "login.html";
-      return;
+    alert("Silakan login terlebih dahulu untuk membalas komentar.");
+    window.location.href = "login.html";
+    return;
   }
 
   btn.disabled = true;
@@ -289,7 +289,7 @@ window.submitReply = async function (event, commentId) {
         body: JSON.stringify({
           event_id: idAcara,
           isi_komentar: text,
-          user_id: userAktif.id, 
+          user_id: userAktif.id,
         }),
       },
     );
@@ -337,7 +337,8 @@ const initChatSystem = () => {
       // LOOP KOMENTAR UTAMA
       result.data.forEach((comment) => {
         const namaUser = comment.user_nama || "Anonim";
-        const isPanitia = comment.role === "panitia" || comment.role === "admin";
+        const isPanitia =
+          comment.role === "panitia" || comment.role === "admin";
         const initial = namaUser.charAt(0).toUpperCase();
         const jamFormat = comment.waktu_yang_lalu || "Baru saja";
 
@@ -371,7 +372,8 @@ const initChatSystem = () => {
         if (comment.replies && comment.replies.length > 0) {
           comment.replies.forEach((reply) => {
             const rNamaUser = reply.user_nama || "Anonim";
-            const rIsPanitia = reply.role === "panitia" || reply.role === "admin";
+            const rIsPanitia =
+              reply.role === "panitia" || reply.role === "admin";
             const rInitial = rNamaUser.charAt(0).toUpperCase();
             const rJam = reply.waktu_yang_lalu || "Baru saja";
 
@@ -409,9 +411,9 @@ const initChatSystem = () => {
     // AMBIL DATA USER DARI MEMORI
     const userAktif = JSON.parse(localStorage.getItem("user_mading"));
     if (!userAktif) {
-        alert("Silakan login terlebih dahulu untuk berkomentar.");
-        window.location.href = "login.html";
-        return;
+      alert("Silakan login terlebih dahulu untuk berkomentar.");
+      window.location.href = "login.html";
+      return;
     }
 
     btnSubmit.disabled = true;
@@ -426,9 +428,9 @@ const initChatSystem = () => {
           "ngrok-skip-browser-warning": "true",
         },
         // MENGGUNAKAN ID USER ASLI
-        body: JSON.stringify({ 
-            isi_komentar: messageText,
-            user_id: userAktif.id
+        body: JSON.stringify({
+          isi_komentar: messageText,
+          user_id: userAktif.id,
         }),
       });
 
