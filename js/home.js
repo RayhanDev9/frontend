@@ -1,13 +1,10 @@
-// 1. URL API Ngrok & Storage
 const API_URL = "https://slab-silenced-riot.ngrok-free.dev/api/events";
 const API_ROLE_URL = "https://slab-silenced-riot.ngrok-free.dev/api/login";
-const STORAGE_URL = "http://127.0.0.1:8000/storage/";
+const STORAGE_URL = "https://slab-silenced-riot.ngrok-free.dev/storage/";
 
-// 2. Global State untuk menyimpan data dan status filter saat ini
 let allEvents = [];
 let currentFilterKat = "Semua";
 let currentFilterWaktu = "Semua";
-
 
 const header = () => {
   const initMobileMenu = () => {
@@ -28,32 +25,24 @@ const header = () => {
   initMobileMenu();
 
   const checkUserRole = () => {
-    // Ambil data user yang sedang login dari memori browser
     const userAktif = JSON.parse(localStorage.getItem("user_mading"));
 
-    // Tangkap elemen tombol unggah
     const btnDesktop = document.getElementById("btn-unggah-desktop");
     const btnMobile = document.getElementById("btn-unggah-mobile");
 
-    // Jika user belum login ATAU user bukan admin (misal: mahasiswa)
     if (!userAktif || userAktif.role !== "admin") {
-      // Sembunyikan tombol dengan class 'hidden' bawaan Tailwind
       if (btnDesktop) btnDesktop.classList.add("hidden");
       if (btnMobile) btnMobile.classList.add("hidden");
     } else {
-      // Jika Admin, pastikan tombolnya muncul
       if (btnDesktop) btnDesktop.classList.remove("hidden");
       if (btnMobile) btnMobile.classList.remove("hidden");
     }
   };
 
-  // Panggil fungsinya saat web dibuka
   checkUserRole();
 };
 header();
-/**
- * Mengambil data acara dari API dan merender pertama kali
- */
+
 async function fetchEventsData() {
   const wadahPoster = document.getElementById("tempat-poster");
 
@@ -69,10 +58,8 @@ async function fetchEventsData() {
     if (!response.ok) throw new Error(`Server status: ${response.status}`);
     const result = await response.json();
 
-    // Simpan semua data acara ke dalam memori
     allEvents = result.data || [];
 
-    // Terapkan filter (kondisi awal: Semua) dan cetak kartunya
     applyFiltersAndRender();
   } catch (error) {
     console.error("Gagal konek ke API:", error);
@@ -85,20 +72,15 @@ async function fetchEventsData() {
   }
 }
 
-/**
- * Menyaring data berdasarkan kategori dan waktu yang dipilih
- */
 function applyFiltersAndRender() {
   let filteredEvents = allEvents;
 
-  // --- A. FILTER KATEGORI ---
   if (currentFilterKat !== "Semua") {
     filteredEvents = filteredEvents.filter(
       (event) => event.kategori === currentFilterKat,
     );
   }
 
-  // --- B. FILTER WAKTU ---
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -124,13 +106,9 @@ function applyFiltersAndRender() {
     });
   }
 
-  // Cetak data yang sudah disaring
   renderCards(filteredEvents);
 }
 
-/**
- * Mencetak Kartu HTML berdasarkan data yang masuk
- */
 function renderCards(events) {
   const wadahPoster = document.getElementById("tempat-poster");
 
@@ -142,18 +120,15 @@ function renderCards(events) {
 
   const semuaCardHTML = events
     .map((acara) => {
-      // Format Harga
       const hargaTeks =
         acara.harga == 0
           ? "Gratis"
           : `Rp ${parseInt(acara.harga).toLocaleString("id-ID")}`;
 
-      // Format URL Gambar
       let imageUrl = acara.gambar_poster;
       if (imageUrl && !imageUrl.startsWith("http"))
         imageUrl = STORAGE_URL + imageUrl;
 
-      // Menampilkan Jam Acara (Jika Back-End belum membuat kolom 'waktu_acara', fallback ke teks default)
       const jamAcara = acara.waktu_acara
         ? acara.waktu_acara.substring(0, 5)
         : "12:00";
@@ -162,7 +137,7 @@ function renderCards(events) {
       <div data-id="${acara.id}" class="card-acara w-[100%] xs:w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition duration-300 flex flex-col cursor-pointer group max-sm:mx-auto">
           <div class="h-48 bg-slate-100 w-full relative overflow-hidden">
               <div class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm">
-                  <img src="${imageUrl}" alt="${acara.judul}" class="w-full h-full object-cover opacity-90">
+                  <img src="${imageUrl}" alt="${acara.judul}" onerror="this.src='https://via.placeholder.com/800x450?text=Gambar+Tidak+Tersedia'" class="w-full h-full object-cover opacity-90">
               </div>
               <div class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded shadow-sm uppercase tracking-wider">
                   ${acara.kategori || "ACARA"}
@@ -207,7 +182,6 @@ function renderCards(events) {
   wadahPoster.innerHTML = semuaCardHTML;
 }
 
-// 3. Pindah ke halaman detail saat Kartu diklik
 document.getElementById("tempat-poster").addEventListener("click", (e) => {
   const diklik = e.target.closest(".card-acara");
   if (diklik) {
@@ -216,9 +190,6 @@ document.getElementById("tempat-poster").addEventListener("click", (e) => {
   }
 });
 
-/**
- * Logika Filter UI & Data (Menangkap Klik Tombol)
- */
 const eventFilterLogic = () => {
   const tabActive = [
     "bg-white",
@@ -264,7 +235,6 @@ const eventFilterLogic = () => {
 
     buttons.forEach((button) => {
       button.addEventListener("click", () => {
-        // 1. Ubah tampilan UI Tombol
         buttons.forEach((btn) => {
           btn.classList.remove(...activeClasses);
           btn.classList.add(...inactiveClasses);
@@ -272,7 +242,6 @@ const eventFilterLogic = () => {
         button.classList.remove(...inactiveClasses);
         button.classList.add(...activeClasses);
 
-        // 2. Sesuaikan State Data untuk penyaringan
         const teksTombol = button.innerText.trim();
 
         if (tipeFilter === "kategori") {
@@ -289,23 +258,14 @@ const eventFilterLogic = () => {
             currentFilterWaktu = "Mendatang";
         }
 
-        // 3. Jalankan ulang penyaringan kartu
         applyFiltersAndRender();
       });
     });
   }
 
-  // Pasang pengaitnya
   initFilterGroup("tab-group", tabActive, tabInactive, "kategori");
   initFilterGroup("time-group", timeActive, timeInactive, "waktu");
 };
 
-/**
- * Logika Menu Mobile
- */
-
-// ==========================================
-// MENGHIDUPKAN SEMUA SISTEM SAAT WEB DIBUKA
-// ==========================================
 fetchEventsData();
 eventFilterLogic();
