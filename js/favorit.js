@@ -1,53 +1,41 @@
-const API_BASE_URL = "https://slab-silenced-riot.ngrok-free.dev/api/events";
+const API_BASE_URL = "https://slab-silenced-riot.ngrok-free.dev/api";
 const STORAGE_BASE_URL = "https://slab-silenced-riot.ngrok-free.dev/storage/";
 
-// Ambil elemen berdasarkan ID DOM
 const emptyState = document.getElementById("empty-state");
 const dataState = document.getElementById("data-state");
-// Pastikan kamu punya variabel wadahPoster, misalnya:
 const wadahPoster = document.getElementById("tempat-poster");
 
-// ==========================================
-// 1. LOGIKA TOGGLE EMPTY STATE & DATA STATE
-// ==========================================
 function toggleState(hasData) {
   if (hasData) {
-    emptyState.classList.add("hidden"); // Sembunyikan state kosong
-    dataState.classList.remove("hidden"); // Tampilkan wadah card
+    if (emptyState) emptyState.classList.add("hidden"); 
+    if (dataState) dataState.classList.remove("hidden"); 
   } else {
-    emptyState.classList.remove("hidden"); // Tampilkan state kosong
-    dataState.classList.add("hidden"); // Sembunyikan wadah card
+    if (emptyState) emptyState.classList.remove("hidden"); 
+    if (dataState) dataState.classList.add("hidden"); 
   }
 }
 
-// ==========================================
-// 2. FUNGSI RENDER CARD KE HTML
-// ==========================================
 function renderCards(dataArray) {
-  // Jika dataArray bernilai null, undefined, atau panjangnya 0 -> Tampilkan Empty State
   if (!dataArray || dataArray.length === 0) {
     toggleState(false);
+    if (wadahPoster) wadahPoster.innerHTML = ""; 
     return;
   }
 
-  // Jika ada data -> Tampilkan Data State
   toggleState(true);
 
   function cardFungsi(acara) {
-    const hargaTeks =
-      acara.harga == 0
-        ? "Gratis"
-        : `Rp ${parseInt(acara.harga).toLocaleString("id-ID")}`;
+    if (!acara) return ""; 
 
+    const hargaTeks = acara.harga == 0 ? "Gratis" : `Rp ${parseInt(acara.harga).toLocaleString("id-ID")}`;
     let paletWarnaHTML = "";
 
-    // Perbaikan: STORAGE_URL diganti ke STORAGE_BASE_URL
     return `
-      <div data-id="${acara.id}" class="card-acara w-[100%] xs:w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition duration-300 flex flex-col cursor-pointer group max-sm:mx-auto">
+      <div onclick="window.location.href='select-event.html?id=${acara.id}'" data-id="${acara.id}" class="card-acara w-[100%] xs:w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition duration-300 flex flex-col cursor-pointer group max-sm:mx-auto">
           
           <div class="h-48 bg-slate-100 w-full relative overflow-hidden">
               <div class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm">
-                  <img src="${STORAGE_BASE_URL}${acara.gambar_poster}" alt="${acara.judul}" class="w-full h-full object-cover">
+                  <img src="${STORAGE_BASE_URL}${acara.gambar_poster}" alt="${acara.judul}" onerror="this.src='https://via.placeholder.com/800x450?text=Gambar+Tidak+Tersedia'" class="w-full h-full object-cover">
               </div>
               <div class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded shadow-sm uppercase tracking-wider">
                   ${acara.kategori || "ACARA"}
@@ -85,17 +73,21 @@ function renderCards(dataArray) {
     `;
   }
 
-  // Menggabungkan array dan render ke DOM
   const semuaCardHTML = dataArray.map((acara) => cardFungsi(acara)).join("");
-  wadahPoster.innerHTML = semuaCardHTML;
+  if (wadahPoster) wadahPoster.innerHTML = semuaCardHTML;
 }
 
-// ==========================================
-// 3. INISIALISASI (FETCH API)
-// ==========================================
 const initFavorit = async () => {
-  async function fetchSemuaAcara() {
-    const apiUrl = API_BASE_URL;
+  const userAktif = JSON.parse(localStorage.getItem("user_mading"));
+  
+  if (!userAktif) {
+      alert("Silakan login terlebih dahulu untuk melihat daftar Favorit Anda.");
+      window.location.href = "login.html";
+      return;
+  }
+
+  async function fetchFavoritUser() {
+    const apiUrl = `${API_BASE_URL}/users/${userAktif.id}/bookmarks`;
 
     try {
       const response = await fetch(apiUrl, {
@@ -109,25 +101,20 @@ const initFavorit = async () => {
       if (!response.ok) throw new Error("Gagal mengambil data dari API");
 
       const result = await response.json();
-      console.info(result.data);
       return result.data !== undefined ? result.data : result;
     } catch (error) {
-      console.error("Error Mengambil Semua Acara:", error);
-      return null;
+      console.error("Error Mengambil Acara Favorit:", error);
+      return [];
     }
   }
 
-  // Secara default (sementara ambil API/loading), anggap data kosong dulu
   toggleState(false);
 
-  // Ambil semua data karena data favorit masih kosong
-  const dataAcara = await fetchSemuaAcara();
+  const dataAcara = await fetchFavoritUser();
 
-  // Render hasilnya (fungsi ini akan otomatis memanggil toggleState ke `true` jika data sukses didapat)
   renderCards(dataAcara);
 };
 
-// Jalankan sistem
 initFavorit();
 
 const header = () => {
@@ -149,26 +136,18 @@ const header = () => {
   initMobileMenu();
 
   const checkUserRole = () => {
-    // Ambil data user yang sedang login dari memori browser
     const userAktif = JSON.parse(localStorage.getItem("user_mading"));
-
-    // Tangkap elemen tombol unggah
     const btnDesktop = document.getElementById("btn-unggah-desktop");
     const btnMobile = document.getElementById("btn-unggah-mobile");
 
-    // Jika user belum login ATAU user bukan admin (misal: mahasiswa)
     if (!userAktif || userAktif.role !== "admin") {
-      // Sembunyikan tombol dengan class 'hidden' bawaan Tailwind
       if (btnDesktop) btnDesktop.classList.add("hidden");
       if (btnMobile) btnMobile.classList.add("hidden");
     } else {
-      // Jika Admin, pastikan tombolnya muncul
       if (btnDesktop) btnDesktop.classList.remove("hidden");
       if (btnMobile) btnMobile.classList.remove("hidden");
     }
   };
-
-  // Panggil fungsinya saat web dibuka
   checkUserRole();
 };
 header();
