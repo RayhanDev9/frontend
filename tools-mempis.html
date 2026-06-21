@@ -33,13 +33,9 @@
         }
 
         /* === HEADER === */
-        header {
-            display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: var(--bg-card); border-bottom: 1px solid var(--border); z-index: 10;
-        }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: var(--bg-card); border-bottom: 1px solid var(--border); z-index: 10; }
         .header-title { display: flex; align-items: center; gap: 15px; font-size: 20px; font-weight: 700; }
-        .logo-icon {
-            width: 36px; height: 36px; background: linear-gradient(135deg, #ec4899, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;
-        }
+        .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #ec4899, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; }
         .logo-icon::after { content: ''; width: 8px; height: 8px; background: white; border-radius: 50%; position: absolute; right: 8px; top: 8px; }
         .logo-icon::before { content: ''; width: 14px; height: 14px; border: 2px solid white; border-radius: 50%; }
         .badge-on-device { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; font-weight: normal; margin-top: 2px; }
@@ -227,46 +223,49 @@
         let currentShapeStyle = 'mixed';
         let svgString = '';
         
-        // --- DATA STATE / SEED (KUNCI PERBAIKANNYA DI SINI) ---
-        let maxElements = 300; // Sesuai maksimal density
+        // --- DATA SEED STABIL (TIDAK AKAN MENGACAK SAAT SLIDER DIGESER) ---
+        let maxElements = 300; 
         let elementsData = []; 
 
         const SHAPES = [
-            `<circle cx="0" cy="0" r="0.5" />`,
-            `<rect x="-0.4" y="-0.4" width="0.8" height="0.8" />`,
-            `<polygon points="0,-0.5 0.5,0.4 -0.5,0.4" />`,
-            `<path d="M -0.1,-0.4 L 0.1,-0.4 L 0.1,-0.1 L 0.4,-0.1 L 0.4,0.1 L 0.1,0.1 L 0.1,0.4 L -0.1,0.4 L -0.1,0.1 L -0.4,0.1 L -0.4,-0.1 L -0.1,-0.1 Z" />`,
-            `<path d="M -0.4,-0.2 Q -0.2,0.3 0,0 T 0.4,0.2" fill="none" stroke-linecap="round" stroke-linejoin="round" />`,
-            `<rect x="-0.5" y="-0.2" width="1" height="0.4" rx="0.2" />`
+            `<circle cx="0" cy="0" r="0.5" />`, // Shape Dasar 0
+            `<rect x="-0.4" y="-0.4" width="0.8" height="0.8" />`, // Shape 1
+            `<polygon points="0,-0.5 0.5,0.4 -0.5,0.4" />`, // Shape 2
+            `<path d="M -0.1,-0.4 L 0.1,-0.4 L 0.1,-0.1 L 0.4,-0.1 L 0.4,0.1 L 0.1,0.1 L 0.1,0.4 L -0.1,0.4 L -0.1,0.1 L -0.4,0.1 L -0.4,-0.1 L -0.1,-0.1 Z" />`, // Shape 3
+            `<path d="M -0.4,-0.2 Q -0.2,0.3 0,0 T 0.4,0.2" fill="none" stroke-linecap="round" stroke-linejoin="round" />`, // Shape 4 (Squiggle)
+            `<rect x="-0.5" y="-0.2" width="1" height="0.4" rx="0.2" />` // Shape 5
         ];
 
-        // Fungsi ini hanya dipanggil jika menekan SHUFFLE atau tombol RESET/RANDOM.
-        // Tugasnya melempar posisi dan properti dasar, lalu menyimpannya.
+        // Melempar aset ke memori 1 KALI SAJA
         function generateSeed() {
             elementsData = [];
             for (let i = 0; i < maxElements; i++) {
                 elementsData.push({
-                    x: Math.random(),
-                    y: Math.random(),
-                    shapeF: Math.random(),
-                    colorF: Math.random(),
-                    sizeF: Math.random(),
-                    rotF: Math.random(),
-                    styleF: Math.random()
+                    x: Math.random() * 1920,
+                    y: Math.random() * 1080,
+                    shapeType: Math.floor(Math.random() * SHAPES.length), // Sifat bentuk asli
+                    colorIndex: Math.floor(Math.random() * 5), // Tetap mengikat ke 1 dari 5 warna
+                    baseRot: Math.random() * 360, // Rotasi dasar
+                    sizeF: Math.random(), // Skala ukuran dasar
+                    isOutline: Math.random() > 0.5 // Status garis untuk style mixed
                 });
             }
         }
 
-        // Fungsi ini membaca Slider dan menerapkannya pada data yang sudah ada.
+        // Fungsi Render yang membaca instruksi dari Slider
         function renderMemphis() {
             const colors = Array.from(colorPickers).map(p => p.value);
             const hasBg = bgToggle.checked;
+            
             const density = parseInt(inputs.density.value);
             const variation = parseInt(inputs.variation.value);
-            const rotationMax = parseInt(inputs.rotation.value);
+            const rotationOffset = parseInt(inputs.rotation.value);
             const minSize = parseInt(inputs.minSize.value);
-            const maxSize = Math.max(parseInt(inputs.maxSize.value), minSize + 1); // Cek aman
+            const maxSize = Math.max(parseInt(inputs.maxSize.value), minSize); // Cegah error ukuran minus
             const shadowOp = parseInt(inputs.shadow.value) / 100;
+
+            // Batas Toleransi Bentuk (Variation)
+            const allowedShapesCount = Math.max(1, Math.ceil((variation / 100) * SHAPES.length));
 
             const width = 1920;
             const height = 1080;
@@ -280,29 +279,27 @@
                 svgContent += `<rect width="100%" height="100%" fill="#ffffff" />`;
             }
 
-            // Looping hanya sampai batas "Density", menggunakan elemen yang konsisten
+            // Loop HANYA sepanjang Density (Sesuai instruksi Anda)
             for (let i = 0; i < density; i++) {
                 let data = elementsData[i];
 
-                // Hitung bentuk apa berdasarkan Variation dan data.shapeF
-                let shapePoolSize = Math.max(1, Math.ceil((variation / 100) * SHAPES.length));
-                let shapeIndex = Math.floor(data.shapeF * shapePoolSize);
-                shapeIndex = Math.min(shapeIndex, shapePoolSize - 1); // Jaga agar tidak error
+                // VARIATION: Jika bentuk asli dilarang oleh slider, paksa jadi bentuk dasar (Lingkaran)
+                let shapeIndex = data.shapeType < allowedShapesCount ? data.shapeType : 0;
                 let shapeCode = SHAPES[shapeIndex];
 
-                let colorIndex = Math.floor(data.colorF * colors.length);
-                let color = colors[colorIndex];
+                // COLOR
+                let color = colors[data.colorIndex];
 
-                // Interpolasi posisi, rotasi, dan ukuran
-                let x = data.x * width;
-                let y = data.y * height;
+                // SIZE
                 let size = minSize + (data.sizeF * (maxSize - minSize));
-                let rot = data.rotF * rotationMax;
 
-                // Aturan Style
+                // ROTATION: Putar secara halus dari posisi dasar
+                let rot = data.baseRot + rotationOffset;
+
+                // STYLE: Tentukan isi atau garis
                 let isSolid = currentShapeStyle === 'solid';
-                if (currentShapeStyle === 'mixed') isSolid = data.styleF > 0.5;
-                if (shapeIndex === 4) isSolid = false; // Squiggle wajid garis tepi
+                if (currentShapeStyle === 'mixed') isSolid = !data.isOutline;
+                if (shapeIndex === 4) isSolid = false; // Squiggle wajid outline
 
                 let fillProp = isSolid ? color : 'none';
                 let strokeProp = isSolid ? 'none' : color;
@@ -310,7 +307,7 @@
                 let shadowFilter = shadowOp > 0 ? `filter="url(#drop-shadow)"` : '';
 
                 svgContent += `
-                <g transform="translate(${x}, ${y}) rotate(${rot}) scale(${size})" ${shadowFilter}>
+                <g transform="translate(${data.x}, ${data.y}) rotate(${rot}) scale(${size})" ${shadowFilter}>
                     <g fill="${fillProp}" stroke="${strokeProp}" stroke-width="${strokeWidth / size}">
                         ${shapeCode}
                     </g>
@@ -321,14 +318,14 @@
             svgString = svgContent;
             
             previewArea.innerHTML = svgContent;
-            codeSnippet.innerText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">...${density} shapes generated...</svg>`;
+            codeSnippet.innerText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">...${density} elements...</svg>`;
         }
 
         // === EVENT LISTENERS ===
         Object.keys(inputs).forEach(key => {
             inputs[key].addEventListener('input', (e) => {
                 document.getElementById(`val-${key.toLowerCase()}`).innerText = e.target.value;
-                renderMemphis(); // Render ulang dengan formasi posisi yang sama
+                renderMemphis(); // Render ulang dengan formasi yang stabil!
             });
         });
 
@@ -346,30 +343,30 @@
 
         // === FUNGSI TOMBOL ===
         function shuffleAssets() {
-            generateSeed(); // Acak posisi formasi dasar
-            renderMemphis(); // Render ulang
+            generateSeed(); // Tombol ini satu-satunya jalan untuk mengacak formasi secara paksa
+            renderMemphis(); 
         }
 
         function randomizeAppearance() {
             colorPickers.forEach(p => { p.value = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'); });
             bgToggle.checked = Math.random() > 0.5;
-            renderMemphis(); // Render tanpa mengubah seed posisi
+            renderMemphis(); 
         }
 
         function randomizeStructure() {
-            inputs.density.value = Math.floor(Math.random() * 150) + 50;
-            inputs.variation.value = Math.floor(Math.random() * 80) + 20;
+            inputs.density.value = Math.floor(Math.random() * (300 - 10 + 1)) + 10;
+            inputs.variation.value = Math.floor(Math.random() * 100) + 1;
             inputs.rotation.value = Math.floor(Math.random() * 360);
-            inputs.minSize.value = Math.floor(Math.random() * 30) + 10;
-            inputs.maxSize.value = Math.floor(Math.random() * 150) + 80;
-            inputs.shadow.value = Math.floor(Math.random() * 50);
+            inputs.minSize.value = Math.floor(Math.random() * (50 - 5 + 1)) + 5;
+            inputs.maxSize.value = Math.floor(Math.random() * (300 - 50 + 1)) + 50;
+            inputs.shadow.value = Math.floor(Math.random() * 100);
 
             Object.keys(inputs).forEach(key => {
                 document.getElementById(`val-${key.toLowerCase()}`).innerText = inputs[key].value;
             });
             
-            // Random structure berarti formasi juga sebaiknya diacak
-            shuffleAssets();
+            // Render tanpa mengacak posisi
+            renderMemphis();
         }
 
         function resetAll() {
@@ -428,7 +425,7 @@
             img.src = url;
         }
 
-        // Inisiasi awal saat browser pertama kali dibuka
+        // Inisiasi
         generateSeed();
         renderMemphis();
 
