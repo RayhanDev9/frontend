@@ -37,19 +37,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const initCheckout = (data) => {
     const container = document.getElementById("container-checkout");
 
-    function htmlCheckout(data) {
+    function htmlCheckout() {
       const hargaFormat =
         !data.harga || data.harga == 0
           ? "GRATIS"
           : "Rp " + new Intl.NumberFormat("id-ID").format(data.harga);
 
-      const subTotal =
-        !data.harga || data.harga == 0
-          ? "GRATIS"
-          : "Rp " +
-            new Intl.NumberFormat("id-ID").format(
-              data.harga * Number(inputQty),
-            );
+      // const subTotal =
+      //   !data.harga || data.harga == 0
+      //     ? "GRATIS"
+      //     : "Rp " +
+      //       new Intl.NumberFormat("id-ID").format(
+      //         data.harga * Number(inputQty),
+      //       );
       return `
          <div class="mb-6">
             <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
           >
             <div class="flex justify-between items-center mb-4 px-2">
               <h2 class="text-lg font-semibold text-slate-800">Subtotal</h2>
-              <div class="text-md sm:text-lg lg:text-xl font-bold text-blue-600">${subTotal}</div>
+              <div class="text-md sm:text-lg lg:text-xl font-bold text-blue-600">${hargaFormat}</div>
             </div>
 
             <div
@@ -276,6 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await response.json();
       initCheckout(result.data !== undefined ? result.data : result);
     } catch (error) {
+      console.error("DEBUG ERROR:", error); // Ini kuncinya!
       document.getElementById("container-checkout").innerHTML =
         `<div class="p-6 text-center text-red-500 font-bold">Gagal memuat acara.</div>`;
     }
