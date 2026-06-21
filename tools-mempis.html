@@ -12,8 +12,8 @@
             --text-main: #1e293b;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --primary: #8b5cf6; /* Ungu sesuai logo */
-            --danger: #fb7185; /* Merah pink untuk Save Image */
+            --primary: #8b5cf6;
+            --danger: #fb7185; 
             --success: #22c55e;
             --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             --sidebar-width: 320px;
@@ -34,87 +34,40 @@
 
         /* === HEADER === */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border);
-            z-index: 10;
+            display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: var(--bg-card); border-bottom: 1px solid var(--border); z-index: 10;
         }
-        
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 20px;
-            font-weight: 700;
-        }
-
+        .header-title { display: flex; align-items: center; gap: 15px; font-size: 20px; font-weight: 700; }
         .logo-icon {
-            width: 36px; height: 36px; 
-            background: linear-gradient(135deg, #ec4899, #8b5cf6); 
-            border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
+            width: 36px; height: 36px; background: linear-gradient(135deg, #ec4899, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;
         }
         .logo-icon::after { content: ''; width: 8px; height: 8px; background: white; border-radius: 50%; position: absolute; right: 8px; top: 8px; }
         .logo-icon::before { content: ''; width: 14px; height: 14px; border: 2px solid white; border-radius: 50%; }
-
-        .badge-on-device {
-            font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; font-weight: normal; margin-top: 2px;
-        }
+        .badge-on-device { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; font-weight: normal; margin-top: 2px; }
         .badge-on-device::before { content: ''; display: inline-block; width: 8px; height: 8px; background-color: var(--success); border-radius: 50%; }
-
-        .btn-reset {
-            background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px; font-weight: 600;
-        }
+        .btn-reset { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px; font-weight: 600; }
 
         /* === LAYOUT UTAMA === */
-        .layout-container {
-            display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden;
-        }
+        .layout-container { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
 
         /* === SIDEBAR === */
-        .sidebar {
-            width: var(--sidebar-width); display: flex; flex-direction: column; gap: 15px; overflow-y: auto; padding-right: 5px;
-        }
+        .sidebar { width: var(--sidebar-width); display: flex; flex-direction: column; gap: 15px; overflow-y: auto; padding-right: 5px; }
         .sidebar::-webkit-scrollbar { width: 6px; }
         .sidebar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
-
-        .card {
-            background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .card-header {
-            display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 20px; text-transform: uppercase;
-        }
-
-        .btn-random {
-            background: none; border: none; color: var(--text-muted); font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px;
-        }
+        .card { background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 20px; text-transform: uppercase; }
+        .btn-random { background: none; border: none; color: var(--text-muted); font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 
         /* Toggles & Pickers */
         .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; }
-        
-        .toggle-switch {
-            position: relative; display: inline-block; width: 40px; height: 22px;
-        }
+        .toggle-switch { position: relative; display: inline-block; width: 40px; height: 22px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .slider-toggle {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 34px;
-        }
-        .slider-toggle:before {
-            position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;
-        }
+        .slider-toggle { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 34px; }
+        .slider-toggle:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
         .toggle-switch input:checked + .slider-toggle { background-color: var(--primary); }
         .toggle-switch input:checked + .slider-toggle:before { transform: translateX(18px); }
 
-        /* Color Pickers (5 Warna) */
         .color-group { display: flex; gap: 8px; }
-        .color-picker {
-            width: 24px; height: 24px; border: none; border-radius: 6px; cursor: pointer; padding: 0; overflow: hidden;
-        }
+        .color-picker { width: 24px; height: 24px; border: none; border-radius: 6px; cursor: pointer; padding: 0; overflow: hidden; }
         .color-picker::-webkit-color-swatch-wrapper { padding: 0; }
         .color-picker::-webkit-color-swatch { border: none; }
 
@@ -122,42 +75,22 @@
         .range-group { margin-bottom: 20px; }
         .range-header { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 8px; text-transform: uppercase; }
         .range-val { color: #0f172a; font-weight: 800; }
-        
-        input[type=range] {
-            -webkit-appearance: none; width: 100%; background: transparent;
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%; background: #1e293b; cursor: pointer; margin-top: -6px;
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%; height: 2px; cursor: pointer; background: #e2e8f0;
-        }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%; background: #1e293b; cursor: pointer; margin-top: -6px; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 2px; cursor: pointer; background: #e2e8f0; }
 
         /* Shape Style Buttons */
         .style-group { display: flex; background: #f1f5f9; border-radius: 8px; padding: 4px; }
-        .style-btn {
-            flex: 1; border: none; background: transparent; padding: 8px 0; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 6px; transition: 0.2s;
-        }
+        .style-btn { flex: 1; border: none; background: transparent; padding: 8px 0; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 6px; transition: 0.2s; }
         .style-btn.active { background: white; color: var(--text-main); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
         /* === WORKSPACE === */
-        .workspace {
-            flex: 1; background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-        }
-
-        .workspace-header {
-            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);
-        }
-        
+        .workspace { flex: 1; background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .workspace-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
         .header-title-sm { font-size: 14px; font-weight: 700; color: #334155; display: flex; align-items: center; gap: 8px; }
-
         .btn-group-right { display: flex; gap: 10px; }
-        .btn-outline {
-            background: white; border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; color: #475569; display: flex; align-items: center; gap: 6px;
-        }
-        .btn-save {
-            background: var(--danger); border: none; color: white; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(251,113,133,0.3);
-        }
+        .btn-outline { background: white; border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; color: #475569; display: flex; align-items: center; gap: 6px; }
+        .btn-save { background: var(--danger); border: none; color: white; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(251,113,133,0.3); }
         .btn-save:hover { background: #e11d48; }
 
         /* Area Canvas/SVG */
@@ -167,17 +100,10 @@
             background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
         }
         
-        #memphis-svg { width: 100%; height: 100%; display: block; }
-
         /* Code Footer */
-        .workspace-footer {
-            padding: 12px 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #fafafa;
-        }
-        .code-preview {
-            font-family: monospace; font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%;
-        }
+        .workspace-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
+        .code-preview { font-family: monospace; font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
         .btn-copy { background: white; border: 1px solid var(--border); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-
     </style>
 </head>
 <body>
@@ -195,7 +121,6 @@
 
     <div class="layout-container">
         <div class="sidebar">
-            
             <div class="card">
                 <div class="card-header">
                     <span>🎨 Appearance</span>
@@ -229,20 +154,20 @@
                 </div>
 
                 <div class="range-group">
-                    <div class="range-header"><span>Density</span> <span class="range-val" id="val-density">113</span></div>
-                    <input type="range" id="in-density" min="10" max="300" value="113">
+                    <div class="range-header"><span>Density</span> <span class="range-val" id="val-density">128</span></div>
+                    <input type="range" id="in-density" min="10" max="300" value="128">
                 </div>
                 <div class="range-group">
-                    <div class="range-header"><span>Variation</span> <span class="range-val" id="val-variation">66</span></div>
-                    <input type="range" id="in-variation" min="1" max="100" value="66">
+                    <div class="range-header"><span>Variation</span> <span class="range-val" id="val-variation">54</span></div>
+                    <input type="range" id="in-variation" min="1" max="100" value="54">
                 </div>
                 <div class="range-group">
-                    <div class="range-header"><span>Rotation</span> <span class="range-val" id="val-rotation">250</span></div>
-                    <input type="range" id="in-rotation" min="0" max="360" value="250">
+                    <div class="range-header"><span>Rotation</span> <span class="range-val" id="val-rotation">221</span></div>
+                    <input type="range" id="in-rotation" min="0" max="360" value="221">
                 </div>
                 <div class="range-group">
-                    <div class="range-header"><span>Min Size</span> <span class="range-val" id="val-minsize">11</span></div>
-                    <input type="range" id="in-minsize" min="5" max="50" value="11">
+                    <div class="range-header"><span>Min Size</span> <span class="range-val" id="val-minsize">34</span></div>
+                    <input type="range" id="in-minsize" min="5" max="100" value="34">
                 </div>
                 <div class="range-group">
                     <div class="range-header"><span>Max Size</span> <span class="range-val" id="val-maxsize">155</span></div>
@@ -269,23 +194,21 @@
                     Live Preview
                 </div>
                 <div class="btn-group-right">
-                    <button class="btn-outline" onclick="generateMemphis()">🔀 SHUFFLE</button>
+                    <button class="btn-outline" onclick="shuffleAssets()">🔀 SHUFFLE</button>
                     <button class="btn-save" onclick="saveAsImage()">📥 SAVE IMAGE</button>
                 </div>
             </div>
 
-            <div class="preview-area" id="preview-area">
-                </div>
+            <div class="preview-area" id="preview-area"></div>
 
             <div class="workspace-footer">
-                <div class="code-preview" id="code-snippet">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"&gt;...&lt;/svg&gt;</div>
+                <div class="code-preview" id="code-snippet">&lt;svg&gt;...&lt;/svg&gt;</div>
                 <button class="btn-copy" onclick="copySVG()">📄 Copy SVG</button>
             </div>
         </div>
     </div>
 
     <script>
-        // DOM Elements
         const previewArea = document.getElementById('preview-area');
         const bgToggle = document.getElementById('bg-toggle');
         const colorPickers = document.querySelectorAll('.color-picker');
@@ -303,37 +226,46 @@
 
         let currentShapeStyle = 'mixed';
         let svgString = '';
+        
+        // --- DATA STATE / SEED (KUNCI PERBAIKANNYA DI SINI) ---
+        let maxElements = 300; // Sesuai maksimal density
+        let elementsData = []; 
 
-        // Definisi Bentuk Path (Skala 0-1)
         const SHAPES = [
-            // Circle
             `<circle cx="0" cy="0" r="0.5" />`,
-            // Square
             `<rect x="-0.4" y="-0.4" width="0.8" height="0.8" />`,
-            // Triangle
             `<polygon points="0,-0.5 0.5,0.4 -0.5,0.4" />`,
-            // Cross
             `<path d="M -0.1,-0.4 L 0.1,-0.4 L 0.1,-0.1 L 0.4,-0.1 L 0.4,0.1 L 0.1,0.1 L 0.1,0.4 L -0.1,0.4 L -0.1,0.1 L -0.4,0.1 L -0.4,-0.1 L -0.1,-0.1 Z" />`,
-            // Squiggle (Khusus ini selalu outline nantinya)
             `<path d="M -0.4,-0.2 Q -0.2,0.3 0,0 T 0.4,0.2" fill="none" stroke-linecap="round" stroke-linejoin="round" />`,
-            // Pill
             `<rect x="-0.5" y="-0.2" width="1" height="0.4" rx="0.2" />`
         ];
 
-        // Random Helper
-        const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        const randomFloat = (min, max) => Math.random() * (max - min) + min;
+        // Fungsi ini hanya dipanggil jika menekan SHUFFLE atau tombol RESET/RANDOM.
+        // Tugasnya melempar posisi dan properti dasar, lalu menyimpannya.
+        function generateSeed() {
+            elementsData = [];
+            for (let i = 0; i < maxElements; i++) {
+                elementsData.push({
+                    x: Math.random(),
+                    y: Math.random(),
+                    shapeF: Math.random(),
+                    colorF: Math.random(),
+                    sizeF: Math.random(),
+                    rotF: Math.random(),
+                    styleF: Math.random()
+                });
+            }
+        }
 
-        // FUNGSI UTAMA: Generate SVG
-        function generateMemphis() {
-            // Ambil semua nilai dari sidebar
+        // Fungsi ini membaca Slider dan menerapkannya pada data yang sudah ada.
+        function renderMemphis() {
             const colors = Array.from(colorPickers).map(p => p.value);
             const hasBg = bgToggle.checked;
             const density = parseInt(inputs.density.value);
             const variation = parseInt(inputs.variation.value);
             const rotationMax = parseInt(inputs.rotation.value);
             const minSize = parseInt(inputs.minSize.value);
-            const maxSize = parseInt(inputs.maxSize.value);
+            const maxSize = Math.max(parseInt(inputs.maxSize.value), minSize + 1); // Cek aman
             const shadowOp = parseInt(inputs.shadow.value) / 100;
 
             const width = 1920;
@@ -341,44 +273,40 @@
 
             let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="100%" height="100%">`;
             
-            // Filter Drop Shadow
             if (shadowOp > 0) {
-                svgContent += `
-                <defs>
-                    <filter id="drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="8" dy="12" stdDeviation="6" flood-color="#000" flood-opacity="${shadowOp}"/>
-                    </filter>
-                </defs>`;
+                svgContent += `<defs><filter id="drop-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="8" dy="12" stdDeviation="6" flood-color="#000" flood-opacity="${shadowOp}"/></filter></defs>`;
             }
-
-            // Layer Background
             if (hasBg) {
                 svgContent += `<rect width="100%" height="100%" fill="#ffffff" />`;
             }
 
-            // Kalkulasi bentuk
+            // Looping hanya sampai batas "Density", menggunakan elemen yang konsisten
             for (let i = 0; i < density; i++) {
-                // Variation menentukan keragaman bentuk yang muncul
-                let shapePoolSize = Math.max(2, Math.ceil((variation / 100) * SHAPES.length));
-                let shapeIndex = randomInt(0, shapePoolSize - 1);
+                let data = elementsData[i];
+
+                // Hitung bentuk apa berdasarkan Variation dan data.shapeF
+                let shapePoolSize = Math.max(1, Math.ceil((variation / 100) * SHAPES.length));
+                let shapeIndex = Math.floor(data.shapeF * shapePoolSize);
+                shapeIndex = Math.min(shapeIndex, shapePoolSize - 1); // Jaga agar tidak error
                 let shapeCode = SHAPES[shapeIndex];
 
-                let color = colors[randomInt(0, colors.length - 1)];
-                let size = randomInt(minSize, maxSize);
-                let rot = randomInt(0, rotationMax);
-                let x = randomInt(0, width);
-                let y = randomInt(0, height);
+                let colorIndex = Math.floor(data.colorF * colors.length);
+                let color = colors[colorIndex];
 
-                // Tentukan style (Solid / Outline)
+                // Interpolasi posisi, rotasi, dan ukuran
+                let x = data.x * width;
+                let y = data.y * height;
+                let size = minSize + (data.sizeF * (maxSize - minSize));
+                let rot = data.rotF * rotationMax;
+
+                // Aturan Style
                 let isSolid = currentShapeStyle === 'solid';
-                if (currentShapeStyle === 'mixed') isSolid = Math.random() > 0.5;
-                
-                // Pengecualian: Shape ke-4 (Squiggle) selalu outline agar tidak hancur bentuknya
-                if (shapeIndex === 4) isSolid = false;
+                if (currentShapeStyle === 'mixed') isSolid = data.styleF > 0.5;
+                if (shapeIndex === 4) isSolid = false; // Squiggle wajid garis tepi
 
                 let fillProp = isSolid ? color : 'none';
                 let strokeProp = isSolid ? 'none' : color;
-                let strokeWidth = isSolid ? 0 : Math.max(4, size * 0.15); // Tebal garis proporsional
+                let strokeWidth = isSolid ? 0 : Math.max(4, size * 0.15);
                 let shadowFilter = shadowOp > 0 ? `filter="url(#drop-shadow)"` : '';
 
                 svgContent += `
@@ -392,85 +320,77 @@
             svgContent += `</svg>`;
             svgString = svgContent;
             
-            // Render ke Layar
             previewArea.innerHTML = svgContent;
-            codeSnippet.innerText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">...${density} paths...</svg>`;
+            codeSnippet.innerText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">...${density} shapes generated...</svg>`;
         }
 
         // === EVENT LISTENERS ===
-
-        // Event: Update nilai slider angka di sebelah kanan
         Object.keys(inputs).forEach(key => {
             inputs[key].addEventListener('input', (e) => {
                 document.getElementById(`val-${key.toLowerCase()}`).innerText = e.target.value;
-                generateMemphis(); // Render Realtime
+                renderMemphis(); // Render ulang dengan formasi posisi yang sama
             });
         });
 
-        // Event: Ganti Warna atau Toggle BG
-        bgToggle.addEventListener('change', generateMemphis);
-        colorPickers.forEach(p => p.addEventListener('input', generateMemphis));
+        bgToggle.addEventListener('change', renderMemphis);
+        colorPickers.forEach(p => p.addEventListener('input', renderMemphis));
 
-        // Event: Ganti Shape Style (Solid/Outline/Mixed)
         styleBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 styleBtns.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 currentShapeStyle = this.getAttribute('data-val');
-                generateMemphis();
+                renderMemphis();
             });
         });
 
-        // === FUNGSI TOMBOL KHUSUS ===
+        // === FUNGSI TOMBOL ===
+        function shuffleAssets() {
+            generateSeed(); // Acak posisi formasi dasar
+            renderMemphis(); // Render ulang
+        }
 
         function randomizeAppearance() {
-            // Generate warna hex acak
-            colorPickers.forEach(p => {
-                p.value = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
-            });
+            colorPickers.forEach(p => { p.value = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'); });
             bgToggle.checked = Math.random() > 0.5;
-            generateMemphis();
+            renderMemphis(); // Render tanpa mengubah seed posisi
         }
 
         function randomizeStructure() {
-            inputs.density.value = randomInt(30, 200);
-            inputs.variation.value = randomInt(20, 100);
-            inputs.rotation.value = randomInt(0, 360);
-            inputs.minSize.value = randomInt(5, 30);
-            inputs.maxSize.value = randomInt(80, 250);
-            inputs.shadow.value = randomInt(0, 60);
+            inputs.density.value = Math.floor(Math.random() * 150) + 50;
+            inputs.variation.value = Math.floor(Math.random() * 80) + 20;
+            inputs.rotation.value = Math.floor(Math.random() * 360);
+            inputs.minSize.value = Math.floor(Math.random() * 30) + 10;
+            inputs.maxSize.value = Math.floor(Math.random() * 150) + 80;
+            inputs.shadow.value = Math.floor(Math.random() * 50);
 
-            // Trigger update text label
             Object.keys(inputs).forEach(key => {
                 document.getElementById(`val-${key.toLowerCase()}`).innerText = inputs[key].value;
             });
-            generateMemphis();
+            
+            // Random structure berarti formasi juga sebaiknya diacak
+            shuffleAssets();
         }
 
         function resetAll() {
-            // Warna Default (Sesuai Referensi)
             const defColors = ["#0f172a", "#ec4899", "#06b6d4", "#eab308", "#8b5cf6"];
             colorPickers.forEach((p, i) => p.value = defColors[i]);
             bgToggle.checked = false;
 
-            // Parameter Default
-            inputs.density.value = 113;
-            inputs.variation.value = 66;
-            inputs.rotation.value = 250;
-            inputs.minSize.value = 11;
+            inputs.density.value = 128;
+            inputs.variation.value = 54;
+            inputs.rotation.value = 221;
+            inputs.minSize.value = 34;
             inputs.maxSize.value = 155;
             inputs.shadow.value = 30;
 
-            Object.keys(inputs).forEach(key => {
-                document.getElementById(`val-${key.toLowerCase()}`).innerText = inputs[key].value;
-            });
+            Object.keys(inputs).forEach(key => { document.getElementById(`val-${key.toLowerCase()}`).innerText = inputs[key].value; });
 
-            // Reset Style
             styleBtns.forEach(b => b.classList.remove('active'));
             styleBtns[2].classList.add('active');
             currentShapeStyle = 'mixed';
 
-            generateMemphis();
+            shuffleAssets();
         }
 
         function copySVG() {
@@ -483,19 +403,16 @@
         }
 
         function saveAsImage() {
-            // Konversi SVG ke Canvas lalu Download sebagai PNG
             const canvas = document.createElement("canvas");
             canvas.width = 1920; 
             canvas.height = 1080;
             const ctx = canvas.getContext("2d");
             
             const img = new Image();
-            // Encode SVG untuk dimasukkan ke src gambar
             const svgBlob = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
             const url = URL.createObjectURL(svgBlob);
 
             img.onload = function() {
-                // Jika tidak pakai Background Layer, paksa transparan. Jika pakai, warna diurus SVG.
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 0, 0);
                 
@@ -511,8 +428,9 @@
             img.src = url;
         }
 
-        // Render perdana saat halaman dimuat
-        generateMemphis();
+        // Inisiasi awal saat browser pertama kali dibuka
+        generateSeed();
+        renderMemphis();
 
     </script>
 </body>
