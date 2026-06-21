@@ -206,7 +206,7 @@
         </div>
     </div>
 
-<script src="https://unpkg.com/@imgly/background-removal@1.4.5/dist/imglyRemoveBackground.umd.js"></script>
+    <script src="https://unpkg.com/@imgly/background-removal@1.4.5/dist/imglyRemoveBackground.umd.js"></script>
     
     <script>
         // DOM Elements
@@ -282,13 +282,9 @@
             detStatus.style.color = '#eab308'; // Kuning
 
             try {
-                // Konfigurasi path khusus agar library bisa mendownload model AI
-                const config = {
-    publicPath: "https://unpkg.com/@imgly/background-removal@1.4.5/dist/"
-      };
-
-                // Proses AI (Menghasilkan Blob PNG transparan)
-                const imageBlob = await imglyRemoveBackground(currentFile, config);
+                // MEMPROSES AI
+                // Langsung gunakan fungsi bawaan agar mengambil model dari server pusat yang stabil
+                const imageBlob = await imglyRemoveBackground(currentFile);
                 
                 // Cek Auto-Crop
                 if (autoCropToggle.checked) {
@@ -310,12 +306,12 @@
 
             } catch (error) {
                 console.error("BG Removal Error:", error);
-                alert("Gagal menghapus background. Pastikan koneksi internet stabil untuk mengunduh model AI pertama kali.");
+                alert("Gagal menghapus background: " + error.message + "\n\nPastikan koneksi internet Anda stabil untuk mengunduh model pertama kalinya, dan matikan sementara Adblocker jika ada.");
                 
                 loadingOverlay.style.display = 'none';
                 btnStart.disabled = false;
                 detStatus.innerText = 'ERROR';
-                detStatus.style.color = 'var(--danger)';
+                detStatus.style.color = '#ef4444'; // Merah
             }
         });
 
