@@ -1,209 +1,341 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Caption Generator - Mading Kampus</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-[#f5f7fa] text-slate-800 font-sans selection:bg-blue-200">
-
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="index.html" class="text-xl font-bold text-blue-700 tracking-tight flex items-center gap-2 transition-transform hover:-translate-x-1">
-                <span class="text-2xl">&larr;</span> Kembali
-            </a>
-            <span class="font-semibold text-slate-500 uppercase tracking-widest text-sm text-right">Mini Tools (Ollama)</span>
-        </div>
+  </head>
+  <body
+    class="min-h-screen bg-[#f5f7fa] text-slate-800 font-sans selection:bg-blue-200"
+  >
+    <header
+      class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm"
+    >
+      <div
+        class=" mx-auto px-6 md:px-16 lg:px-24 xl:px-32 h-16 flex items-center justify-between"
+      >
+        <a
+          href="mini-tools.html"
+          class="text-xl font-bold text-blue-700 tracking-tight flex items-center gap-2  "
+        >
+          <button
+            class="bg-[#2664ff] text-white px-3 py-2 md:px- md:py-2 text-xs md:text-sm  font-bold rounded-lg inline-flex justify-center items-center gap-2  hover:bg-[#1a4dbd] w-full sm:w-auto"
+          >
+            <svg
+              class="h-4 W-4"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="20" y1="12" x2="4" y2="12"></line>
+              <polyline points="10 18 4 12 10 6"></polyline>
+            </svg>
+            BACK
+          </button>
+        </a>
+        <span class="font-semibold text-slate-500 uppercase text-sm text-right"
+          >Mini Tools
+        </span>
+      </div>
     </header>
 
     <main class="max-w-4xl mx-auto px-6 py-12">
-        <div class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 flex items-center justify-center gap-3">
-                ✨ AI Caption Generator
-            </h1>
-            <p class="text-slate-500 text-lg">Unggah poster acara, dan biarkan AI menuliskan caption estetik dan informatif untuk Anda.</p>
-        </div>
+      <div class="text-center mb-10">
+        <h1
+          class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 flex items-center justify-center gap-3"
+        >
+          AI Caption Generator
+        </h1>
+        <p class="text-slate-500 text-lg">
+          Unggah poster acara, dan biarkan AI menuliskan caption estetik dan
+          informatif untuk Anda.
+        </p>
+      </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 h-fit">
-                
-                <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">1. Unggah Poster Acara</label>
-                
-                <div id="area-drop" class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group mb-6 relative">
-                    <input type="file" id="input-gambar" accept="image/*" class="hidden">
-                    
-                    <div id="state-kosong">
-                        <svg class="w-10 h-10 mx-auto text-slate-400 group-hover:text-blue-500 mb-2 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        <p class="text-sm font-semibold text-slate-700">Klik atau Seret Gambar ke Sini</p>
-                    </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div
+          class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 h-fit"
+        >
+          <label
+            class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide"
+            >1. Unggah Poster Acara</label
+          >
 
-                    <div id="state-preview" class="hidden">
-                        <img id="gambar-preview" src="" alt="Preview" class="max-h-40 mx-auto rounded shadow-sm object-contain">
-                        <p class="text-xs text-blue-600 font-medium mt-3 hover:underline">Ganti Gambar</p>
-                    </div>
-                </div>
+          <div
+            id="area-drop"
+            class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group mb-6 relative"
+          >
+            <input
+              type="file"
+              id="input-gambar"
+              accept="image/*"
+              class="hidden"
+            />
 
-                <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">2. Informasi Tambahan (Opsional)</label>
-                <textarea id="input-konteks" rows="3" placeholder="Contoh: Acara ini gratis, ada doorprize laptop, dan wajib bawa tumbler." class="w-full p-4 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none mb-6 text-sm"></textarea>
-
-                <button id="btn-generate" disabled class="w-full bg-slate-300 text-slate-500 font-bold py-4 rounded-xl transition-all duration-300 pointer-events-none flex justify-center items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    BUAT CAPTION SEKARANG
-                </button>
+            <div id="state-kosong">
+              <svg
+                class="w-10 h-10 mx-auto text-slate-400 group-hover:text-blue-500 mb-2 transition-colors"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                ></path>
+              </svg>
+              <p class="text-sm font-semibold text-slate-700">
+                Klik atau Seret Gambar ke Sini
+              </p>
             </div>
 
-            <div class="bg-slate-900 p-6 md:p-8 rounded-2xl shadow-lg border border-slate-800 flex flex-col">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest">Hasil Generasi AI</h3>
-                    
-                    <button id="btn-copy" class="text-xs font-bold bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-700 hover:text-white transition-colors hidden flex items-center gap-1.5">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                        Copy
-                    </button>
-                </div>
-
-                <div id="area-hasil" class="flex-grow bg-slate-800/50 rounded-xl p-5 border border-slate-700/50 text-slate-300 text-sm leading-relaxed overflow-y-auto whitespace-pre-wrap flex items-center justify-center min-h-[300px]">
-                    <span class="text-slate-500 text-center">Menunggu poster diunggah...</span>
-                </div>
+            <div id="state-preview" class="hidden">
+              <img
+                id="gambar-preview"
+                src=""
+                alt="Preview"
+                class="max-h-40 mx-auto rounded shadow-sm object-contain"
+              />
+              <p class="text-xs text-blue-600 font-medium mt-3 hover:underline">
+                Ganti Gambar
+              </p>
             </div>
+          </div>
 
+          <label
+            class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide"
+            >2. Informasi Tambahan (Opsional)</label
+          >
+          <textarea
+            id="input-konteks"
+            rows="3"
+            placeholder="Contoh: Acara ini gratis, ada doorprize laptop, dan wajib bawa tumbler."
+            class="w-full p-4 bg-slate-50 border border-slate-300 text-slate-900 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none mb-6 text-sm"
+          ></textarea>
+
+          <button
+            id="btn-generate"
+            disabled
+            class="w-full bg-slate-300 text-slate-500 font-bold py-4 rounded-xl transition-all duration-300 pointer-events-none flex justify-center items-center gap-2"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              ></path>
+            </svg>
+            BUAT CAPTION SEKARANG
+          </button>
         </div>
+
+        <div
+          class="bg-slate-900 p-6 md:p-8 rounded-2xl shadow-lg border border-slate-800 flex flex-col"
+        >
+          <div class="flex justify-between items-center mb-4">
+            <h3
+              class="text-sm font-bold text-slate-400 uppercase tracking-widest"
+            >
+              Hasil Generasi AI
+            </h3>
+
+            <button
+              id="btn-copy"
+              class="text-xs font-bold bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-700 hover:text-white transition-colors hidden flex items-center gap-1.5"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                ></path>
+              </svg>
+              Copy
+            </button>
+          </div>
+
+          <div
+            id="area-hasil"
+            class="flex-grow bg-slate-800/50 rounded-xl p-5 border border-slate-700/50 text-slate-300 text-sm leading-relaxed overflow-y-auto whitespace-pre-wrap flex items-center justify-center min-h-[300px]"
+          >
+            <span class="text-slate-500 text-center"
+              >Menunggu poster diunggah...</span
+            >
+          </div>
+        </div>
+      </div>
     </main>
 
     <script>
-        // === URL API LOKAL OLLAMA ===
-        const OLLAMA_API_URL = 'http://127.0.0.1:11434/api/generate'; 
-        
-        // =======================================================
-        // GANTI INI DENGAN MODEL VISION OLLAMA YANG ANDA MILIKI
-        // Contoh: 'llava', 'llama3.2-vision', 'moondream'
-        // =======================================================
-        const OLLAMA_MODEL = 'llava'; 
-        
-        const inputGambar = document.getElementById('input-gambar');
-        const stateKosong = document.getElementById('state-kosong');
-        const statePreview = document.getElementById('state-preview');
-        const gambarPreview = document.getElementById('gambar-preview');
-        const btnGenerate = document.getElementById('btn-generate');
-        const inputKonteks = document.getElementById('input-konteks');
-        const areaHasil = document.getElementById('area-hasil');
-        const btnCopy = document.getElementById('btn-copy');
-        const areaDrop = document.getElementById('area-drop');
+      // === URL API LOKAL OLLAMA ===
+      const OLLAMA_API_URL = "http://127.0.0.1:11434/api/generate";
 
-        let fullBase64Image = "";
+      // =======================================================
+      // GANTI INI DENGAN MODEL VISION OLLAMA YANG ANDA MILIKI
+      // Contoh: 'llava', 'llama3.2-vision', 'moondream'
+      // =======================================================
+      const OLLAMA_MODEL = "llava";
 
-        areaDrop.addEventListener('click', (e) => {
-            if (e.target !== inputGambar) inputGambar.click();
+      const inputGambar = document.getElementById("input-gambar");
+      const stateKosong = document.getElementById("state-kosong");
+      const statePreview = document.getElementById("state-preview");
+      const gambarPreview = document.getElementById("gambar-preview");
+      const btnGenerate = document.getElementById("btn-generate");
+      const inputKonteks = document.getElementById("input-konteks");
+      const areaHasil = document.getElementById("area-hasil");
+      const btnCopy = document.getElementById("btn-copy");
+      const areaDrop = document.getElementById("area-drop");
+
+      let fullBase64Image = "";
+
+      areaDrop.addEventListener("click", (e) => {
+        if (e.target !== inputGambar) inputGambar.click();
+      });
+
+      inputGambar.addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          fullBase64Image = event.target.result;
+
+          gambarPreview.src = event.target.result;
+          stateKosong.classList.add("hidden");
+          statePreview.classList.remove("hidden");
+
+          btnGenerate.disabled = false;
+          btnGenerate.classList.remove(
+            "bg-slate-300",
+            "text-slate-500",
+            "pointer-events-none",
+          );
+          btnGenerate.classList.add(
+            "bg-blue-600",
+            "text-white",
+            "hover:bg-blue-700",
+            "shadow-lg",
+            "active:scale-[0.98]",
+          );
+        };
+        reader.readAsDataURL(file);
+      });
+
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        areaDrop.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
         });
+      });
+      ["dragenter", "dragover"].forEach((eventName) => {
+        areaDrop.addEventListener(eventName, () =>
+          areaDrop.classList.add("border-blue-500", "bg-blue-50"),
+        );
+      });
+      ["dragleave", "drop"].forEach((eventName) => {
+        areaDrop.addEventListener(eventName, () =>
+          areaDrop.classList.remove("border-blue-500", "bg-blue-50"),
+        );
+      });
+      areaDrop.addEventListener("drop", (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length) {
+          inputGambar.files = files;
+          inputGambar.dispatchEvent(new Event("change"));
+        }
+      });
 
-        inputGambar.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return; 
-            
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                fullBase64Image = event.target.result;
+      // 3. LOGIKA EKSEKUSI API LANGSUNG KE OLLAMA
+      btnGenerate.addEventListener("click", async () => {
+        if (!fullBase64Image) return;
 
-                gambarPreview.src = event.target.result;
-                stateKosong.classList.add('hidden');
-                statePreview.classList.remove('hidden');
-                
-                btnGenerate.disabled = false;
-                btnGenerate.classList.remove('bg-slate-300', 'text-slate-500', 'pointer-events-none');
-                btnGenerate.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700', 'shadow-lg', 'active:scale-[0.98]');
-            }
-            reader.readAsDataURL(file);
+        const teksAsli = btnGenerate.innerHTML;
+        btnGenerate.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> AI Sedang Menganalisis Gambar...`;
+        btnGenerate.disabled = true;
+        btnGenerate.classList.replace("hover:bg-blue-700", "opacity-90");
+        btnCopy.classList.add("hidden");
+
+        areaHasil.innerHTML =
+          '<span class="text-blue-400 animate-pulse text-center">Menghubungi Ollama lokal (Tunggu ya, membaca gambar butuh memori besar)...</span>';
+        areaHasil.classList.replace("items-center", "items-start");
+
+        try {
+          // PENTING: Membuang awalan "data:image/jpeg;base64," agar tidak ditolak Ollama
+          const base64DataOnly = fullBase64Image.split(",")[1];
+
+          // Menyusun Prompt
+          let promptText =
+            "Kamu adalah seorang pakar media sosial yang kreatif. Tolong buatkan caption Instagram yang menarik, estetik, dan informatif untuk poster acara yang ada di gambar ini. Gunakan hashtag yang relevan dan format paragraf yang rapi menggunakan emoji.";
+
+          if (inputKonteks.value.trim() !== "") {
+            promptText +=
+              "\n\nPastikan caption tersebut juga memasukkan detail tambahan berikut: " +
+              inputKonteks.value.trim();
+          }
+
+          // Tembak API Ollama secara langsung
+          const response = await fetch(OLLAMA_API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              model: OLLAMA_MODEL,
+              prompt: promptText,
+              images: [base64DataOnly],
+              stream: false, // Menerima respon utuh, bukan berjalan
+            }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok && data.response) {
+            const formattedCaption = data.response.replace(/\n/g, "<br>");
+            areaHasil.innerHTML = formattedCaption;
+            btnCopy.classList.remove("hidden");
+          } else if (data.error) {
+            areaHasil.innerHTML = `<span class="text-red-400">Error dari Ollama: ${data.error}</span>`;
+          }
+        } catch (error) {
+          console.error("API Error:", error);
+          areaHasil.innerHTML = `<span class="text-red-400"><b>KONEKSI TERPUTUS KE OLLAMA</b><br><br>Jika aplikasi Ollama Anda sudah menyala tapi ini muncul, penyebabnya adalah "CORS Policy" peramban. <br><br>Cara mengatasi:<br>1. Tutup aplikasi Ollama.<br>2. Buka Command Prompt (CMD) Windows.<br>3. Ketik: <code>set OLLAMA_ORIGINS="*"</code> lalu Enter.<br>4. Ketik: <code>ollama serve</code> lalu Enter.</span>`;
+        } finally {
+          btnGenerate.innerHTML = teksAsli;
+          btnGenerate.disabled = false;
+          btnGenerate.classList.replace("opacity-90", "hover:bg-blue-700");
+        }
+      });
+
+      // 4. Fitur Copy
+      btnCopy.addEventListener("click", () => {
+        const textToCopy = areaHasil.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const originalText = btnCopy.innerHTML;
+          btnCopy.innerHTML = "Tersalin!";
+          btnCopy.classList.replace("bg-slate-800", "bg-green-600");
+
+          setTimeout(() => {
+            btnCopy.innerHTML = originalText;
+            btnCopy.classList.replace("bg-green-600", "bg-slate-800");
+          }, 2000);
         });
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            areaDrop.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); });
-        });
-        ['dragenter', 'dragover'].forEach(eventName => {
-            areaDrop.addEventListener(eventName, () => areaDrop.classList.add('border-blue-500', 'bg-blue-50'));
-        });
-        ['dragleave', 'drop'].forEach(eventName => {
-            areaDrop.addEventListener(eventName, () => areaDrop.classList.remove('border-blue-500', 'bg-blue-50'));
-        });
-        areaDrop.addEventListener('drop', e => {
-            const files = e.dataTransfer.files;
-            if(files.length) {
-                inputGambar.files = files;
-                inputGambar.dispatchEvent(new Event('change'));
-            }
-        });
-
-        // 3. LOGIKA EKSEKUSI API LANGSUNG KE OLLAMA
-        btnGenerate.addEventListener('click', async () => {
-            if (!fullBase64Image) return;
-
-            const teksAsli = btnGenerate.innerHTML;
-            btnGenerate.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> AI Sedang Menganalisis Gambar...`;
-            btnGenerate.disabled = true;
-            btnGenerate.classList.replace('hover:bg-blue-700', 'opacity-90');
-            btnCopy.classList.add('hidden');
-            
-            areaHasil.innerHTML = '<span class="text-blue-400 animate-pulse text-center">Menghubungi Ollama lokal (Tunggu ya, membaca gambar butuh memori besar)...</span>';
-            areaHasil.classList.replace('items-center', 'items-start');
-
-            try {
-                // PENTING: Membuang awalan "data:image/jpeg;base64," agar tidak ditolak Ollama
-                const base64DataOnly = fullBase64Image.split(',')[1];
-
-                // Menyusun Prompt
-                let promptText = "Kamu adalah seorang pakar media sosial yang kreatif. Tolong buatkan caption Instagram yang menarik, estetik, dan informatif untuk poster acara yang ada di gambar ini. Gunakan hashtag yang relevan dan format paragraf yang rapi menggunakan emoji.";
-                
-                if (inputKonteks.value.trim() !== "") {
-                    promptText += "\n\nPastikan caption tersebut juga memasukkan detail tambahan berikut: " + inputKonteks.value.trim();
-                }
-
-                // Tembak API Ollama secara langsung
-                const response = await fetch(OLLAMA_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: OLLAMA_MODEL,
-                        prompt: promptText,
-                        images: [base64DataOnly],
-                        stream: false // Menerima respon utuh, bukan berjalan
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.response) {
-                    const formattedCaption = data.response.replace(/\n/g, '<br>');
-                    areaHasil.innerHTML = formattedCaption;
-                    btnCopy.classList.remove('hidden');
-                } else if (data.error) {
-                    areaHasil.innerHTML = `<span class="text-red-400">Error dari Ollama: ${data.error}</span>`;
-                }
-
-            } catch (error) {
-                console.error("API Error:", error);
-                areaHasil.innerHTML = `<span class="text-red-400"><b>KONEKSI TERPUTUS KE OLLAMA</b><br><br>Jika aplikasi Ollama Anda sudah menyala tapi ini muncul, penyebabnya adalah "CORS Policy" peramban. <br><br>Cara mengatasi:<br>1. Tutup aplikasi Ollama.<br>2. Buka Command Prompt (CMD) Windows.<br>3. Ketik: <code>set OLLAMA_ORIGINS="*"</code> lalu Enter.<br>4. Ketik: <code>ollama serve</code> lalu Enter.</span>`;
-            } finally {
-                btnGenerate.innerHTML = teksAsli;
-                btnGenerate.disabled = false;
-                btnGenerate.classList.replace('opacity-90', 'hover:bg-blue-700');
-            }
-        });
-
-        // 4. Fitur Copy
-        btnCopy.addEventListener('click', () => {
-            const textToCopy = areaHasil.innerText;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const originalText = btnCopy.innerHTML;
-                btnCopy.innerHTML = "Tersalin!";
-                btnCopy.classList.replace('bg-slate-800', 'bg-green-600');
-                
-                setTimeout(() => {
-                    btnCopy.innerHTML = originalText;
-                    btnCopy.classList.replace('bg-green-600', 'bg-slate-800');
-                }, 2000);
-            });
-        });
+      });
     </script>
-</body>
+  </body>
 </html>
