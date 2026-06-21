@@ -1,168 +1,259 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Color Palette Generator - Mading Kampus</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-[#f5f7fa] text-slate-800 font-sans selection:bg-blue-200">
-
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="index.html" class="text-xl font-bold text-blue-700 tracking-tight flex items-center gap-2">
-                <span class="text-2xl">&larr;</span> Kembali
-            </a>
-            <span class="font-semibold text-slate-500 uppercase tracking-widest text-sm">Mini Tools</span>
-        </div>
+  </head>
+  <body
+    class="min-h-screen bg-[#f5f7fa] text-slate-800 font-sans selection:bg-blue-200"
+  >
+    <header
+      class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm"
+    >
+      <div
+        class="mx-auto px-6 md:px-16 lg:px-24 xl:px-32 h-16 flex items-center justify-between"
+      >
+        <a
+          href="mini-tools.html"
+          class="text-xl font-bold text-blue-700 tracking-tight flex items-center gap-2"
+        >
+          <button
+            class="bg-[#2664ff] text-white px-3 py-2 md:px- md:py-2 text-xs md:text-sm font-bold rounded-lg inline-flex justify-center items-center gap-2 hover:bg-[#1a4dbd] w-full sm:w-auto"
+          >
+            <svg
+              class="h-4 W-4"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="20" y1="12" x2="4" y2="12"></line>
+              <polyline points="10 18 4 12 10 6"></polyline>
+            </svg>
+            BACK
+          </button>
+        </a>
+        <span class="font-semibold text-slate-500 uppercase text-sm text-right"
+          >Mini Tools
+        </span>
+      </div>
     </header>
 
     <main class="max-w-3xl mx-auto px-6 py-12">
-        <div class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Color Palette Generator</h1>
-            <p class="text-slate-500 text-lg">Unggah poster atau gambar apapun, dan AI kami akan mengekstrak warna dominannya dalam hitungan detik.</p>
+      <div class="text-center mb-10">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
+          Color Palette Generator
+        </h1>
+        <p class="text-slate-500 text-lg">
+          Unggah poster atau gambar apapun, dan AI kami akan mengekstrak warna
+          dominannya dalam hitungan detik.
+        </p>
+      </div>
+
+      <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+        <div
+          id="area-drop"
+          onclick="document.getElementById('input-gambar').click()"
+          class="border-2 border-dashed border-slate-300 rounded-xl p-10 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group relative overflow-hidden"
+        >
+          <input
+            type="file"
+            id="input-gambar"
+            accept="image/jpeg, image/png, image/jpg"
+            class="hidden"
+          />
+
+          <div id="state-kosong">
+            <svg
+              class="w-12 h-12 mx-auto text-slate-400 group-hover:text-blue-500 transition-colors mb-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+              ></path>
+            </svg>
+            <p class="text-base font-semibold text-slate-700">
+              Klik untuk unggah gambar
+            </p>
+            <p class="text-sm text-slate-500 mt-1">
+              atau seret file ke sini (Maks 5MB)
+            </p>
+          </div>
+
+          <div id="state-preview" class="hidden">
+            <img
+              id="gambar-preview"
+              src=""
+              alt="Preview"
+              class="max-h-64 mx-auto rounded-lg shadow-md object-contain"
+            />
+            <p class="text-sm text-blue-600 font-medium mt-4 hover:underline">
+              Ganti Gambar
+            </p>
+          </div>
         </div>
 
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-            
-            <div id="area-drop" onclick="document.getElementById('input-gambar').click()" class="border-2 border-dashed border-slate-300 rounded-xl p-10 text-center hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group relative overflow-hidden">
-                
-                <input type="file" id="input-gambar" accept="image/jpeg, image/png, image/jpg" class="hidden">
-                
-                <div id="state-kosong">
-                    <svg class="w-12 h-12 mx-auto text-slate-400 group-hover:text-blue-500 transition-colors mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"></path></svg>
-                    <p class="text-base font-semibold text-slate-700">Klik untuk unggah gambar</p>
-                    <p class="text-sm text-slate-500 mt-1">atau seret file ke sini (Maks 5MB)</p>
-                </div>
+        <button
+          id="btn-ekstrak"
+          disabled
+          class="w-full mt-6 bg-slate-300 text-slate-500 font-bold py-3.5 rounded-xl transition-all duration-300 pointer-events-none flex justify-center items-center gap-2"
+        >
+          EKSTRAK WARNA SEKARANG
+        </button>
+      </div>
 
-                <div id="state-preview" class="hidden">
-                    <img id="gambar-preview" src="" alt="Preview" class="max-h-64 mx-auto rounded-lg shadow-md object-contain">
-                    <p class="text-sm text-blue-600 font-medium mt-4 hover:underline">Ganti Gambar</p>
-                </div>
-            </div>
+      <div
+        id="wadah-hasil"
+        class="mt-12 hidden transition-all duration-500 opacity-0 translate-y-4"
+      >
+        <h3
+          class="text-center text-sm font-bold text-slate-400 uppercase tracking-widest mb-6"
+        >
+          Hasil Ekstraksi Palet
+        </h3>
 
-            <button id="btn-ekstrak" disabled class="w-full mt-6 bg-slate-300 text-slate-500 font-bold py-3.5 rounded-xl transition-all duration-300 pointer-events-none flex justify-center items-center gap-2">
-                EKSTRAK WARNA SEKARANG
-            </button>
-
-        </div>
-
-        <div id="wadah-hasil" class="mt-12 hidden transition-all duration-500 opacity-0 translate-y-4">
-            <h3 class="text-center text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Hasil Ekstraksi Palet</h3>
-            
-            <div id="grid-warna" class="flex flex-wrap justify-center gap-4 md:gap-6">
-                </div>
-        </div>
-
+        <div
+          id="grid-warna"
+          class="flex flex-wrap justify-center gap-4 md:gap-6"
+        ></div>
+      </div>
     </main>
 
     <script>
-        // URL API Mandiri Laravel lu
-        const API_URL = 'https://slab-silenced-riot.ngrok-free.dev/api/ekstrak-warna';
+      // URL API Mandiri Laravel lu
+      const API_URL =
+        "https://slab-silenced-riot.ngrok-free.dev/api/ekstrak-warna";
 
-        const inputGambar = document.getElementById('input-gambar');
-        const stateKosong = document.getElementById('state-kosong');
-        const statePreview = document.getElementById('state-preview');
-        const gambarPreview = document.getElementById('gambar-preview');
-        const btnEkstrak = document.getElementById('btn-ekstrak');
-        const wadahHasil = document.getElementById('wadah-hasil');
-        const gridWarna = document.getElementById('grid-warna');
-        const areaDrop = document.getElementById('area-drop');
+      const inputGambar = document.getElementById("input-gambar");
+      const stateKosong = document.getElementById("state-kosong");
+      const statePreview = document.getElementById("state-preview");
+      const gambarPreview = document.getElementById("gambar-preview");
+      const btnEkstrak = document.getElementById("btn-ekstrak");
+      const wadahHasil = document.getElementById("wadah-hasil");
+      const gridWarna = document.getElementById("grid-warna");
+      const areaDrop = document.getElementById("area-drop");
 
-        // 1. LOGIKA PREVIEW GAMBAR
-        inputGambar.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    gambarPreview.src = e.target.result;
-                    stateKosong.classList.add('hidden');
-                    statePreview.classList.remove('hidden');
-                    
-                    // Nyalakan tombol
-                    btnEkstrak.disabled = false;
-                    btnEkstrak.classList.remove('bg-slate-300', 'text-slate-500', 'pointer-events-none');
-                    btnEkstrak.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700', 'shadow-lg', 'active:scale-[0.98]');
-                    
-                    // Sembunyikan hasil lama jika ada
-                    wadahHasil.classList.add('hidden', 'opacity-0', 'translate-y-4');
-                }
-                reader.readAsDataURL(file);
-            }
-        });
+      // 1. LOGIKA PREVIEW GAMBAR
+      inputGambar.addEventListener("change", function () {
+        const file = this.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            gambarPreview.src = e.target.result;
+            stateKosong.classList.add("hidden");
+            statePreview.classList.remove("hidden");
 
-        // 2. LOGIKA DRAG AND DROP
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            areaDrop.addEventListener(eventName, e => {
-                e.preventDefault(); e.stopPropagation();
-            });
-        });
-        ['dragenter', 'dragover'].forEach(eventName => {
-            areaDrop.addEventListener(eventName, () => areaDrop.classList.add('border-blue-500', 'bg-blue-50'));
-        });
-        ['dragleave', 'drop'].forEach(eventName => {
-            areaDrop.addEventListener(eventName, () => areaDrop.classList.remove('border-blue-500', 'bg-blue-50'));
-        });
-        areaDrop.addEventListener('drop', e => {
-            const files = e.dataTransfer.files;
-            if(files.length) {
-                inputGambar.files = files;
-                inputGambar.dispatchEvent(new Event('change'));
-            }
-        });
+            // Nyalakan tombol
+            btnEkstrak.disabled = false;
+            btnEkstrak.classList.remove(
+              "bg-slate-300",
+              "text-slate-500",
+              "pointer-events-none",
+            );
+            btnEkstrak.classList.add(
+              "bg-blue-600",
+              "text-white",
+              "hover:bg-blue-700",
+              "shadow-lg",
+              "active:scale-[0.98]",
+            );
 
-        // 3. LOGIKA TEMBAK API EKSTRAK WARNA
-        btnEkstrak.addEventListener('click', async () => {
-            const file = inputGambar.files[0];
-            if (!file) return;
+            // Sembunyikan hasil lama jika ada
+            wadahHasil.classList.add("hidden", "opacity-0", "translate-y-4");
+          };
+          reader.readAsDataURL(file);
+        }
+      });
 
-            // UI Loading State
-            const teksAsli = btnEkstrak.innerHTML;
-            btnEkstrak.innerHTML = `
+      // 2. LOGIKA DRAG AND DROP
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        areaDrop.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+      });
+      ["dragenter", "dragover"].forEach((eventName) => {
+        areaDrop.addEventListener(eventName, () =>
+          areaDrop.classList.add("border-blue-500", "bg-blue-50"),
+        );
+      });
+      ["dragleave", "drop"].forEach((eventName) => {
+        areaDrop.addEventListener(eventName, () =>
+          areaDrop.classList.remove("border-blue-500", "bg-blue-50"),
+        );
+      });
+      areaDrop.addEventListener("drop", (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length) {
+          inputGambar.files = files;
+          inputGambar.dispatchEvent(new Event("change"));
+        }
+      });
+
+      // 3. LOGIKA TEMBAK API EKSTRAK WARNA
+      btnEkstrak.addEventListener("click", async () => {
+        const file = inputGambar.files[0];
+        if (!file) return;
+
+        // UI Loading State
+        const teksAsli = btnEkstrak.innerHTML;
+        btnEkstrak.innerHTML = `
                 <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                 Sedang Membedah Warna...
             `;
-            btnEkstrak.disabled = true;
-            btnEkstrak.classList.replace('hover:bg-blue-700', 'opacity-90');
+        btnEkstrak.disabled = true;
+        btnEkstrak.classList.replace("hover:bg-blue-700", "opacity-90");
 
-            const formData = new FormData();
-            formData.append('gambar', file);
+        const formData = new FormData();
+        formData.append("gambar", file);
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'ngrok-skip-browser-warning': 'true'
-                    },
-                    body: formData
-                });
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "ngrok-skip-browser-warning": "true",
+            },
+            body: formData,
+          });
 
-                const result = await response.json();
+          const result = await response.json();
 
-                if (response.ok) {
-                    renderPaletWarna(result.colors);
-                } else {
-                    alert('Gagal mengekstrak: ' + (result.message || 'Error tidak diketahui'));
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Gagal terhubung ke API. Pastikan server Laravel menyala.');
-            } finally {
-                // Kembalikan UI tombol
-                btnEkstrak.innerHTML = teksAsli;
-                btnEkstrak.disabled = false;
-                btnEkstrak.classList.replace('opacity-90', 'hover:bg-blue-700');
-            }
-        });
+          if (response.ok) {
+            renderPaletWarna(result.colors);
+          } else {
+            alert(
+              "Gagal mengekstrak: " +
+                (result.message || "Error tidak diketahui"),
+            );
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Gagal terhubung ke API. Pastikan server Laravel menyala.");
+        } finally {
+          // Kembalikan UI tombol
+          btnEkstrak.innerHTML = teksAsli;
+          btnEkstrak.disabled = false;
+          btnEkstrak.classList.replace("opacity-90", "hover:bg-blue-700");
+        }
+      });
 
-        // 4. FUNGSI RENDER HASIL KE LAYAR
-        function renderPaletWarna(arrayWarna) {
-            gridWarna.innerHTML = ''; // Kosongkan hasil sebelumnya
+      // 4. FUNGSI RENDER HASIL KE LAYAR
+      function renderPaletWarna(arrayWarna) {
+        gridWarna.innerHTML = ""; // Kosongkan hasil sebelumnya
 
-            arrayWarna.forEach((warnaHex, index) => {
-                // Buat kotak warna dengan animasi delay
-                gridWarna.innerHTML += `
+        arrayWarna.forEach((warnaHex, index) => {
+          // Buat kotak warna dengan animasi delay
+          gridWarna.innerHTML += `
                     <div class="flex flex-col items-center gap-3 animate-[fadeIn_0.5s_ease-out_forwards]" style="animation-delay: ${index * 0.1}s; opacity: 0;">
                         <div class="w-20 h-20 md:w-24 md:h-24 rounded-2xl shadow-md border border-slate-200 cursor-pointer hover:-translate-y-2 hover:shadow-xl transition-all duration-300 relative group" style="background-color: ${warnaHex};" onclick="copyKeClipboard('${warnaHex}')">
                             
@@ -173,32 +264,38 @@
                         <span class="text-sm font-bold text-slate-700 uppercase tracking-wide bg-white px-3 py-1 rounded-full shadow-sm border border-slate-100">${warnaHex}</span>
                     </div>
                 `;
-            });
+        });
 
-            // Munculkan wadah hasil dengan animasi
-            wadahHasil.classList.remove('hidden');
-            setTimeout(() => {
-                wadahHasil.classList.remove('opacity-0', 'translate-y-4');
-                wadahHasil.classList.add('opacity-100', 'translate-y-0');
-                
-                // Scroll ke bawah otomatis
-                wadahHasil.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }, 50);
-        }
+        // Munculkan wadah hasil dengan animasi
+        wadahHasil.classList.remove("hidden");
+        setTimeout(() => {
+          wadahHasil.classList.remove("opacity-0", "translate-y-4");
+          wadahHasil.classList.add("opacity-100", "translate-y-0");
 
-        // 5. FITUR TAMBAHAN: COPY KE CLIPBOARD
-        function copyKeClipboard(teks) {
-            navigator.clipboard.writeText(teks).then(() => {
-                alert(`Kode warna ${teks} berhasil disalin!`);
-            });
-        }
+          // Scroll ke bawah otomatis
+          wadahHasil.scrollIntoView({ behavior: "smooth", block: "end" });
+        }, 50);
+      }
+
+      // 5. FITUR TAMBAHAN: COPY KE CLIPBOARD
+      function copyKeClipboard(teks) {
+        navigator.clipboard.writeText(teks).then(() => {
+          alert(`Kode warna ${teks} berhasil disalin!`);
+        });
+      }
     </script>
 
     <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
     </style>
-</body>
+  </body>
 </html>

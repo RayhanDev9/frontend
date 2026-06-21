@@ -40,23 +40,6 @@
         /* overflow: hidden; */
       }
 
-      /* === HEADER === */
-      header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 30px;
-        background-color: var(--bg-card);
-        border-bottom: 1px solid var(--border);
-        z-index: 10;
-      }
-      .header-title {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        font-size: 20px;
-        font-weight: 700;
-      }
       .logo-icon {
         width: 36px;
         height: 36px;
@@ -115,7 +98,6 @@
         max-width: 1400px;
         margin: 0 auto;
         width: 100%;
-        
       }
 
       /* === TOP BAR === */
@@ -428,15 +410,54 @@
     </style>
   </head>
   <body>
-    <header>
-      <div class="header-title">
-        <div class="logo-icon"></div>
-        <div>
-          Exam Simulator
-          <div class="badge-on-device">Online via Laravel</div>
-        </div>
+    <header
+      class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm"
+    >
+      <div
+        class="mx-auto px-6 md:px-16 lg:px-24 xl:px-32 h-16 flex items-center justify-between"
+      >
+        <a
+          href="mini-tools.html"
+          class="text-xl font-bold text-blue-700 tracking-tight flex items-center gap-2"
+        >
+          <button
+            class="bg-[#2664ff] text-white px-3 py-2 md:px- md:py-2 text-xs md:text-sm font-bold rounded-lg inline-flex justify-center items-center gap-2 hover:bg-[#1a4dbd] w-full sm:w-auto"
+          >
+            <svg
+              class="h-4 W-4"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="20" y1="12" x2="4" y2="12"></line>
+              <polyline points="10 18 4 12 10 6"></polyline>
+            </svg>
+            BACK
+          </button>
+        </a>
+        <span class="font-semibold text-slate-500 uppercase text-sm text-right"
+          >Mini Tools
+        </span>
       </div>
     </header>
+
+    <div class="flex items-center gap-[15px] text-[20px] font-bold mx-auto my-8">
+      <div
+        class="w-[36px] h-[36px] rounded-full flex items-center justify-center relative after:content-[''] after:w-[8px] after:h-[8px] after:bg-white after:rounded-full after:absolute after:right-[8px] after:top-[8px] before:content-[''] before:w-[14px] before:h-[14px] before:border-2 before:border-white before:rounded-full"
+        style="background: linear-gradient(135deg, #ec4899, #8b5cf6)"
+      ></div>
+      <h1 class="m-0 text-inherit font-inherit leading-tight">
+        Memphis Generator <span class="text-[#22c55e]">🍃</span>
+        <span
+          class="text-[11px] text-[#64748b] flex items-center gap-[5px] font-normal mt-[2px] before:content-[''] before:inline-block before:w-[8px] before:h-[8px] before:bg-[#22c55e] before:rounded-full"
+        >
+          On-Device
+        </span>
+      </h1>
+    </div>
 
     <div class="layout-container">
       <div class="top-bar">
