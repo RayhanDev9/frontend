@@ -95,7 +95,7 @@ const EvenCardLogic = async () => {
       // >>> LOGIKA PEMBUAT PALET WARNA DIMULAI <<<
       // ==========================================
       let paletWarnaHTML = "";
-  
+
       // ==========================================
 
       const cardHTML = `
