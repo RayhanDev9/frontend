@@ -91,6 +91,16 @@ const header = () => {
 };
 header();
 
+function daftarEvent(id) {
+  const btnDaftar = document.getElementById("dafta-event");
+  // / Arahkan ke halaman checkout dengan parameter id
+
+  btnDaftar.addEventListener("click", () => {
+    window.location.href = `checkout.html?id=${id}`;
+    console.info('ok')
+  });
+}
+
 const initEventDetail = () => {
   function fungsiCreateEvents(data) {
     const container = document.getElementById("container-slect-event");
@@ -222,9 +232,9 @@ const initEventDetail = () => {
                 <p class="text-xs text-gray-500 mt-0.5">Penyelenggara</p>
             </div>
         </div>
-        <a href="${data.link_action || "#"}" target="_blank" class="bg-[#3b82f6] hover:bg-blue-600 text-white px-6 py-2.5 rounded font-semibold text-sm w-full sm:w-auto transition-colors text-center shadow-md">
+        <button href="" class="bg-[#3b82f6] hover:bg-blue-600 text-white px-6 py-2.5 rounded font-semibold text-sm w-full sm:w-auto transition-colors text-center shadow-md" id="dafta-event">
             ${data.harga == 0 ? "DAFTAR SEKARANG" : "PESAN TIKET"}
-        </a>
+        </button>
     </div>
 </div>
 
@@ -235,7 +245,7 @@ const initEventDetail = () => {
     </div>
 </div>
         `;
-        console.info(data)
+    console.info(data);
     // Bersihkan loading state lalu masukkan HTML baru
     container.innerHTML = html;
   }
@@ -271,6 +281,7 @@ const initEventDetail = () => {
 
       fungsiCreateEvents(dataAsli);
       renderBreadcrumb(dataAsli);
+      daftarEvent(dataAsli.id);
     } catch (error) {
       console.error("Error Detail Acara:", error);
       document.getElementById("container-slect-event").innerHTML =
