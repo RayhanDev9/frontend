@@ -13,7 +13,7 @@
             <a href="index.html" class="text-xl font-bold text-blue-700 tracking-tight flex items-center gap-2 transition-transform hover:-translate-x-1">
                 <span class="text-2xl">&larr;</span> Kembali
             </a>
-            <span class="font-semibold text-slate-500 uppercase tracking-widest text-sm text-right">Mini Tools</span>
+            <span class="font-semibold text-slate-500 uppercase tracking-widest text-sm text-right">Mini Tools (Ollama)</span>
         </div>
     </header>
 
@@ -73,8 +73,14 @@
     </main>
 
     <script>
-        // URL API Lokal Laravel
-        const LARAVEL_API_URL = 'http://127.0.0.1:8000/api/generate-caption'; 
+        // === URL API LOKAL OLLAMA ===
+        const OLLAMA_API_URL = 'http://127.0.0.1:11434/api/generate'; 
+        
+        // =======================================================
+        // GANTI INI DENGAN MODEL VISION OLLAMA YANG ANDA MILIKI
+        // Contoh: 'llava', 'llama3.2-vision', 'moondream'
+        // =======================================================
+        const OLLAMA_MODEL = 'llava'; 
         
         const inputGambar = document.getElementById('input-gambar');
         const stateKosong = document.getElementById('state-kosong');
@@ -88,21 +94,16 @@
 
         let fullBase64Image = "";
 
-        // 1. Logika Klik yang Aman
         areaDrop.addEventListener('click', (e) => {
-            if (e.target !== inputGambar) {
-                inputGambar.click();
-            }
+            if (e.target !== inputGambar) inputGambar.click();
         });
 
-        // 2. Logika Preview Gambar Diperkuat
         inputGambar.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return; 
             
             const reader = new FileReader();
             reader.onload = function(event) {
-                // OpenAI butuh data URL penuh, jadi kita simpan semuanya
                 fullBase64Image = event.target.result;
 
                 gambarPreview.src = event.target.result;
@@ -116,11 +117,8 @@
             reader.readAsDataURL(file);
         });
 
-        // Logika Drag and Drop
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            areaDrop.addEventListener(eventName, e => {
-                e.preventDefault(); e.stopPropagation();
-            });
+            areaDrop.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); });
         });
         ['dragenter', 'dragover'].forEach(eventName => {
             areaDrop.addEventListener(eventName, () => areaDrop.classList.add('border-blue-500', 'bg-blue-50'));
@@ -136,48 +134,55 @@
             }
         });
 
-        // 3. Logika Eksekusi API via Backend Laravel
+        // 3. LOGIKA EKSEKUSI API LANGSUNG KE OLLAMA
         btnGenerate.addEventListener('click', async () => {
             if (!fullBase64Image) return;
 
             const teksAsli = btnGenerate.innerHTML;
-            btnGenerate.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> AI Sedang Menulis...`;
+            btnGenerate.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> AI Sedang Menganalisis Gambar...`;
             btnGenerate.disabled = true;
             btnGenerate.classList.replace('hover:bg-blue-700', 'opacity-90');
             btnCopy.classList.add('hidden');
             
-            areaHasil.innerHTML = '<span class="text-blue-400 animate-pulse text-center">Menghubungi server lokal untuk membuat caption...</span>';
+            areaHasil.innerHTML = '<span class="text-blue-400 animate-pulse text-center">Menghubungi Ollama lokal (Tunggu ya, membaca gambar butuh memori besar)...</span>';
             areaHasil.classList.replace('items-center', 'items-start');
 
             try {
-                // Tembak ke API Lokal Laravel Anda
-                const response = await fetch(LARAVEL_API_URL, {
+                // PENTING: Membuang awalan "data:image/jpeg;base64," agar tidak ditolak Ollama
+                const base64DataOnly = fullBase64Image.split(',')[1];
+
+                // Menyusun Prompt
+                let promptText = "Kamu adalah seorang pakar media sosial yang kreatif. Tolong buatkan caption Instagram yang menarik, estetik, dan informatif untuk poster acara yang ada di gambar ini. Gunakan hashtag yang relevan dan format paragraf yang rapi menggunakan emoji.";
+                
+                if (inputKonteks.value.trim() !== "") {
+                    promptText += "\n\nPastikan caption tersebut juga memasukkan detail tambahan berikut: " + inputKonteks.value.trim();
+                }
+
+                // Tembak API Ollama secara langsung
+                const response = await fetch(OLLAMA_API_URL, {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'ngrok-skip-browser-warning': 'true'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        image_base64: fullBase64Image,
-                        konteks: inputKonteks.value.trim()
+                        model: OLLAMA_MODEL,
+                        prompt: promptText,
+                        images: [base64DataOnly],
+                        stream: false // Menerima respon utuh, bukan berjalan
                     })
                 });
 
                 const data = await response.json();
 
-                if (response.ok && data.status === 'success') {
-                    // Konversi baris baru menjadi tag <br> agar rapi di HTML
-                    const formattedCaption = data.caption.replace(/\n/g, '<br>');
+                if (response.ok && data.response) {
+                    const formattedCaption = data.response.replace(/\n/g, '<br>');
                     areaHasil.innerHTML = formattedCaption;
                     btnCopy.classList.remove('hidden');
-                } else {
-                    areaHasil.innerHTML = `<span class="text-red-400">Gagal: ${data.message}</span>`;
+                } else if (data.error) {
+                    areaHasil.innerHTML = `<span class="text-red-400">Error dari Ollama: ${data.error}</span>`;
                 }
 
             } catch (error) {
                 console.error("API Error:", error);
-                areaHasil.innerHTML = `<span class="text-red-400">Koneksi terputus. Pastikan server Laravel (php artisan serve) sedang menyala.</span>`;
+                areaHasil.innerHTML = `<span class="text-red-400"><b>KONEKSI TERPUTUS KE OLLAMA</b><br><br>Jika aplikasi Ollama Anda sudah menyala tapi ini muncul, penyebabnya adalah "CORS Policy" peramban. <br><br>Cara mengatasi:<br>1. Tutup aplikasi Ollama.<br>2. Buka Command Prompt (CMD) Windows.<br>3. Ketik: <code>set OLLAMA_ORIGINS="*"</code> lalu Enter.<br>4. Ketik: <code>ollama serve</code> lalu Enter.</span>`;
             } finally {
                 btnGenerate.innerHTML = teksAsli;
                 btnGenerate.disabled = false;
@@ -187,7 +192,6 @@
 
         // 4. Fitur Copy
         btnCopy.addEventListener('click', () => {
-            // Mengambil teks menggunakan innerText agar format baris baru tetap terjaga
             const textToCopy = areaHasil.innerText;
             navigator.clipboard.writeText(textToCopy).then(() => {
                 const originalText = btnCopy.innerHTML;
