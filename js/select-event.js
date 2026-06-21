@@ -2,7 +2,7 @@
 const API_BASE_URL = "https://slab-silenced-riot.ngrok-free.dev/api/events";
 const STORAGE_BASE_URL = "https://slab-silenced-riot.ngrok-free.dev/storage/"; 
 
-// 1. Tangkap ID dari URL
+// Tangkap ID dari URL
 const urlParams = new URLSearchParams(window.location.search);
 const idAcara = urlParams.get("id");
 
@@ -28,10 +28,7 @@ const header = () => {
   initMobileMenu();
 
   const checkUserRole = () => {
-    // Ambil data user yang sedang login
     const userAktif = JSON.parse(localStorage.getItem("user_mading"));
-    
-    // Sembunyikan atau tampilkan tombol unggah berdasarkan role
     const btnDesktop = document.getElementById("btn-unggah-desktop");
     const btnMobile = document.getElementById("btn-unggah-mobile");
 
@@ -60,8 +57,6 @@ window.toggleBookmarkEvent = async function () {
 
   const btn = document.getElementById("btn-bookmark");
   const text = document.getElementById("bookmark-text");
-
-  // Ubah tampilan tombol langsung (Optimistic UI)
   const isBookmarked = text.innerText === "Tersimpan";
 
   if (isBookmarked) {
@@ -76,7 +71,6 @@ window.toggleBookmarkEvent = async function () {
     btn.classList.replace("border-gray-300", "border-yellow-400");
   }
 
-  // Kirim data ke API Laravel dengan ID asli
   try {
     const response = await fetch(`${API_BASE_URL}/${idAcara}/bookmark`, {
       method: "POST",
@@ -85,7 +79,8 @@ window.toggleBookmarkEvent = async function () {
         Accept: "application/json",
         "ngrok-skip-browser-warning": "true",
       },
-      body: JSON.stringify({ user_id: userAktif.id }), // Menggunakan ID yang sedang login
+      // 👇 PERBAIKAN: Gunakan ID User Asli 👇
+      body: JSON.stringify({ user_id: userAktif.id }), 
     });
 
     if (!response.ok) throw new Error("Gagal menyimpan ke server");
@@ -102,22 +97,14 @@ const initEventDetail = () => {
   function fungsiCreateEvents(data) {
     const container = document.getElementById("container-slect-event");
 
-    // Logika Perbaikan Gambar
     let imageUrl = data.gambar_poster;
     if (imageUrl && !imageUrl.startsWith("http")) {
       imageUrl = STORAGE_BASE_URL + imageUrl;
     }
 
-    // Format Uang Rupiah 
-    const hargaFormat = !data.harga || data.harga == 0
-        ? "GRATIS"
-        : "Rp " + new Intl.NumberFormat("id-ID").format(data.harga);
-
-    // Tampilkan Status Bookmark jika ada dari Backend
+    const hargaFormat = !data.harga || data.harga == 0 ? "GRATIS" : "Rp " + new Intl.NumberFormat("id-ID").format(data.harga);
     const textBookmark = data.is_bookmarked ? "Tersimpan" : "Simpan";
-    const classBtnBookmark = data.is_bookmarked 
-        ? "bg-yellow-50 text-yellow-600 border-yellow-400" 
-        : "bg-white text-gray-500 border-gray-300";
+    const classBtnBookmark = data.is_bookmarked ? "bg-yellow-50 text-yellow-600 border-yellow-400" : "bg-white text-gray-500 border-gray-300";
 
     const html = `
     <div class="relative w-full rounded-lg overflow-hidden bg-gray-200">
@@ -126,7 +113,6 @@ const initEventDetail = () => {
         </span>
         <img src="${imageUrl}" alt="${data.judul}" class="w-full h-auto object-cover aspect-video transition-transform duration-500 hover:scale-105" onerror="this.src='https://via.placeholder.com/800x450?text=Gambar+Tidak+Tersedia'" />
     </div>
-
     <div class="flex flex-col w-full gap-6 mb-6 mt-4">
         <div class="flex justify-between items-start gap-4 w-full">
             <h1 class="text-2xl md:text-3xl font-bold text-gray-900">${data.judul}</h1>
@@ -135,7 +121,6 @@ const initEventDetail = () => {
                 <span id="bookmark-text">${textBookmark}</span>
             </button>
         </div>
-
         <div class="flex flex-wrap sm:flex-nowrap justify-between w-full mx-auto gap-4 py-3 border-gray-200 border-t-2 border-b-2 px-5 md:px-12 ">
             <div class="flex items-start space-x-3">
                 <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">📅</div>
@@ -161,7 +146,6 @@ const initEventDetail = () => {
                 </div>
             </div>
         </div>
-
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
             <div class="flex items-center space-x-3">
                 <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center border border-gray-300 text-gray-500 font-bold">MK</div>
@@ -175,7 +159,6 @@ const initEventDetail = () => {
             </a>
         </div>
     </div>
-
     <div class="bg-white p-5 md:p-6 rounded-lg shadow-sm border border-gray-200">
         <h2 class="text-base font-bold text-gray-900 mb-4">Tentang Acara</h2>
         <div class="text-gray-600 text-sm leading-relaxed space-y-4 whitespace-pre-line">
@@ -207,7 +190,6 @@ const initEventDetail = () => {
       const result = await response.json();
       
       const dataAsli = result.data !== undefined ? result.data : result;
-      // Gabungkan status bookmark agar UI mengenali
       if (result.is_bookmarked !== undefined) {
           dataAsli.is_bookmarked = result.is_bookmarked;
       }
@@ -257,10 +239,11 @@ window.submitReply = async function (event, commentId) {
           Accept: "application/json",
           "ngrok-skip-browser-warning": "true",
         },
+        // 👇 PERBAIKAN: Gunakan ID User Asli 👇
         body: JSON.stringify({
           event_id: idAcara,
           isi_komentar: text,
-          user_id: userAktif.id, // ID Asli
+          user_id: userAktif.id, 
         }),
     });
 
@@ -383,9 +366,10 @@ const initChatSystem = () => {
           Accept: "application/json",
           "ngrok-skip-browser-warning": "true",
         },
+        // 👇 PERBAIKAN: Gunakan ID User Asli 👇
         body: JSON.stringify({ 
             isi_komentar: messageText,
-            user_id: userAktif.id // ID Asli
+            user_id: userAktif.id 
         }),
       });
 
