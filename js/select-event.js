@@ -88,7 +88,7 @@ const initEventDetail = () => {
         </button>
     </div>
 
-    <div class="flex flex-wrap sm:flex-nowrap justify-between w-full  mx-auto  gap-4 py-3 border-gray-400 border-t-2 border-b-2 px-3 md:px-12 ">
+    <div class="flex flex-wrap sm:flex-nowrap justify-between w-full  mx-auto  gap-4 py-3 border-gray-200 border-t-2 border-b-2 px-5 md:px-12 ">
         <div class="flex items-start space-x-3">
             <div class="text-blue-500 text-xl bg-gray-50 rounded p-1">📅</div>
             <div>
