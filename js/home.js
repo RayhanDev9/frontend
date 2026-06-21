@@ -1,5 +1,6 @@
 // 1. URL API Ngrok & Storage
 const API_URL = "https://slab-silenced-riot.ngrok-free.dev/api/events";
+const API_ROLE_URL = "https://slab-silenced-riot.ngrok-free.dev/api/login";
 const STORAGE_URL = "http://127.0.0.1:8000/storage/";
 
 // 2. Global State untuk menyimpan data dan status filter saat ini
@@ -7,12 +8,82 @@ let allEvents = [];
 let currentFilterKat = "Semua";
 let currentFilterWaktu = "Semua";
 
+// const headerHtml = () => {
+//   document.addEventListener("DOMContentLoaded", function () {
+//     // 1. Ambil data user dari penyimpanan browser
+//     const dataLokal = localStorage.getItem("user_mading");
+
+//     // 2. Pilih tombol unggah berdasarkan ID
+//     const btnsUnggah = document.querySelectorAll(".btn-unggah");
+//     console.info(btnsUnggah);
+
+//     // Fungsi kecil untuk menyembunyikan tombol
+//     const sembunyikanTombol = () => {
+//       btnsUnggah.forEach((btn) => {
+//         btn.classList.add("hidden");
+//         console.info(btn);
+//       });
+//     };
+
+//     // 3. Logika Pengecekan
+//     if (dataLokal) {
+//       // Jika user sudah login, ubah teks data lokal menjadi objek
+//       const userData = JSON.parse(dataLokal);
+//       console.info("Data User Saat Ini:", userData);
+
+//       // KARENA API BELUM MENGIRIM ROLE, KITA CEK PAKAI NAMA
+//       // Asumsi: Hanya "YAHFI" yang merupakan admin
+//       // Peringatan: Huruf besar/kecil sangat berpengaruh (YAHFI != yahfi)
+//       if (userData.nama !== "YAHFI") {
+//         // Jika yang login BUKAN YAHFI, sembunyikan tombol unggah
+//         sembunyikanTombol();
+//       } else {
+//         console.info("Halo Admin YAHFI, tombol unggah ditampilkan.");
+//       }
+//     } else {
+//       // Jika belum login sama sekali, sembunyikan tombol
+//       sembunyikanTombol();
+//     }
+//   });
+// };
+
+// // Jalankan fungsinya
+// headerHtml();
+
+// ==========================================
+// FUNGSI CEK ROLE (SEMBUNYIKAN TOMBOL UNGGAH JIKA BUKAN ADMIN)
+// ==========================================
+const checkUserRole = () => {
+  // Ambil data user yang sedang login dari memori browser
+  const userAktif = JSON.parse(localStorage.getItem("user_mading"));
+
+  // Tangkap elemen tombol unggah
+  const btnDesktop = document.getElementById("btn-unggah-desktop");
+  const btnMobile = document.getElementById("btn-unggah-mobile");
+
+  console.info(userAktif.role);
+
+  // Jika user belum login ATAU user bukan admin (misal: mahasiswa)
+  if (!userAktif || userAktif.role !== "admin") {
+    // Sembunyikan tombol dengan class 'hidden' bawaan Tailwind
+    if (btnDesktop) btnDesktop.classList.add("hidden");
+    if (btnMobile) btnMobile.classList.add("hidden");
+  } else {
+    // Jika Admin, pastikan tombolnya muncul
+    if (btnDesktop) btnDesktop.classList.remove("hidden");
+    if (btnMobile) btnMobile.classList.remove("hidden");
+  }
+};
+
+// Panggil fungsinya saat web dibuka
+checkUserRole();
+
 /**
  * Mengambil data acara dari API dan merender pertama kali
  */
 async function fetchEventsData() {
   const wadahPoster = document.getElementById("tempat-poster");
-  
+
   try {
     const response = await fetch(API_URL, {
       method: "GET",
@@ -27,10 +98,9 @@ async function fetchEventsData() {
 
     // Simpan semua data acara ke dalam memori
     allEvents = result.data || [];
-    
+
     // Terapkan filter (kondisi awal: Semua) dan cetak kartunya
     applyFiltersAndRender();
-
   } catch (error) {
     console.error("Gagal konek ke API:", error);
     wadahPoster.innerHTML = `
@@ -50,7 +120,9 @@ function applyFiltersAndRender() {
 
   // --- A. FILTER KATEGORI ---
   if (currentFilterKat !== "Semua") {
-    filteredEvents = filteredEvents.filter(event => event.kategori === currentFilterKat);
+    filteredEvents = filteredEvents.filter(
+      (event) => event.kategori === currentFilterKat,
+    );
   }
 
   // --- B. FILTER WAKTU ---
@@ -58,7 +130,7 @@ function applyFiltersAndRender() {
   today.setHours(0, 0, 0, 0);
 
   if (currentFilterWaktu === "Hari Ini") {
-    filteredEvents = filteredEvents.filter(event => {
+    filteredEvents = filteredEvents.filter((event) => {
       const evDate = new Date(event.tanggal_acara);
       evDate.setHours(0, 0, 0, 0);
       return evDate.getTime() === today.getTime();
@@ -66,13 +138,13 @@ function applyFiltersAndRender() {
   } else if (currentFilterWaktu === "Minggu Ini") {
     const endOfWeek = new Date(today);
     endOfWeek.setDate(today.getDate() + (7 - today.getDay()));
-    filteredEvents = filteredEvents.filter(event => {
+    filteredEvents = filteredEvents.filter((event) => {
       const evDate = new Date(event.tanggal_acara);
       evDate.setHours(0, 0, 0, 0);
       return evDate >= today && evDate <= endOfWeek;
     });
   } else if (currentFilterWaktu === "Mendatang") {
-    filteredEvents = filteredEvents.filter(event => {
+    filteredEvents = filteredEvents.filter((event) => {
       const evDate = new Date(event.tanggal_acara);
       evDate.setHours(0, 0, 0, 0);
       return evDate > today;
@@ -88,24 +160,32 @@ function applyFiltersAndRender() {
  */
 function renderCards(events) {
   const wadahPoster = document.getElementById("tempat-poster");
-  
+
   if (events.length === 0) {
-    wadahPoster.innerHTML = '<p class="col-span-full text-center py-20 text-gray-500 mx-auto font-medium">Belum ada acara yang sesuai dengan filter ini.</p>';
+    wadahPoster.innerHTML =
+      '<p class="col-span-full text-center py-20 text-gray-500 mx-auto font-medium">Belum ada acara yang sesuai dengan filter ini.</p>';
     return;
   }
 
-  const semuaCardHTML = events.map((acara) => {
-    // Format Harga
-    const hargaTeks = acara.harga == 0 ? "Gratis" : `Rp ${parseInt(acara.harga).toLocaleString("id-ID")}`;
-    
-    // Format URL Gambar
-    let imageUrl = acara.gambar_poster;
-    if (imageUrl && !imageUrl.startsWith("http")) imageUrl = STORAGE_URL + imageUrl;
+  const semuaCardHTML = events
+    .map((acara) => {
+      // Format Harga
+      const hargaTeks =
+        acara.harga == 0
+          ? "Gratis"
+          : `Rp ${parseInt(acara.harga).toLocaleString("id-ID")}`;
 
-    // Menampilkan Jam Acara (Jika Back-End belum membuat kolom 'waktu_acara', fallback ke teks default)
-    const jamAcara = acara.waktu_acara ? acara.waktu_acara.substring(0, 5) : "12:00";
+      // Format URL Gambar
+      let imageUrl = acara.gambar_poster;
+      if (imageUrl && !imageUrl.startsWith("http"))
+        imageUrl = STORAGE_URL + imageUrl;
 
-    return `
+      // Menampilkan Jam Acara (Jika Back-End belum membuat kolom 'waktu_acara', fallback ke teks default)
+      const jamAcara = acara.waktu_acara
+        ? acara.waktu_acara.substring(0, 5)
+        : "12:00";
+
+      return `
       <div data-id="${acara.id}" class="card-acara w-[100%] xs:w-80 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition duration-300 flex flex-col cursor-pointer group max-sm:mx-auto">
           <div class="h-48 bg-slate-100 w-full relative overflow-hidden">
               <div class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm">
@@ -118,7 +198,7 @@ function renderCards(events) {
 
           <div class="p-5 flex flex-col flex-grow">
               <div class="flex items-center justify-between gap-x-2 text-sm text-blue-600 font-semibold mb-3">
-                  <span class="${acara.harga == 0 ? 'text-gray-500' : 'text-blue-600 font-bold'}">${hargaTeks}</span>
+                  <span class="${acara.harga == 0 ? "text-gray-500" : "text-blue-600 font-bold"}">${hargaTeks}</span>
                   <div class="flex items-center gap-x-2 text-blue-600">
                       <svg class="w-4 h-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
@@ -148,7 +228,8 @@ function renderCards(events) {
           </div>
       </div>
     `;
-  }).join("");
+    })
+    .join("");
 
   wadahPoster.innerHTML = semuaCardHTML;
 }
@@ -166,13 +247,43 @@ document.getElementById("tempat-poster").addEventListener("click", (e) => {
  * Logika Filter UI & Data (Menangkap Klik Tombol)
  */
 const eventFilterLogic = () => {
-  const tabActive = ["bg-white", "text-blue-700", "font-bold", "shadow-sm", "border-slate-200"];
-  const tabInactive = ["text-slate-500", "font-medium", "border-transparent", "hover:text-slate-900", "hover:bg-slate-200/50"];
-  
-  const timeActive = ["bg-blue-50", "text-blue-700", "border-blue-200", "font-semibold", "hover:bg-blue-100"];
-  const timeInactive = ["bg-white", "text-slate-600", "border-slate-200", "font-medium", "hover:bg-slate-50", "hover:border-slate-300"];
+  const tabActive = [
+    "bg-white",
+    "text-blue-700",
+    "font-bold",
+    "shadow-sm",
+    "border-slate-200",
+  ];
+  const tabInactive = [
+    "text-slate-500",
+    "font-medium",
+    "border-transparent",
+    "hover:text-slate-900",
+    "hover:bg-slate-200/50",
+  ];
 
-  function initFilterGroup(containerId, activeClasses, inactiveClasses, tipeFilter) {
+  const timeActive = [
+    "bg-blue-50",
+    "text-blue-700",
+    "border-blue-200",
+    "font-semibold",
+    "hover:bg-blue-100",
+  ];
+  const timeInactive = [
+    "bg-white",
+    "text-slate-600",
+    "border-slate-200",
+    "font-medium",
+    "hover:bg-slate-50",
+    "hover:border-slate-300",
+  ];
+
+  function initFilterGroup(
+    containerId,
+    activeClasses,
+    inactiveClasses,
+    tipeFilter,
+  ) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -190,18 +301,19 @@ const eventFilterLogic = () => {
 
         // 2. Sesuaikan State Data untuk penyaringan
         const teksTombol = button.innerText.trim();
-        
+
         if (tipeFilter === "kategori") {
-            if(teksTombol === "Acara") currentFilterKat = "Semua";
-            else if(teksTombol === "UMKM") currentFilterKat = "UMKM";
-            else if(teksTombol === "UKO") currentFilterKat = "UMKO";
-            else if(teksTombol === "HIMTIF") currentFilterKat = "HIMA";
-        } 
-        else if (tipeFilter === "waktu") {
-            if(teksTombol === "Semua Acara") currentFilterWaktu = "Semua";
-            else if(teksTombol === "Hari Ini") currentFilterWaktu = "Hari Ini";
-            else if(teksTombol === "Minggu Ini") currentFilterWaktu = "Minggu Ini";
-            else if(teksTombol === "Acara Mendatang") currentFilterWaktu = "Mendatang";
+          if (teksTombol === "Acara") currentFilterKat = "Semua";
+          else if (teksTombol === "UMKM") currentFilterKat = "UMKM";
+          else if (teksTombol === "UKO") currentFilterKat = "UMKO";
+          else if (teksTombol === "HIMTIF") currentFilterKat = "HIMA";
+        } else if (tipeFilter === "waktu") {
+          if (teksTombol === "Semua Acara") currentFilterWaktu = "Semua";
+          else if (teksTombol === "Hari Ini") currentFilterWaktu = "Hari Ini";
+          else if (teksTombol === "Minggu Ini")
+            currentFilterWaktu = "Minggu Ini";
+          else if (teksTombol === "Acara Mendatang")
+            currentFilterWaktu = "Mendatang";
         }
 
         // 3. Jalankan ulang penyaringan kartu

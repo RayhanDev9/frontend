@@ -48,6 +48,7 @@ document
       });
 
       const result = await response.json();
+      console.info(JSON.stringify(result.data_user));
 
       if (response.ok && result.status === "success") {
         localStorage.setItem("user_mading", JSON.stringify(result.data_user));
