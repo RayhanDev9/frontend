@@ -7,7 +7,6 @@
 
     <title>Exam Simulator - Mading Kampus</title>
     <style>
-      /* === RESET & VARIABEL === */
       :root {
         --bg-body: #f8fafc;
         --bg-card: #ffffff;
@@ -707,11 +706,9 @@
         );
       });
 
-      // Event Drop Eksekusi
       dropZone.addEventListener("drop", (e) => {
         if (e.dataTransfer.files.length) {
-          fileInput.files = e.dataTransfer.files; // Sinkronisasi input
-          handleFile(e.dataTransfer.files[0]);
+          fileInput.files = e.dataTransfer.files; 
         }
       });
 
@@ -726,7 +723,6 @@
           btnStart.disabled = true;
         });
 
-      // === Menghubungkan ke Laravel / Ollama ===
       btnStart.addEventListener("click", async () => {
         if (!currentFile) return;
 
@@ -784,7 +780,6 @@
         }
       });
 
-      // === FUNGSI MERENDER JSON MENJADI KUIS INTERAKTIF ===
       function renderQuiz(questionsArray) {
         document.getElementById("right-header-title").innerHTML =
           `📝 Interactive Quiz (${questionsArray.length} Questions)`;
@@ -816,7 +811,6 @@
         container.innerHTML = htmlContent;
       }
 
-      // === FUNGSI INTERAKTIF JAWABAN ===
       window.checkAnswer = function (
         labelElement,
         selectedIdx,
@@ -827,13 +821,11 @@
         const allLabels = card.querySelectorAll(".option-label");
         const expBox = card.querySelector(".explanation-box");
 
-        // Kunci pilihan
         allLabels.forEach((lbl) => {
           lbl.style.pointerEvents = "none";
           lbl.style.borderColor = "var(--border)";
         });
 
-        // Logika Warna Hijau/Merah
         if (selectedIdx === correctIdx) {
           labelElement.style.borderColor = "var(--success)";
           labelElement.style.backgroundColor = "#d1fae5";

@@ -5,16 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Background Remover - On Device</title>
     <style>
-        /* === RESET & VARIABEL === */
         :root {
             --bg-body: #f8fafc;
             --bg-card: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --primary: #8b5cf6; /* Ungu */
+            --primary: #8b5cf6;
             --primary-hover: #7c3aed;
-            --success: #10b981; /* Hijau */
+            --success: #10b981; 
             --success-hover: #059669;
             --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             --sidebar-width: 320px;
@@ -26,7 +25,6 @@
             background-size: 40px 40px; color: var(--text-main); display: flex; flex-direction: column; height: 100vh; overflow: hidden;
         }
 
-        /* === HEADER === */
         header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: var(--bg-card); border-bottom: 1px solid var(--border); z-index: 10; }
         .header-title { display: flex; align-items: center; gap: 15px; font-size: 20px; font-weight: 700; }
         .logo-icon { width: 36px; height: 36px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
@@ -34,23 +32,19 @@
         .badge-on-device::before { content: ''; display: inline-block; width: 8px; height: 8px; background-color: var(--success); border-radius: 50%; }
         .btn-reset { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px; font-weight: 600; }
 
-        /* === LAYOUT UTAMA === */
         .layout-container { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
 
-        /* === SIDEBAR === */
         .sidebar { width: var(--sidebar-width); display: flex; flex-direction: column; gap: 15px; overflow-y: auto; padding-right: 5px; }
         .sidebar::-webkit-scrollbar { width: 6px; }
         .sidebar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
         .card { background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .card-header { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 20px; }
         
-        /* Upload Area */
         .upload-area { border: 2px dashed var(--border); border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; background-color: var(--bg-body); position: relative; }
         .upload-area:hover { border-color: var(--primary); }
         .upload-area input[type="file"] { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer; }
         .upload-btn { background: white; border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; font-weight: 600; color: var(--primary); margin-bottom: 10px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px;}
 
-        /* Settings Card */
         .btn-start { background-color: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; }
         .btn-start:hover { background-color: var(--primary-hover); }
         .btn-start:disabled { background-color: #cbd5e1; cursor: not-allowed; }
@@ -65,13 +59,11 @@
         .toggle-switch input:checked + .slider-toggle { background-color: var(--primary); }
         .toggle-switch input:checked + .slider-toggle:before { transform: translateX(16px); }
 
-        /* Details Card */
         .detail-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 12px; color: var(--text-muted); }
         .detail-val { font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; text-align: right;}
         .status-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border); font-weight: 700; font-size: 14px; }
         .status-badge { color: var(--primary); text-transform: uppercase; }
 
-        /* === WORKSPACE === */
         .workspace { flex: 1; background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .workspace-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
         .header-title-sm { font-size: 14px; font-weight: 700; color: #334155; display: flex; align-items: center; gap: 8px; }
@@ -88,7 +80,6 @@
         .badge-gray { background: #e2e8f0; color: #475569; padding: 4px 8px; border-radius: 4px; font-size: 10px; }
         .badge-green { background: #d1fae5; color: #059669; padding: 4px 8px; border-radius: 4px; font-size: 10px; }
 
-        /* Checkerboard for Transparency */
         .checker-bg {
             flex: 1; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 20px;
             background-color: #f8fafc;
@@ -98,7 +89,6 @@
 
         .preview-img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: none; }
         
-        /* Loading Overlay */
         .loading-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; display: none; }
         .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -209,7 +199,6 @@
     <script src="https://unpkg.com/@imgly/background-removal@1.4.5/dist/imglyRemoveBackground.umd.js"></script>
     
     <script>
-        // DOM Elements
         const imageInput = document.getElementById('image-input');
         const btnStart = document.getElementById('btn-start');
         const btnDownload = document.getElementById('btn-download');
@@ -229,7 +218,6 @@
         let currentFile = null;
         let finalResultUrl = null;
 
-        // FUNGSI: Format Bytes ke KB/MB
         function formatBytes(bytes, decimals = 2) {
             if (!+bytes) return '0 Bytes';
             const k = 1024;
@@ -239,7 +227,6 @@
             return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
         }
 
-        // EVENT: Upload Gambar
         imageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -247,57 +234,46 @@
             currentFile = file;
             const objectUrl = URL.createObjectURL(file);
             
-            // Update UI Original
             imgOriginal.src = objectUrl;
             imgOriginal.style.display = 'block';
             
-            // Update Details
             detFilename.innerText = file.name;
             detFilename.title = file.name;
             const formattedSize = formatBytes(file.size);
             detSize.innerText = formattedSize;
             badgeOrigSize.innerText = formattedSize;
 
-            // Reset Result Area
             imgResult.style.display = 'none';
             imgResult.src = '';
             finalResultUrl = null;
             badgeResultStatus.style.display = 'none';
             btnDownload.disabled = true;
 
-            // Enable Start Button
             btnStart.disabled = false;
             detStatus.innerText = 'READY TO PROCESS';
             detStatus.style.color = 'var(--text-main)';
         });
 
-        // EVENT: Eksekusi Remove Background
         btnStart.addEventListener('click', async () => {
             if (!currentFile) return;
 
-            // Set UI to Loading
             btnStart.disabled = true;
             loadingOverlay.style.display = 'flex';
             detStatus.innerText = 'PROCESSING...';
-            detStatus.style.color = '#eab308'; // Kuning
+            detStatus.style.color = '#eab308'; 
 
             try {
-                // MEMPROSES AI
-                // Langsung gunakan fungsi bawaan agar mengambil model dari server pusat yang stabil
                 const imageBlob = await imglyRemoveBackground(currentFile);
                 
-                // Cek Auto-Crop
                 if (autoCropToggle.checked) {
                     finalResultUrl = await autoCropTransparent(imageBlob);
                 } else {
                     finalResultUrl = URL.createObjectURL(imageBlob);
                 }
 
-                // Tampilkan Hasil
                 imgResult.src = finalResultUrl;
                 imgResult.style.display = 'block';
                 
-                // Update UI Success
                 loadingOverlay.style.display = 'none';
                 badgeResultStatus.style.display = 'inline-block';
                 btnDownload.disabled = false;
@@ -311,16 +287,14 @@
                 loadingOverlay.style.display = 'none';
                 btnStart.disabled = false;
                 detStatus.innerText = 'ERROR';
-                detStatus.style.color = '#ef4444'; // Merah
+                detStatus.style.color = '#ef4444'; 
             }
         });
 
-        // EVENT: Download Hasil
         btnDownload.addEventListener('click', () => {
             if (!finalResultUrl) return;
             const a = document.createElement('a');
             a.href = finalResultUrl;
-            // Buat nama file baru: originalname-rmbg.png
             const newName = currentFile.name.split('.')[0] + '-rmbg.png';
             a.download = newName;
             document.body.appendChild(a);
@@ -328,7 +302,6 @@
             document.body.removeChild(a);
         });
 
-        // EVENT: Reset All
         btnReset.addEventListener('click', () => {
             currentFile = null;
             finalResultUrl = null;
@@ -352,7 +325,6 @@
             loadingOverlay.style.display = 'none';
         });
 
-        // FUNGSI TAMBAHAN: Auto Crop Border Transparan (Menggunakan Canvas)
         function autoCropTransparent(blob) {
             return new Promise((resolve) => {
                 const url = URL.createObjectURL(blob);
@@ -364,15 +336,13 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0);
 
-                    // Ambil data piksel
                     const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
                     const l = pixels.data.length;
                     const bound = { top: null, left: null, right: null, bottom: null };
                     let x, y;
 
-                    // Cari batas tepi yang tidak transparan (Alpha > 0)
                     for (let i = 0; i < l; i += 4) {
-                        if (pixels.data[i + 3] !== 0) { // Cek Alpha Channel
+                        if (pixels.data[i + 3] !== 0) { 
                             x = (i / 4) % canvas.width;
                             y = ~~((i / 4) / canvas.width);
 
@@ -386,13 +356,11 @@
                         }
                     }
 
-                    // Jika gambar kosong sepenuhnya, kembalikan gambar asli
                     if (bound.top === null) {
                         resolve(url);
                         return;
                     }
 
-                    // Buat canvas baru sebesar ukuran objek
                     const trimHeight = bound.bottom - bound.top + 1;
                     const trimWidth = bound.right - bound.left + 1;
                     const trimmedCanvas = document.createElement('canvas');
@@ -401,8 +369,8 @@
                     
                     trimmedCanvas.getContext('2d').drawImage(
                         canvas,
-                        bound.left, bound.top, trimWidth, trimHeight, // Area sumber
-                        0, 0, trimWidth, trimHeight                   // Area tujuan
+                        bound.left, bound.top, trimWidth, trimHeight, 
+                        0, 0, trimWidth, trimHeight                   
                     );
 
                     resolve(trimmedCanvas.toDataURL('image/png'));

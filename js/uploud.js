@@ -17,36 +17,28 @@ const header = () => {
   initMobileMenu();
 
   const checkUserRole = () => {
-    // Ambil data user yang sedang login dari memori browser
     const userAktif = JSON.parse(localStorage.getItem("user_mading"));
 
-    // Tangkap elemen tombol unggah
     const btnDesktop = document.getElementById("btn-unggah-desktop");
     const btnMobile = document.getElementById("btn-unggah-mobile");
 
-    // Jika user belum login ATAU user bukan admin (misal: mahasiswa)
     if (!userAktif || userAktif.role !== "admin") {
-      // Sembunyikan tombol dengan class 'hidden' bawaan Tailwind
       if (btnDesktop) btnDesktop.classList.add("hidden");
       if (btnMobile) btnMobile.classList.add("hidden");
     } else {
-      // Jika Admin, pastikan tombolnya muncul
       if (btnDesktop) btnDesktop.classList.remove("hidden");
       if (btnMobile) btnMobile.classList.remove("hidden");
     }
   };
 
-  // Panggil fungsinya saat web dibuka
   checkUserRole();
 };
 header();
 
-// Sesuaikan URL API dengan port Back-End (Contoh: http://127.0.0.1:8000/api)
-// Catatan: Kalau dites via HP, ganti ini pakai alamat ngrok Back-End ya
+
 const API_BASE_URL = "http://127.0.0.1:8000/api";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Logika untuk mengubah teks saat file gambar dipilih
   const inputFile = document.getElementById("gambar_poster");
   const namaFileTeks = document.getElementById("nama-file");
 
@@ -60,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  //LOGIKA DRAG AND DROP (SERET FOTO)
   const areaDrop = document.getElementById("area-drop-file");
 
   ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
@@ -102,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
     false,
   );
 
-  // 2. Logika submit form ke API Laravel
   const formUnggah = document.getElementById("form-unggah");
   const btnSubmit = document.getElementById("btn-submit");
 
@@ -127,7 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append("judul", document.getElementById("judul").value);
       formData.append("kategori", document.getElementById("kategori").value);
 
-      // BAGIAN YANG DIUBAH: Menangkap waktu_acara untuk dikirim ke Laravel
       formData.append(
         "tanggal_acara",
         document.getElementById("tanggal").value,

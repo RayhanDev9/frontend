@@ -1,14 +1,10 @@
-// Konfigurasi URL API Utama
 const API_BASE_URL = "https://slab-silenced-riot.ngrok-free.dev/api/events";
-const STORAGE_BASE_URL = "https://slab-silenced-riot.ngrok-free.dev/storage/"; // Untuk mengatasi masalah gambar
+const STORAGE_BASE_URL = "https://slab-silenced-riot.ngrok-free.dev/storage/"; 
 
-// 1. Tangkap ID dari URL
 const urlParams = new URLSearchParams(window.location.search);
 const idAcara = urlParams.get("id");
 
-// ==========================================
-// PENGATURAN HEADER & ROLE USER
-// ==========================================
+
 const header = () => {
   const initMobileMenu = () => {
     const menuBtn = document.getElementById("mobile-menu-btn");
@@ -28,33 +24,25 @@ const header = () => {
   initMobileMenu();
 
   const checkUserRole = () => {
-    // Ambil data user yang sedang login dari memori browser
     const userAktif = JSON.parse(localStorage.getItem("user_mading"));
 
-    // Tangkap elemen tombol unggah
     const btnDesktop = document.getElementById("btn-unggah-desktop");
     const btnMobile = document.getElementById("btn-unggah-mobile");
 
-    // Jika user belum login ATAU user bukan admin (misal: mahasiswa)
     if (!userAktif || userAktif.role !== "admin") {
-      // Sembunyikan tombol
       if (btnDesktop) btnDesktop.classList.add("hidden");
       if (btnMobile) btnMobile.classList.add("hidden");
     } else {
-      // Jika Admin, pastikan tombolnya muncul
       if (btnDesktop) btnDesktop.classList.remove("hidden");
       if (btnMobile) btnMobile.classList.remove("hidden");
     }
   };
 
-  // Panggil fungsinya saat web dibuka
   checkUserRole();
 };
 header();
 
-// ==========================================
-// FITUR BOOKMARK (SIMPAN ACARA)
-// ==========================================
+
 window.toggleBookmarkEvent = async function () {
   const userAktif = JSON.parse(localStorage.getItem("user_mading"));
 
@@ -102,20 +90,16 @@ window.toggleBookmarkEvent = async function () {
   }
 };
 
-// ==========================================
-// RENDER DETAIL ACARA
-// ==========================================
+
 const initEventDetail = () => {
   function fungsiCreateEvents(data) {
     const container = document.getElementById("container-slect-event");
 
-    // Logika Perbaikan Gambar: Jika URL gambar dari API tidak mengandung 'http'
     let imageUrl = data.gambar_poster;
     if (imageUrl && !imageUrl.startsWith("http")) {
       imageUrl = STORAGE_BASE_URL + imageUrl;
     }
 
-    // Format Uang Rupiah (Jika ada kolom harga di API)
     const hargaFormat =
       !data.harga || data.harga == 0
         ? "GRATIS"
@@ -126,7 +110,6 @@ const initEventDetail = () => {
       ? "bg-yellow-50 text-yellow-600 border-yellow-400"
       : "bg-white text-gray-500 border-gray-300";
 
-    // Render HTML
     const html = `
             <div class="relative w-full rounded-lg overflow-hidden bg-gray-200">
     <span class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded shadow-sm z-10 capitalize max-w-[70%] truncate">
@@ -284,7 +267,6 @@ const initEventDetail = () => {
       const result = await response.json();
       const dataAsli = result.data !== undefined ? result.data : result;
 
-      // Sisipkan is_bookmarked dari luar data utama jika strukturnya terpisah
       if (result.is_bookmarked !== undefined) {
         dataAsli.is_bookmarked = result.is_bookmarked;
       }
@@ -311,9 +293,7 @@ const initEventDetail = () => {
   }
 };
 
-// ==========================================
-// BAGIAN 2: LOGIKA CHAT & KOMENTAR (INTEGRASI API)
-// ==========================================
+
 
 window.toggleReply = function (commentId) {
   const form = document.getElementById(`reply-form-${commentId}`);
@@ -327,7 +307,6 @@ window.submitReply = async function (event, commentId) {
   const text = input.value.trim();
   if (!text) return;
 
-  // AMBIL DATA USER DARI MEMORI
   const userAktif = JSON.parse(localStorage.getItem("user_mading"));
   if (!userAktif) {
     alert("Silakan login terlebih dahulu untuk membalas komentar.");
@@ -348,7 +327,6 @@ window.submitReply = async function (event, commentId) {
           Accept: "application/json",
           "ngrok-skip-browser-warning": "true",
         },
-        // MENGGUNAKAN ID USER ASLI
         body: JSON.stringify({
           event_id: idAcara,
           isi_komentar: text,
@@ -359,8 +337,8 @@ window.submitReply = async function (event, commentId) {
 
     if (response.ok) {
       input.value = "";
-      window.toggleReply(commentId); // Tutup form setelah sukses
-      window.refreshComments(); // Refresh seluruh chat
+      window.toggleReply(commentId); 
+      window.refreshComments(); 
     } else {
       alert("Gagal mengirim balasan.");
     }
@@ -397,7 +375,6 @@ const initChatSystem = () => {
         return;
       }
 
-      // LOOP KOMENTAR UTAMA
       result.data.forEach((comment) => {
         const namaUser = comment.user_nama || "Anonim";
         const isPanitia =
@@ -431,7 +408,6 @@ const initChatSystem = () => {
             </div>
         `;
 
-        // LOOP BALASAN
         if (comment.replies && comment.replies.length > 0) {
           comment.replies.forEach((reply) => {
             const rNamaUser = reply.user_nama || "Anonim";
@@ -465,13 +441,11 @@ const initChatSystem = () => {
     }
   };
 
-  // Fungsi Kirim Komentar Utama
   chatForm.addEventListener("submit", async function (e) {
     e.preventDefault();
     const messageText = chatInput.value.trim();
     if (!messageText) return;
 
-    // AMBIL DATA USER DARI MEMORI
     const userAktif = JSON.parse(localStorage.getItem("user_mading"));
     if (!userAktif) {
       alert("Silakan login terlebih dahulu untuk berkomentar.");
@@ -490,7 +464,6 @@ const initChatSystem = () => {
           Accept: "application/json",
           "ngrok-skip-browser-warning": "true",
         },
-        // MENGGUNAKAN ID USER ASLI
         body: JSON.stringify({
           isi_komentar: messageText,
           user_id: userAktif.id,
@@ -511,7 +484,6 @@ const initChatSystem = () => {
     }
   });
 
-  // Jalankan load pertama
   window.refreshComments();
 };
 

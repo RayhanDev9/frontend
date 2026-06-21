@@ -9,7 +9,6 @@ async function cekStatusAdmin() {
     });
     const result = await response.json();
 
-    // Kalau admin udah ada, sembunyikan opsi admin di dropdown
     if (result.admin_sudah_ada) {
       document.getElementById("opsi-admin").remove();
       document.getElementById("teks-admin-tutup").classList.remove("hidden");
@@ -19,10 +18,8 @@ async function cekStatusAdmin() {
   }
 }
 
-// Panggil fungsi cek admin
 cekStatusAdmin();
 
-// 2. Fungsi Proses Submit Form Registrasi
 document
   .getElementById("form-register")
   .addEventListener("submit", async function (e) {
@@ -35,7 +32,6 @@ document
     tombol.disabled = true;
     notif.classList.add("hidden");
 
-    // Ambil data dari inputan
     const dataKirim = {
       nama_lengkap: document.getElementById("nama_lengkap").value,
       username: document.getElementById("username").value,
@@ -56,18 +52,15 @@ document
       const result = await response.json();
 
       if (response.ok && result.status === "success") {
-        // Jika Sukses
         notif.className =
           "bg-green-900/50 border border-green-700 text-green-200 px-4 py-2 rounded mb-4 text-sm text-center block";
         notif.innerText = result.pesan;
-        document.getElementById("form-register").reset(); // Kosongkan form
+        document.getElementById("form-register").reset(); 
 
-        // Otomatis pindah ke halaman login setelah 2 detik
         setTimeout(() => {
           window.location.href = "login.html";
         }, 2000);
       } else {
-        // Jika Gagal (misal: username udah dipakai)
         notif.className =
           "bg-red-900/50 border border-red-700 text-red-200 px-4 py-2 rounded mb-4 text-sm text-center block";
         notif.innerText = result.pesan || "Terjadi kesalahan saat registrasi.";

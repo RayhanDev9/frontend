@@ -1,4 +1,3 @@
-// 1. Logika Toggle Mata Password khusus tampilan baru
 function togglePasswordView() {
   const passwordInput = document.getElementById("password");
   const eyeOpenIcon = document.getElementById("eyeOpenIcon");
@@ -16,7 +15,6 @@ function togglePasswordView() {
 }
 document.getElementById("eye").addEventListener("click", togglePasswordView);
 
-// 2. LOGIKA KONEKSI API NGORK BAWAAN ASLI (TIDAK BERUBAH)
 const API_LOGIN_URL = "https://slab-silenced-riot.ngrok-free.dev/api/login";
 
 document

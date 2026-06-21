@@ -92,58 +92,47 @@
         const qrCanvas = document.getElementById('qr-canvas');
         const btnDownload = document.getElementById('btn-download');
 
-        // Objek QRious untuk membuat QR Code
         let qrGenerator = new QRious({
             element: qrCanvas,
-            size: 250, // Ukuran pixel gambar
+            size: 250, 
             background: 'white',
-            foreground: '#0f172a', // Warna biru dongker gelap (Slate 900)
-            level: 'H' // Error correction level High (gambarnya tetap bisa dibaca meski sedikit tertutup)
+            foreground: '#0f172a', 
+            level: 'H' 
         });
 
-        // Event saat tombol ditekan
         btnGenerate.addEventListener('click', () => {
             const nilaiInput = inputLink.value.trim();
 
-            // Validasi jika kosong
             if (!nilaiInput) {
                 alert('Tautan atau teks tidak boleh kosong!');
                 inputLink.focus();
                 return;
             }
 
-            // Generate QR Code baru berdasarkan input
             qrGenerator.value = nilaiInput;
 
-            // Munculkan wadah hasil dengan animasi
             wadahHasil.classList.remove('hidden');
             setTimeout(() => {
                 wadahHasil.classList.remove('opacity-0', 'translate-y-4');
                 wadahHasil.classList.add('opacity-100', 'translate-y-0');
                 
-                // Scroll halus ke area hasil
                 wadahHasil.scrollIntoView({ behavior: 'smooth', block: 'end' });
             }, 50);
         });
 
-        // Fitur eksekusi saat menekan tombol "Enter" di keyboard
         inputLink.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 btnGenerate.click();
             }
         });
 
-        // Event untuk tombol unduh gambar
         btnDownload.addEventListener('click', () => {
-            // Ubah kanvas menjadi URL data gambar PNG
             const dataUrl = qrCanvas.toDataURL("image/png");
             
-            // Buat elemen link bohongan untuk memicu download
             const linkDownload = document.createElement('a');
             linkDownload.href = dataUrl;
-            linkDownload.download = 'MadingKampus-QRCode.png'; // Nama file otomatis
+            linkDownload.download = 'MadingKampus-QRCode.png'; 
             
-            // Simulasikan klik
             document.body.appendChild(linkDownload);
             linkDownload.click();
             document.body.removeChild(linkDownload);

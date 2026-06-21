@@ -167,11 +167,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
     <script>
-      // === KONFIGURASI API ===
       const API_URL =
         "https://slab-silenced-riot.ngrok-free.dev/api/crop-image";
 
-      // === VARIABEL GLOBAL ===
       let cropper = null;
       const imageInput = document.getElementById("image-input");
       const cropperImage = document.getElementById("cropper-image");
@@ -180,51 +178,43 @@
       const btnDownload = document.getElementById("btn-download");
       const ratioBtns = document.querySelectorAll(".ratio-btn");
 
-      // === INIT GAMBAR & CROPPER ===
       imageInput.addEventListener("change", function (e) {
         const files = e.target.files;
         if (files && files.length > 0) {
           const file = files[0];
           const url = URL.createObjectURL(file);
 
-          // Tampilkan gambar, sembunyikan teks kosong
           noImageText.style.display = "none";
           cropperImage.src = url;
           cropperImage.style.display = "block";
 
-          // Hancurkan cropper lama jika ada, lalu buat yang baru
           if (cropper) {
             cropper.destroy();
           }
 
           cropper = new Cropper(cropperImage, {
-            aspectRatio: NaN, // Default FREE
-            viewMode: 1, // Membatasi kotak crop agar tidak keluar gambar
-            background: false, // Background ditangani oleh CSS kita
+            aspectRatio: NaN, 
+            viewMode: 1, 
+            background: false, 
           });
 
-          // Reset status tombol ratio ke FREE
           ratioBtns.forEach((b) => b.classList.remove("active"));
           ratioBtns[0].classList.add("active");
         }
       });
 
-      // === FUNGSI ASPECT RATIO ===
       ratioBtns.forEach((btn) => {
         btn.addEventListener("click", function () {
           if (!cropper) return alert("Silakan upload gambar terlebih dahulu!");
 
-          // Update UI tombol
           ratioBtns.forEach((b) => b.classList.remove("active"));
           this.classList.add("active");
 
-          // Ubah rasio pada cropper
           const ratioValue = parseFloat(this.getAttribute("data-ratio"));
           cropper.setAspectRatio(ratioValue);
         });
       });
 
-      // === FUNGSI RESET ===
       btnReset.addEventListener("click", () => {
         if (cropper) {
           cropper.destroy();
@@ -238,23 +228,19 @@
         ratioBtns[0].classList.add("active");
       });
 
-      // === FUNGSI DOWNLOAD & KIRIM KE LARAVEL API ===
       btnDownload.addEventListener("click", async () => {
         if (!cropper) return alert("Tidak ada gambar untuk di-crop!");
 
         btnDownload.innerText = "⏳ PROSES...";
 
-        // 1. Ekstrak gambar yang sudah dipotong menjadi Base64
         const canvas = cropper.getCroppedCanvas();
-        const base64Image = canvas.toDataURL("image/png"); // Format file PNG
+        const base64Image = canvas.toDataURL("image/png"); 
 
-        // 2. Opsi: Download otomatis ke komputer lokal (Opsional)
         const link = document.createElement("a");
         link.download = "cropped-image.png";
         link.href = base64Image;
         link.click();
 
-        // 3. Kirim hasil crop ke API Laravel Anda
         try {
           const response = await fetch(API_URL, {
             method: "POST",
@@ -272,7 +258,6 @@
 
           if (response.ok) {
             console.log("Sukses disimpan di Laravel!", result);
-            // alert('Sukses! Gambar berhasil di-crop dan dikirim ke server.');
           } else {
             alert("Error dari Server: " + result.message);
           }

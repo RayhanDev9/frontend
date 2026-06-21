@@ -17,16 +17,12 @@ const header = () => {
   initMobileMenu();
 
   const checkUserRole = () => {
-    // Ambil data user yang sedang login dari memori browser
     const userAktif = JSON.parse(localStorage.getItem("user_mading"));
 
-    // Tangkap elemen tombol unggah
     const btnDesktop = document.getElementById("btn-unggah-desktop");
     const btnMobile = document.getElementById("btn-unggah-mobile");
 
-    // Jika user belum login ATAU user bukan admin (misal: mahasiswa)
     if (!userAktif || userAktif.role !== "admin") {
-      // Sembunyikan tombol dengan class 'hidden' bawaan Tailwind
       if (btnDesktop) btnDesktop.classList.add("hidden");
       if (btnMobile) btnMobile.classList.add("hidden");
     } else {
@@ -36,7 +32,6 @@ const header = () => {
     }
   };
 
-  // Panggil fungsinya saat web dibuka
   checkUserRole();
 };
 header();
